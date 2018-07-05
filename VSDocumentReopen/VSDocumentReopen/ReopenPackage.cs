@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -6,6 +7,8 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using EnvDTE;
+using EnvDTE80;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
@@ -35,8 +38,10 @@ namespace VSDocumentReopen
 	[PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
 	[InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
 	[ProvideMenuResource("Menus.ctmenu", 1)]
-	[Guid(ReopenPackage.PackageGuidString)]
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
+	[Guid(ReopenPackage.PackageGuidString)]
+	[ProvideAutoLoad(UIContextGuids.NoSolution)]
+	//[ProvideAutoLoad(UIContextGuids.SolutionExists)]
 	public sealed class ReopenPackage : AsyncPackage
 	{
 		/// <summary>
@@ -44,15 +49,32 @@ namespace VSDocumentReopen
 		/// </summary>
 		public const string PackageGuidString = "b30147a1-6fbc-4b94-bf01-123d837c4fe2";
 
+		private readonly DTE2 _dte;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Reopen"/> class.
 		/// </summary>
 		public ReopenPackage()
 		{
-			// Inside this method you can place any initialization code that does not require
-			// any Visual Studio service because at this point the package object is created but
-			// not sited yet inside Visual Studio environment. The place to do all the other
-			// initialization is the Initialize method.
+			_dte = GetGlobalService(typeof(DTE)) as DTE2;
+
+			_dte.Events.SolutionEvents.Opened += () =>
+			{
+				Debug.WriteLine("Solution opened");
+			};
+			_dte.Events.SolutionEvents.AfterClosing += () =>
+			{
+				Debug.WriteLine("Solution closed");
+			};
+
+			_dte.Events.DocumentEvents.DocumentClosing += DocumentEventsOnDocumentClosing;
+		}
+
+		private void DocumentEventsOnDocumentClosing(Document document)
+		{
+			var op = _dte.ItemOperations.IsFileOpen(document.Name, document.Kind);
+
+			_dte.ItemOperations.OpenFile(document.Name, document.Kind);
 		}
 
 		#region Package Members
@@ -70,6 +92,29 @@ namespace VSDocumentReopen
 			// Do any initialization that requires the UI thread after switching to the UI thread.
 			await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 			await Reopen.InitializeAsync(this);
+
+			List<Command> commands = new List<Command>();
+
+			foreach (Command command in _dte.Commands)
+			{
+				if (!string.IsNullOrEmpty(command.Name))
+					commands.Add(command);
+			}
+
+			foreach (var dteCommand in commands)
+			{
+				if (dteCommand.Bindings is object[] bindings && bindings.Length > 0)
+				{
+					
+				}
+			}
+
+			if (GetService(typeof(IMenuCommandService)) is OleMenuCommandService mcs)
+			{
+				//CommandID menuCommandID = new CommandID(GuidList.guidShortcutExporterCmdSet, (int)PkgCmdIDList.cmdExportShortcuts);
+				//MenuCommand menuItem = new MenuCommand(MenuItemCallback, menuCommandID);
+				//mcs.AddCommand(menuItem);
+			}
 		}
 
 		#endregion
