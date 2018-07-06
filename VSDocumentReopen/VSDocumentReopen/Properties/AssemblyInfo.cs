@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("VSDocumentReopen")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("VS Document Reopen")]
+[assembly: AssemblyDescription("VisualStudio Document Reopen")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("VSDocumentReopen")]
+[assembly: AssemblyCompany("Major")]
+[assembly: AssemblyProduct("VS Document Reopen")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
