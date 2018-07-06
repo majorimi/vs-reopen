@@ -54,6 +54,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DocumentTracker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reopen.cs" />
     <Compile Include="ReopenPackage.cs" />

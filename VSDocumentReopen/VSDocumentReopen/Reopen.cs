@@ -1,10 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Design;
-using System.Globalization;
-using System.Threading;
-using System.Threading.Tasks;
+using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen
@@ -27,7 +24,9 @@ namespace VSDocumentReopen
 		/// <summary>
 		/// VS Package that provides this command, not null.
 		/// </summary>
-		private readonly AsyncPackage package;
+		private readonly AsyncPackage _package;
+
+		private readonly DTE2 _dte;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Reopen"/> class.
@@ -35,13 +34,14 @@ namespace VSDocumentReopen
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
 		/// <param name="commandService">Command service to add command to, not null.</param>
-		private Reopen(AsyncPackage package, OleMenuCommandService commandService)
+		private Reopen(AsyncPackage package, OleMenuCommandService commandService, DTE2 dte)
 		{
-			this.package = package ?? throw new ArgumentNullException(nameof(package));
+			_package = package ?? throw new ArgumentNullException(nameof(package));
 			commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+			_dte = dte ?? throw new ArgumentNullException(nameof(dte));
 
-			var menuCommandID = new CommandID(CommandSet, CommandId);
-			var menuItem = new MenuCommand(this.Execute, menuCommandID);
+			var menuCommandId = new CommandID(CommandSet, CommandId);
+			var menuItem = new MenuCommand(this.Execute, menuCommandId);
 			commandService.AddCommand(menuItem);
 		}
 
@@ -61,7 +61,7 @@ namespace VSDocumentReopen
 		{
 			get
 			{
-				return this.package;
+				return this._package;
 			}
 		}
 
@@ -69,14 +69,14 @@ namespace VSDocumentReopen
 		/// Initializes the singleton instance of the command.
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		public static async Task InitializeAsync(AsyncPackage package)
+		public static async Task InitializeAsync(AsyncPackage package, DTE2 dte)
 		{
 			// Verify the current thread is the UI thread - the call to AddCommand in Reopen's constructor requires
 			// the UI thread.
 			ThreadHelper.ThrowIfNotOnUIThread();
 
 			OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
-			Instance = new Reopen(package, commandService);
+			Instance = new Reopen(package, commandService, dte);
 		}
 
 		/// <summary>
@@ -89,17 +89,12 @@ namespace VSDocumentReopen
 		private void Execute(object sender, EventArgs e)
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
-			string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
-			string title = "Reopen";
 
-			// Show a message box to prove we were here
-			VsShellUtilities.ShowMessageBox(
-				this.package,
-				message,
-				title,
-				OLEMSGICON.OLEMSGICON_INFO,
-				OLEMSGBUTTON.OLEMSGBUTTON_OK,
-				OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+			var document = DocumentTracker.Instance.GetLastClosed();
+			if (!string.IsNullOrWhiteSpace(document))
+			{
+				_dte.ItemOperations.OpenFile(document);
+			}
 		}
 	}
 }

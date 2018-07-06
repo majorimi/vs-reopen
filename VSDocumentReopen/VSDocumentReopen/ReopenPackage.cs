@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Threading.Tasks;
 using EnvDTE;
 using EnvDTE80;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.Win32;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen
@@ -33,31 +27,18 @@ namespace VSDocumentReopen
 		public const string PackageGuidString = "b30147a1-6fbc-4b94-bf01-123d837c4fe2";
 
 		private readonly DTE2 _dte;
+		private readonly SolutionEvents _solutionEvents;
+		private readonly DocumentEvents _documentEvents;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Reopen"/> class.
 		/// </summary>
 		public ReopenPackage()
 		{
-			_dte = GetGlobalService(typeof(DTE)) as DTE2;
+			_dte = GetGlobalService(typeof(DTE)) as DTE2 ?? throw new NullReferenceException($"Unable to get service {nameof(DTE2)}");
 
-			_dte.Events.SolutionEvents.Opened += () =>
-			{
-				Debug.WriteLine("Solution opened");
-			};
-			_dte.Events.SolutionEvents.AfterClosing += () =>
-			{
-				Debug.WriteLine("Solution closed");
-			};
-
-			_dte.Events.DocumentEvents.DocumentClosing += DocumentEventsOnDocumentClosing;
-		}
-
-		private void DocumentEventsOnDocumentClosing(Document document)
-		{
-			var op = _dte.ItemOperations.IsFileOpen(document.Name, document.Kind);
-
-			_dte.ItemOperations.OpenFile(document.Name, document.Kind);
+			_solutionEvents = _dte.Events.SolutionEvents;
+			_documentEvents = _dte.Events.DocumentEvents;
 		}
 
 		protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
@@ -65,9 +46,29 @@ namespace VSDocumentReopen
 			// When initialized asynchronously, the current thread may be a background thread at this point.
 			// Do any initialization that requires the UI thread after switching to the UI thread.
 			await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-			await Reopen.InitializeAsync(this);
+			await Reopen.InitializeAsync(this, _dte);
 
 			EnforceKeyBinding();
+
+			_solutionEvents.Opened += () =>
+			{
+				DocumentTracker.Instance.Clear();
+				_documentEvents.DocumentClosing += DocumentEventsOnDocumentClosing;
+
+				Debug.WriteLine("Solution opened");
+			};
+			_solutionEvents.AfterClosing += () =>
+			{
+				_documentEvents.DocumentClosing -= DocumentEventsOnDocumentClosing;
+				DocumentTracker.Instance.Clear();
+
+				Debug.WriteLine("Solution closed");
+			};
+		}
+
+		private void DocumentEventsOnDocumentClosing(Document document)
+		{
+			DocumentTracker.Instance.AddClosed(document);
 		}
 
 		/// <summary>
