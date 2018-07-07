@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Design;
+using System.IO;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Task = System.Threading.Tasks.Task;
@@ -93,7 +94,10 @@ namespace VSDocumentReopen
 			var document = DocumentTracker.Instance.GetLastClosed();
 			if (!string.IsNullOrWhiteSpace(document))
 			{
-				_dte.ItemOperations.OpenFile(document);
+				if (File.Exists(document))
+				{
+					_dte.ItemOperations.OpenFile(document);
+				}
 			}
 		}
 	}
