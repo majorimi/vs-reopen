@@ -6,16 +6,34 @@
 
   <Commands package="guidReopenPackage">
     <Groups>
-      <Group guid="guidReopenPackageCmdSet" id="MyMenuGroup" priority="0x0600">
+      <Group guid="guidReopenPackageCmdSet" id="MyGroupForSubmenu" priority="0x0600">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+      </Group>
+      <Group guid="guidReopenPackageCmdSet" id="MyGroupForCommands" priority="0x0100">
+        <Parent guid="guidReopenPackageCmdSet" id="MySubmenu"/>
       </Group>
     </Groups>
 
+    <Menus>
+      <Menu guid="guidReopenPackageCmdSet" id="MySubmenu" type="Menu">
+        <Parent guid="guidReopenPackageCmdSet" id="MyGroupForSubmenu" />
+        <Strings>
+          <ButtonText>Reopen recent document(s)</ButtonText>
+        </Strings>
+      </Menu>
+    </Menus>
+
     <Buttons>
       <Button guid="guidReopenPackageCmdSet" id="ReopenId" priority="0x0100" type="Button">
-        <Parent guid="guidReopenPackageCmdSet" id="MyMenuGroup" />
+        <Parent guid="guidReopenPackageCmdSet" id="MyGroupForCommands" />
         <Strings>
-          <ButtonText>Reopen closed document</ButtonText>
+          <ButtonText>Reopen closed document(s)</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidReopenPackageCmdSet" id="ClearId" priority="0x0102" type="Button">
+        <Parent guid="guidReopenPackageCmdSet" id="MyGroupForCommands" />
+        <Strings>
+          <ButtonText>Clear history</ButtonText>
         </Strings>
       </Button>
     </Buttons>
@@ -31,8 +49,13 @@
 
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidReopenPackageCmdSet" value="{d968b4de-3a69-4eb1-b676-942055da9dfd}">
-      <IDSymbol name="MyMenuGroup" value="0x1020" />
-      <IDSymbol name="ReopenId" value="0x0100" />
+      <IDSymbol name="MyGroupForSubmenu" value="0x1020" />
+      <IDSymbol name="MyGroupForCommands" value="0x1021" />
+      <IDSymbol name="MySubmenu" value="0x0100" />
+
+      <!-- Warning!!: Keep the values in sync with the code! -->
+      <IDSymbol name="ReopenId" value="0x0101" />
+      <IDSymbol name="ClearId" value="0x0102" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>
