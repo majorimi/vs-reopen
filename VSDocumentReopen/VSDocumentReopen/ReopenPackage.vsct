@@ -69,7 +69,7 @@
 
   <KeyBindings>
     <KeyBinding guid="guidReopenPackageCmdSet" id="ReopenId" editor="guidVSStd97" key1="T" mod1="Control" mod2="Shift" />
-    <KeyBinding guid="guidReopenPackageCmdSet" id="ShowMoreId" editor="guidVSStd97" key1="T" mod1="Control" />
+    <KeyBinding guid="guidReopenPackageCmdSet" id="ShowMoreId" editor="guidVSStd97" key1="R" mod1="Control" />
   </KeyBindings>
 
   <Symbols>
