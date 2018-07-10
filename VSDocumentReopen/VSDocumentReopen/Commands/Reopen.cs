@@ -1,16 +1,18 @@
 ﻿using System;
 using System.ComponentModel.Design;
+using System.IO;
+using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Task = System.Threading.Tasks.Task;
 
-namespace VSDocumentReopen
+namespace VSDocumentReopen.Commands
 {
-	internal sealed class ClearHistory
+	internal sealed class Reopen
 	{
 		/// <summary>
 		/// Command ID.
 		/// </summary>
-		public const int CommandId = 0x0102;
+		public const int CommandId = 0x0101;
 
 		/// <summary>
 		/// Command menu group (command set GUID).
@@ -18,18 +20,20 @@ namespace VSDocumentReopen
 		public static readonly Guid CommandSet = new Guid("d968b4de-3a69-4eb1-b676-942055da9dfd");
 
 		private readonly AsyncPackage _package;
+		private readonly DTE2 _dte;
 
-		private ClearHistory(AsyncPackage package, OleMenuCommandService commandService)
+		private Reopen(AsyncPackage package, OleMenuCommandService commandService, DTE2 dte)
 		{
 			_package = package ?? throw new ArgumentNullException(nameof(package));
 			commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+			_dte = dte ?? throw new ArgumentNullException(nameof(dte));
 
 			var menuCommandId = new CommandID(CommandSet, CommandId);
 			var menuItem = new MenuCommand(Execute, menuCommandId);
 			commandService.AddCommand(menuItem);
 		}
 
-		public static ClearHistory Instance
+		public static Reopen Instance
 		{
 			get;
 			private set;
@@ -37,17 +41,26 @@ namespace VSDocumentReopen
 
 		private IAsyncServiceProvider ServiceProvider => _package;
 
-		public static async Task InitializeAsync(AsyncPackage package)
+		public static async Task InitializeAsync(AsyncPackage package, DTE2 dte)
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
 
 			OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
-			Instance = new ClearHistory(package, commandService);
+			Instance = new Reopen(package, commandService, dte);
 		}
 
 		private void Execute(object sender, EventArgs e)
 		{
-			DocumentTracker.Instance.Clear();
+			ThreadHelper.ThrowIfNotOnUIThread();
+
+			var document = DocumentTracker.Instance.GetLastClosed();
+			if (!string.IsNullOrWhiteSpace(document))
+			{
+				if (File.Exists(document))
+				{
+					_dte.ItemOperations.OpenFile(document);
+				}
+			}
 		}
 	}
 }
