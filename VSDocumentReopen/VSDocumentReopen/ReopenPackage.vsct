@@ -15,6 +15,9 @@
       <Group guid="guidReopenPackageCmdSet" id="MyGroupForHistory" priority="0x0101">
         <Parent guid="guidReopenPackageCmdSet" id="MySubmenu"/>
       </Group>
+      <Group guid="guidReopenPackageCmdSet" id="MyGroupForShowMore" priority="0x0102">
+        <Parent guid="guidReopenPackageCmdSet" id="MySubmenu"/>
+      </Group>
       <Group guid="guidReopenPackageCmdSet" id="MyGroupForClear" priority="0x0103">
         <Parent guid="guidReopenPackageCmdSet" id="MySubmenu"/>
       </Group>
@@ -36,28 +39,37 @@
           <ButtonText>Reopen closed document(s)</ButtonText>
         </Strings>
       </Button>
+
+      <Button guid="guidReopenPackageCmdSet" id="HistoryId" priority="0x103">
+        <Parent guid="guidReopenPackageCmdSet" id="MyGroupForHistory" />
+        <CommandFlag>DynamicItemStart</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>TextChanges</CommandFlag>
+        <!-- This text does not appear. -->
+        <Strings>
+          <ButtonText>History</ButtonText>
+        </Strings>
+      </Button>
+      <!--Dynamic commands for history-->
+      <Button guid="guidReopenPackageCmdSet" id="ShowMoreId" priority="0x0110" type="Button">
+        <Parent guid="guidReopenPackageCmdSet" id="MyGroupForShowMore" />
+        <Strings>
+          <ButtonText>Show more...</ButtonText>
+        </Strings>
+      </Button>
+      
       <Button guid="guidReopenPackageCmdSet" id="ClearId" priority="0x0102" type="Button">
         <Parent guid="guidReopenPackageCmdSet" id="MyGroupForClear" />
         <Strings>
           <ButtonText>Clear history</ButtonText>
         </Strings>
       </Button>
-      
-      <Button guid="guidReopenPackageCmdSet" id="HistoryId" priority="0x103" >
-          <Parent guid="guidReopenPackageCmdSet" id="MyGroupForHistory" />
-          <CommandFlag>DynamicItemStart</CommandFlag>
-          <CommandFlag>DynamicVisibility</CommandFlag>
-          <CommandFlag>TextChanges</CommandFlag>
-          <!-- This text does not appear. -->
-          <Strings>
-            <ButtonText>History</ButtonText>
-          </Strings>
-        </Button>
     </Buttons>
   </Commands>
 
   <KeyBindings>
     <KeyBinding guid="guidReopenPackageCmdSet" id="ReopenId" editor="guidVSStd97" key1="T" mod1="Control" mod2="Shift" />
+    <KeyBinding guid="guidReopenPackageCmdSet" id="ShowMoreId" editor="guidVSStd97" key1="T" mod1="Control" />
   </KeyBindings>
 
   <Symbols>
@@ -69,7 +81,7 @@
       <IDSymbol name="MyGroupForSubmenu" value="0x1020" />
       <IDSymbol name="MyGroupForReopen" value="0x1021" />
       <IDSymbol name="MyGroupForHistory" value="0x1022"/>
-      <!--<IDSymbol name="MyGroupForShowMore" value="0x1023"/>-->
+      <IDSymbol name="MyGroupForShowMore" value="0x1023"/>
       <IDSymbol name="MyGroupForClear" value="0x1024" />
       <IDSymbol name="MySubmenu" value="0x0100" />
 
@@ -77,6 +89,7 @@
       <IDSymbol name="ReopenId" value="0x0101" />
       <IDSymbol name="ClearId" value="0x0102" />
       <IDSymbol name="HistoryId" value="0x0103" />
+      <IDSymbol name="ShowMoreId" value="0x0110" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>

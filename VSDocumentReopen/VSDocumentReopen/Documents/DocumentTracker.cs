@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using EnvDTE;
 
 namespace VSDocumentReopen.Documents
 {
-	internal sealed class DocumentTracker
+	internal sealed class DocumentTracker : INotifyPropertyChanged
 	{
+		public event PropertyChangedEventHandler PropertyChanged;
+
 		private static readonly Stack<IClosedDocument> CloseDocuments;
 
 		private DocumentTracker() { }
@@ -22,6 +26,7 @@ namespace VSDocumentReopen.Documents
 		public void Clear()
 		{
 			CloseDocuments.Clear();
+			OnPropertyChanged();
 		}
 
 		public void AddClosed(Document document)
@@ -34,13 +39,18 @@ namespace VSDocumentReopen.Documents
 				Language = document.Language,
 				ClosedAt = DateTime.Now,
 			});
+
+			OnPropertyChanged();
 		}
 
 		public IClosedDocument GetLastClosed()
 		{
 			if (CloseDocuments.Count > 0)
 			{
-				return CloseDocuments.Pop();
+				var ret = CloseDocuments.Pop();
+				OnPropertyChanged();
+
+				return ret;
 			}
 
 			return NullDocument.Instance;
@@ -69,6 +79,13 @@ namespace VSDocumentReopen.Documents
 			{
 				CloseDocuments.Push(document);
 			}
+
+			OnPropertyChanged();
+		}
+
+		private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }
