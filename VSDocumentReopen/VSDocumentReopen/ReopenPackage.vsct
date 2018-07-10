@@ -9,7 +9,10 @@
       <Group guid="guidReopenPackageCmdSet" id="MyGroupForSubmenu" priority="0x0600">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
       </Group>
-      <Group guid="guidReopenPackageCmdSet" id="MyGroupForCommands" priority="0x0100">
+      <Group guid="guidReopenPackageCmdSet" id="MyGroupForReopen" priority="0x0100">
+        <Parent guid="guidReopenPackageCmdSet" id="MySubmenu"/>
+      </Group>
+      <Group guid="guidReopenPackageCmdSet" id="MyGroupForClear" priority="0x0100">
         <Parent guid="guidReopenPackageCmdSet" id="MySubmenu"/>
       </Group>
     </Groups>
@@ -25,13 +28,13 @@
 
     <Buttons>
       <Button guid="guidReopenPackageCmdSet" id="ReopenId" priority="0x0100" type="Button">
-        <Parent guid="guidReopenPackageCmdSet" id="MyGroupForCommands" />
+        <Parent guid="guidReopenPackageCmdSet" id="MyGroupForReopen" />
         <Strings>
           <ButtonText>Reopen closed document(s)</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidReopenPackageCmdSet" id="ClearId" priority="0x0102" type="Button">
-        <Parent guid="guidReopenPackageCmdSet" id="MyGroupForCommands" />
+        <Parent guid="guidReopenPackageCmdSet" id="MyGroupForClear" />
         <Strings>
           <ButtonText>Clear history</ButtonText>
         </Strings>
@@ -50,7 +53,8 @@
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidReopenPackageCmdSet" value="{d968b4de-3a69-4eb1-b676-942055da9dfd}">
       <IDSymbol name="MyGroupForSubmenu" value="0x1020" />
-      <IDSymbol name="MyGroupForCommands" value="0x1021" />
+      <IDSymbol name="MyGroupForReopen" value="0x1021" />
+      <IDSymbol name="MyGroupForClear" value="0x1022" />
       <IDSymbol name="MySubmenu" value="0x0100" />
 
       <!-- Warning!!: Keep the values in sync with the code! -->
