@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel.Design;
-using System.IO;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
+using VSDocumentReopen.Documents;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.Commands
@@ -54,12 +54,9 @@ namespace VSDocumentReopen.Commands
 			ThreadHelper.ThrowIfNotOnUIThread();
 
 			var document = DocumentTracker.Instance.GetLastClosed();
-			if (!string.IsNullOrWhiteSpace(document))
+			if (document.IsValid())
 			{
-				if (File.Exists(document))
-				{
-					_dte.ItemOperations.OpenFile(document);
-				}
+				_dte.ItemOperations.OpenFile(document.FullName, document.Kind);
 			}
 		}
 	}

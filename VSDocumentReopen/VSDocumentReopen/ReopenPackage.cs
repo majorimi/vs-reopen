@@ -10,6 +10,7 @@ using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using VSDocumentReopen.Commands;
+using VSDocumentReopen.Documents;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen

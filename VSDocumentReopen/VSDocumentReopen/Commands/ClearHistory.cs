@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using Microsoft.VisualStudio.Shell;
+using VSDocumentReopen.Documents;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.Commands
