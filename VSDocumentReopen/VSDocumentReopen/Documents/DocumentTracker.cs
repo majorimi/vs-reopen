@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using EnvDTE;
 
 namespace VSDocumentReopen.Documents
@@ -47,8 +48,27 @@ namespace VSDocumentReopen.Documents
 
 		public IEnumerable<IClosedDocument> GetAll()
 		{
-			var ret = CloseDocuments.ToArray();
-			return ret;
+			return CloseDocuments.ToArray();
+		}
+
+		public void Remove(IClosedDocument closedDocument)
+		{
+			var items = GetAll().ToList();
+			if (items.Remove(closedDocument))
+			{
+				Initialize(items);
+			}
+		}
+
+		public void Initialize(IEnumerable<IClosedDocument> closedDocuments, bool reverse = true)
+		{
+			Clear();
+
+			closedDocuments = closedDocuments.Reverse();
+			foreach (var document in closedDocuments)
+			{
+				CloseDocuments.Push(document);
+			}
 		}
 	}
 }

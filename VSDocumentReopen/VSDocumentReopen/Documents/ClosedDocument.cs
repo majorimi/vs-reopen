@@ -19,5 +19,10 @@ namespace VSDocumentReopen.Documents
 		{
 			return File.Exists(FullName);
 		}
+
+		public override string ToString()
+		{
+			return $"FullName: {FullName}, ClosedAt: {ClosedAt}";
+		}
 	}
 }

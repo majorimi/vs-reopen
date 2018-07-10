@@ -14,7 +14,6 @@
       </Group>
       <Group guid="guidReopenPackageCmdSet" id="MyGroupForHistory" priority="0x0101">
         <Parent guid="guidReopenPackageCmdSet" id="MySubmenu"/>
-        <!--https://docs.microsoft.com/en-us/visualstudio/extensibility/dynamically-adding-menu-items-->
       </Group>
       <Group guid="guidReopenPackageCmdSet" id="MyGroupForClear" priority="0x0103">
         <Parent guid="guidReopenPackageCmdSet" id="MySubmenu"/>
@@ -43,6 +42,17 @@
           <ButtonText>Clear history</ButtonText>
         </Strings>
       </Button>
+      
+      <Button guid="guidReopenPackageCmdSet" id="HistoryId" priority="0x103" >
+          <Parent guid="guidReopenPackageCmdSet" id="MyGroupForHistory" />
+          <CommandFlag>DynamicItemStart</CommandFlag>
+          <CommandFlag>DynamicVisibility</CommandFlag>
+          <CommandFlag>TextChanges</CommandFlag>
+          <!-- This text does not appear. -->
+          <Strings>
+            <ButtonText>History</ButtonText>
+          </Strings>
+        </Button>
     </Buttons>
   </Commands>
 
@@ -66,6 +76,7 @@
       <!-- Warning!!: Keep the values in sync with the code! -->
       <IDSymbol name="ReopenId" value="0x0101" />
       <IDSymbol name="ClearId" value="0x0102" />
+      <IDSymbol name="HistoryId" value="0x0103" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>

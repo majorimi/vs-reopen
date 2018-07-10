@@ -51,6 +51,7 @@ namespace VSDocumentReopen
 
 			await Reopen.InitializeAsync(this, _dte);
 			await ClearHistory.InitializeAsync(this);
+			await History.InitializeAsync(this, _dte);
 
 			EnforceKeyBinding();
 
