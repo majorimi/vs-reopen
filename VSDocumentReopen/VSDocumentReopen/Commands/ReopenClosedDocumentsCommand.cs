@@ -2,17 +2,17 @@
 using System.ComponentModel.Design;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
+using VSDocumentReopen.Documents;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.Commands
 {
-	internal sealed class ShowMore
+	internal sealed class ReopenClosedDocumentsCommand
 	{
 		/// <summary>
 		/// Command ID.
 		/// </summary>
-		public const int CommandId = 0x0110;
+		public const int CommandId = 0x0101;
 
 		/// <summary>
 		/// Command menu group (command set GUID).
@@ -22,7 +22,7 @@ namespace VSDocumentReopen.Commands
 		private readonly AsyncPackage _package;
 		private readonly DTE2 _dte;
 
-		private ShowMore(AsyncPackage package, OleMenuCommandService commandService, DTE2 dte)
+		private ReopenClosedDocumentsCommand(AsyncPackage package, OleMenuCommandService commandService, DTE2 dte)
 		{
 			_package = package ?? throw new ArgumentNullException(nameof(package));
 			commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -33,35 +33,31 @@ namespace VSDocumentReopen.Commands
 			commandService.AddCommand(menuItem);
 		}
 
-		public static ShowMore Instance
+		public static ReopenClosedDocumentsCommand Instance
 		{
 			get;
 			private set;
 		}
+
+		private IAsyncServiceProvider ServiceProvider => _package;
 
 		public static async Task InitializeAsync(AsyncPackage package, DTE2 dte)
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
 
 			OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
-			Instance = new ShowMore(package, commandService, dte);
+			Instance = new ReopenClosedDocumentsCommand(package, commandService, dte);
 		}
 
 		private void Execute(object sender, EventArgs e)
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
 
-			// Get the instance number 0 of this tool window. This window is single instance so this instance
-			// is actually the only one.
-			// The last flag is set to true so that if the tool window does not exists it will be created.
-			ToolWindowPane window = _package.FindToolWindow(typeof(ClosedDocumentsHistory), 0, true);
-			if ((null == window) || (null == window.Frame))
+			var document = DocumentHistory.Instance.GetLastClosed();
+			if (document.IsValid())
 			{
-				throw new NotSupportedException("Cannot create tool window");
+				_dte.ItemOperations.OpenFile(document.FullName, document.Kind);
 			}
-
-			IVsWindowFrame windowFrame = (IVsWindowFrame)window.Frame;
-			Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(windowFrame.Show());
 		}
 	}
 }

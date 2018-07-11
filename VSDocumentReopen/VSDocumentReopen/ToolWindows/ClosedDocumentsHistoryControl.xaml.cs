@@ -1,9 +1,9 @@
-﻿namespace VSDocumentReopen
-{
-	using System.Diagnostics.CodeAnalysis;
-	using System.Windows;
-	using System.Windows.Controls;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Windows;
+using System.Windows.Controls;
 
+namespace VSDocumentReopen.ToolWindows
+{
 	/// <summary>
 	/// Interaction logic for ClosedDocumentsHistoryControl.
 	/// </summary>

@@ -10,7 +10,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.Commands
 {
-	internal sealed class History
+	internal sealed class DocumentsHistoryCommand
 	{
 		/// <summary>
 		/// Command ID.
@@ -29,7 +29,7 @@ namespace VSDocumentReopen.Commands
 		private readonly AsyncPackage _package;
 		private readonly DTE2 _dte;
 
-		private History(AsyncPackage package, OleMenuCommandService commandService, DTE2 dte)
+		private DocumentsHistoryCommand(AsyncPackage package, OleMenuCommandService commandService, DTE2 dte)
 		{
 			_package = package ?? throw new ArgumentNullException(nameof(package));
 			commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -93,7 +93,7 @@ namespace VSDocumentReopen.Commands
 			DocumentHistory.Instance.Remove(document);
 		}
 
-		public static History Instance
+		public static DocumentsHistoryCommand Instance
 		{
 			get;
 			private set;
@@ -106,7 +106,7 @@ namespace VSDocumentReopen.Commands
 			ThreadHelper.ThrowIfNotOnUIThread();
 
 			OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
-			Instance = new History(package, commandService, dte);
+			Instance = new DocumentsHistoryCommand(package, commandService, dte);
 		}
 
 		private void Execute(object sender, EventArgs e)

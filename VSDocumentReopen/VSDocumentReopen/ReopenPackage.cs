@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using VSDocumentReopen.Commands;
 using VSDocumentReopen.Documents;
+using VSDocumentReopen.ToolWindows;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen
@@ -31,7 +32,7 @@ namespace VSDocumentReopen
 		private readonly DTE2 _dte;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Reopen"/> class.
+		/// Initializes a new instance of the <see cref="ReopenClosedDocumentsCommand"/> class.
 		/// </summary>
 		public ReopenPackage()
 		{
@@ -43,12 +44,12 @@ namespace VSDocumentReopen
 			await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
 			//Init Commands
-			await Reopen.InitializeAsync(this, _dte);
-			await ClearHistory.InitializeAsync(this);
-			await History.InitializeAsync(this, _dte);
+			await ReopenClosedDocumentsCommand.InitializeAsync(this, _dte);
+			await ClearDocumentsHistoryCommand.InitializeAsync(this);
+			await DocumentsHistoryCommand.InitializeAsync(this, _dte);
 
 			//Init ToolWindow Commands
-			await ShowMore.InitializeAsync(this, _dte);
+			await ShowDocumentsHIstoryCommand.InitializeAsync(this, _dte);
 
 			EnforceKeyBinding();
 
@@ -68,7 +69,7 @@ namespace VSDocumentReopen
 			}
 
 			Command comm;
-			var guid = Reopen.CommandSet.ToString("B").ToUpper();
+			var guid = ReopenClosedDocumentsCommand.CommandSet.ToString("B").ToUpper();
 			var binding = "Global::Ctrl+Shift+T";
 
 			foreach (var command in commands)

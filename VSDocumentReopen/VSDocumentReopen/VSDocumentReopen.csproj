@@ -54,12 +54,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ClosedDocumentsHistory.cs" />
-    <Compile Include="ClosedDocumentsHistoryControl.xaml.cs">
+    <Compile Include="ToolWindows\ClosedDocumentsHistory.cs" />
+    <Compile Include="ToolWindows\ClosedDocumentsHistoryControl.xaml.cs">
       <DependentUpon>ClosedDocumentsHistoryControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Commands\History.cs" />
-    <Compile Include="Commands\ShowMore.cs" />
+    <Compile Include="Commands\DocumentsHistoryCommand.cs" />
+    <Compile Include="Commands\ShowDocumentsHIstoryCommand.cs" />
     <Compile Include="Documents\ClosedDocument.cs" />
     <Compile Include="Documents\DocumentHistory.cs" />
     <Compile Include="Documents\DocumentTracker.cs" />
@@ -67,8 +67,8 @@
     <Compile Include="Documents\NullDocument.cs" />
     <Compile Include="Helpers\PathFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Commands\ClearHistory.cs" />
-    <Compile Include="Commands\Reopen.cs" />
+    <Compile Include="Commands\ClearDocumentsHistoryCommand.cs" />
+    <Compile Include="Commands\ReopenClosedDocumentsCommand.cs" />
     <Compile Include="ReopenPackage.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -198,7 +198,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="ClosedDocumentsHistoryControl.xaml">
+    <Page Include="ToolWindows\ClosedDocumentsHistoryControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
