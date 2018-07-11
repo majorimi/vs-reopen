@@ -57,6 +57,7 @@
     <Compile Include="Commands\History.cs" />
     <Compile Include="Commands\ShowMore.cs" />
     <Compile Include="Documents\ClosedDocument.cs" />
+    <Compile Include="Documents\DocumentHistory.cs" />
     <Compile Include="Documents\DocumentTracker.cs" />
     <Compile Include="Documents\IClosedDocument.cs" />
     <Compile Include="Documents\NullDocument.cs" />

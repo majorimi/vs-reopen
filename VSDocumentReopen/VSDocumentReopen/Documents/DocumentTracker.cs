@@ -1,91 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using EnvDTE;
+﻿using EnvDTE;
+using EnvDTE80;
+using System;
+using System.Diagnostics;
 
 namespace VSDocumentReopen.Documents
 {
-	internal sealed class DocumentTracker : INotifyPropertyChanged
+	internal sealed class DocumentTracker
 	{
-		public event PropertyChangedEventHandler PropertyChanged;
+		private readonly DTE2 _dte;
+		private readonly SolutionEvents _solutionEvents;
+		private readonly DocumentEvents _documentEvents;
 
-		private static readonly Stack<IClosedDocument> CloseDocuments;
-
-		private DocumentTracker() { }
-
-		static DocumentTracker()
+		public DocumentTracker(DTE2 dte)
 		{
-			Instance = new DocumentTracker();
-			CloseDocuments = new Stack<IClosedDocument>();
+			_dte = dte ?? throw new ArgumentNullException(nameof(dte));
+
+			_solutionEvents = _dte.Events.SolutionEvents;
+			_documentEvents = _dte.Events.DocumentEvents;
+
+			Initialize();
 		}
 
-		public static DocumentTracker Instance { get; }
-
-		public void Clear()
+		private void Initialize()
 		{
-			CloseDocuments.Clear();
-			OnPropertyChanged();
-		}
-
-		public void AddClosed(Document document)
-		{
-			CloseDocuments.Push(new ClosedDocument()
+			_solutionEvents.Opened += () =>
 			{
-				FullName = document.FullName,
-				Name = document.Name,
-				Kind = document.Kind,
-				Language = document.Language,
-				ClosedAt = DateTime.Now,
-			});
+				DocumentHistory.Instance.Clear();
+				_documentEvents.DocumentClosing += DocumentEventsOnDocumentClosing;
 
-			OnPropertyChanged();
-		}
-
-		public IClosedDocument GetLastClosed()
-		{
-			if (CloseDocuments.Count > 0)
+				Debug.WriteLine("Solution opened");
+			};
+			_solutionEvents.BeforeClosing += () =>
 			{
-				var ret = CloseDocuments.Pop();
-				OnPropertyChanged();
+				_documentEvents.DocumentClosing -= DocumentEventsOnDocumentClosing;
+				DocumentHistory.Instance.Clear();
 
-				return ret;
-			}
-
-			return NullDocument.Instance;
+				Debug.WriteLine("Solution closing");
+			};
 		}
 
-		public IEnumerable<IClosedDocument> GetAll()
+		private void DocumentEventsOnDocumentClosing(Document document)
 		{
-			return CloseDocuments.ToArray();
-		}
-
-		public void Remove(IClosedDocument closedDocument)
-		{
-			var items = GetAll().ToList();
-			if (items.Remove(closedDocument))
-			{
-				Initialize(items);
-			}
-		}
-
-		public void Initialize(IEnumerable<IClosedDocument> closedDocuments, bool reverse = true)
-		{
-			Clear();
-
-			closedDocuments = closedDocuments.Reverse();
-			foreach (var document in closedDocuments)
-			{
-				CloseDocuments.Push(document);
-			}
-
-			OnPropertyChanged();
-		}
-
-		private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+			DocumentHistory.Instance.AddClosed(document);
 		}
 	}
 }

@@ -53,7 +53,7 @@ namespace VSDocumentReopen.Commands
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
 
-			var document = DocumentTracker.Instance.GetLastClosed();
+			var document = DocumentHistory.Instance.GetLastClosed();
 			if (document.IsValid())
 			{
 				_dte.ItemOperations.OpenFile(document.FullName, document.Kind);

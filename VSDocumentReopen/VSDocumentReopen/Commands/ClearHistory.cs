@@ -48,7 +48,7 @@ namespace VSDocumentReopen.Commands
 
 		private void Execute(object sender, EventArgs e)
 		{
-			DocumentTracker.Instance.Clear();
+			DocumentHistory.Instance.Clear();
 		}
 	}
 }
