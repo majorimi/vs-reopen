@@ -61,6 +61,7 @@
     <Compile Include="Documents\DocumentTracker.cs" />
     <Compile Include="Documents\IClosedDocument.cs" />
     <Compile Include="Documents\NullDocument.cs" />
+    <Compile Include="Helpers\PathFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Commands\ClearHistory.cs" />
     <Compile Include="Commands\Reopen.cs" />

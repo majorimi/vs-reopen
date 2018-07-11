@@ -32,6 +32,7 @@ namespace VSDocumentReopen.Documents
 			};
 			_solutionEvents.BeforeClosing += () =>
 			{
+				//TODO: User can cancel the "Close" operation which means no history after that. However using the "AfterClosing" event will push all opened doc to the history...
 				_documentEvents.DocumentClosing -= DocumentEventsOnDocumentClosing;
 				DocumentHistory.Instance.Clear();
 

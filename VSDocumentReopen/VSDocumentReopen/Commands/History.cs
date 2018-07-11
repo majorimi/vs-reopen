@@ -5,6 +5,7 @@ using System.Linq;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using VSDocumentReopen.Documents;
+using VSDocumentReopen.Helpers;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.Commands
@@ -63,11 +64,11 @@ namespace VSDocumentReopen.Commands
 			var j = 1;
 			foreach (var item in history)
 			{
-				var menuCommandId = new CommandID(CommandSet, CommandId + j++);
+				var menuCommandId = new CommandID(CommandSet, CommandId + j);
 				var command = new OleMenuCommand(DynamicCommandCallback, menuCommandId);
 
 				command.Properties.Add(HistoryItemKey, item);
-				command.Text = item.Name;
+				command.Text = $"{j++}: {PathFormatter.ShrinkPath(item.FullName, 50)}";
 				command.BeforeQueryStatus += (x, y) =>
 				{
 					(x as OleMenuCommand).Visible = true;
