@@ -1,25 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <Extern href="stdidcmd.h"/>
-  <Extern href="vsshlids.h"/>
+  <Extern href="stdidcmd.h" />
+  <Extern href="vsshlids.h" />
 
   <Commands package="guidReopenPackage">
     <Groups>
       <Group guid="guidReopenPackageCmdSet" id="MyGroupForSubmenu" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
       </Group>
       <Group guid="guidReopenPackageCmdSet" id="MyGroupForReopen" priority="0x0100">
-        <Parent guid="guidReopenPackageCmdSet" id="MySubmenu"/>
+        <Parent guid="guidReopenPackageCmdSet" id="MySubmenu" />
       </Group>
       <Group guid="guidReopenPackageCmdSet" id="MyGroupForHistory" priority="0x0101">
-        <Parent guid="guidReopenPackageCmdSet" id="MySubmenu"/>
+        <Parent guid="guidReopenPackageCmdSet" id="MySubmenu" />
       </Group>
       <Group guid="guidReopenPackageCmdSet" id="MyGroupForShowMore" priority="0x0102">
-        <Parent guid="guidReopenPackageCmdSet" id="MySubmenu"/>
+        <Parent guid="guidReopenPackageCmdSet" id="MySubmenu" />
       </Group>
       <Group guid="guidReopenPackageCmdSet" id="MyGroupForClear" priority="0x0103">
-        <Parent guid="guidReopenPackageCmdSet" id="MySubmenu"/>
+        <Parent guid="guidReopenPackageCmdSet" id="MySubmenu" />
       </Group>
     </Groups>
 
@@ -80,8 +80,8 @@
     <GuidSymbol name="guidReopenPackageCmdSet" value="{d968b4de-3a69-4eb1-b676-942055da9dfd}">
       <IDSymbol name="MyGroupForSubmenu" value="0x1020" />
       <IDSymbol name="MyGroupForReopen" value="0x1021" />
-      <IDSymbol name="MyGroupForHistory" value="0x1022"/>
-      <IDSymbol name="MyGroupForShowMore" value="0x1023"/>
+      <IDSymbol name="MyGroupForHistory" value="0x1022" />
+      <IDSymbol name="MyGroupForShowMore" value="0x1023" />
       <IDSymbol name="MyGroupForClear" value="0x1024" />
       <IDSymbol name="MySubmenu" value="0x0100" />
 

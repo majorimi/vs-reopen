@@ -20,6 +20,7 @@ namespace VSDocumentReopen
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
 	[Guid(ReopenPackage.PackageGuidString)]
 	[ProvideAutoLoad(UIContextGuids.NoSolution)]
+	[ProvideToolWindow(typeof(ClosedDocumentsHistory))]
 	public sealed class ReopenPackage : AsyncPackage
 	{
 		/// <summary>
@@ -39,13 +40,14 @@ namespace VSDocumentReopen
 
 		protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
 		{
-			// When initialized asynchronously, the current thread may be a background thread at this point.
-			// Do any initialization that requires the UI thread after switching to the UI thread.
-			await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+			await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
+			//Init Commands
 			await Reopen.InitializeAsync(this, _dte);
 			await ClearHistory.InitializeAsync(this);
 			await History.InitializeAsync(this, _dte);
+
+			//Init ToolWindow Commands
 			await ShowMore.InitializeAsync(this, _dte);
 
 			EnforceKeyBinding();
