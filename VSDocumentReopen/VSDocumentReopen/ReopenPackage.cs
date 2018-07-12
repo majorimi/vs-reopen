@@ -61,6 +61,8 @@ namespace VSDocumentReopen
 		/// </summary>
 		private void EnforceKeyBinding()
 		{
+			ThreadHelper.ThrowIfNotOnUIThread();
+
 			var commands = new List<Command>();
 			foreach (Command command in _dte.Commands)
 			{
