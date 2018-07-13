@@ -8,7 +8,9 @@ using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using VSDocumentReopen.Domain.Documents;
+using VSDocumentReopen.Infrastructure;
+using VSDocumentReopen.Infrastructure.ClosedDocument;
+using VSDocumentReopen.Infrastructure.Helpers;
 using VSDocumentReopen.VS.Commands;
 using VSDocumentReopen.VS.ToolWindows;
 using Task = System.Threading.Tasks.Task;
@@ -53,7 +55,8 @@ namespace VSDocumentReopen
 
 			EnforceKeyBinding();
 
-			new DocumentTracker(_dte);
+			new DocumentTracker(_dte, 
+				new JsonHistoryRepositoryFactory(new ServiceStackJsonSerializer()));
 		}
 
 		/// <summary>

@@ -2,7 +2,7 @@
 
 namespace VSDocumentReopen.Domain.Documents
 {
-	internal sealed class NullDocument : IClosedDocument
+	public sealed class NullDocument : IClosedDocument
 	{
 		internal static readonly NullDocument Instance; 
 

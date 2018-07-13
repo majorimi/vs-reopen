@@ -4,7 +4,9 @@ using System.ComponentModel.Design;
 using System.Linq;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
+using VSDocumentReopen.Domain;
 using VSDocumentReopen.Domain.Documents;
+using VSDocumentReopen.Infrastructure.ClosedDocument;
 using VSDocumentReopen.Infrastructure.Helpers;
 using Task = System.Threading.Tasks.Task;
 

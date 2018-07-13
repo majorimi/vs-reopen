@@ -4,10 +4,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using EnvDTE;
+using VSDocumentReopen.Domain.Documents;
 
-namespace VSDocumentReopen.Domain.Documents
+namespace VSDocumentReopen.Infrastructure.ClosedDocument
 {
-	internal sealed class DocumentHistory : INotifyPropertyChanged
+	public sealed class DocumentHistory : INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -36,7 +37,7 @@ namespace VSDocumentReopen.Domain.Documents
 				return;
 			}
 
-			CloseDocuments.Push(new ClosedDocument()
+			CloseDocuments.Push(new Domain.Documents.ClosedDocument()
 			{
 				FullName = document.FullName,
 				Name = document.Name,
@@ -79,7 +80,11 @@ namespace VSDocumentReopen.Domain.Documents
 		{
 			Clear();
 
-			closedDocuments = closedDocuments.Reverse();
+			if (reverse)
+			{
+				closedDocuments = closedDocuments.Reverse();
+			}
+
 			foreach (var document in closedDocuments)
 			{
 				CloseDocuments.Push(document);

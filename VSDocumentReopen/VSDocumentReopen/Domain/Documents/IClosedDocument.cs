@@ -2,7 +2,7 @@
 
 namespace VSDocumentReopen.Domain.Documents
 {
-	internal interface IClosedDocument
+	public interface IClosedDocument
 	{
 		DateTime ClosedAt { get; }
 		string FullName { get; }
