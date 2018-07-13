@@ -4,11 +4,11 @@ using System.ComponentModel.Design;
 using System.Linq;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
-using VSDocumentReopen.Documents;
-using VSDocumentReopen.Helpers;
+using VSDocumentReopen.Domain.Documents;
+using VSDocumentReopen.Infrastructure.Helpers;
 using Task = System.Threading.Tasks.Task;
 
-namespace VSDocumentReopen.Commands
+namespace VSDocumentReopen.VS.Commands
 {
 	internal sealed class DocumentsHistoryCommand
 	{

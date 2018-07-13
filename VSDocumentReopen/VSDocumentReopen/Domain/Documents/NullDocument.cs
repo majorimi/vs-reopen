@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VSDocumentReopen.Documents
+namespace VSDocumentReopen.Domain.Documents
 {
 	internal sealed class NullDocument : IClosedDocument
 	{

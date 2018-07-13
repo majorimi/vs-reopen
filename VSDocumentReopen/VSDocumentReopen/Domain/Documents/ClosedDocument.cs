@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace VSDocumentReopen.Documents
+namespace VSDocumentReopen.Domain.Documents
 {
 	internal sealed class ClosedDocument : IClosedDocument
 	{

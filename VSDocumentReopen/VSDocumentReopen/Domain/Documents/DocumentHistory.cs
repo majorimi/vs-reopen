@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using EnvDTE;
 
-namespace VSDocumentReopen.Documents
+namespace VSDocumentReopen.Domain.Documents
 {
 	internal sealed class DocumentHistory : INotifyPropertyChanged
 	{

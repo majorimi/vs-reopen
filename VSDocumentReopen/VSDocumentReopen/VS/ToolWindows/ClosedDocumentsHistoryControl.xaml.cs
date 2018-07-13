@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace VSDocumentReopen.ToolWindows
+namespace VSDocumentReopen.VS.ToolWindows
 {
 	/// <summary>
 	/// Interaction logic for ClosedDocumentsHistoryControl.

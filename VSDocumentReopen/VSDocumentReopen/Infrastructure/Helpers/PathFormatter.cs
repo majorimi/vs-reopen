@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace VSDocumentReopen.Helpers
+namespace VSDocumentReopen.Infrastructure.Helpers
 {
 	public static class PathFormatter
 	{

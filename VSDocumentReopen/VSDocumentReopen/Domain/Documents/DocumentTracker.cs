@@ -1,8 +1,8 @@
-﻿using EnvDTE;
+﻿using System;
+using EnvDTE;
 using EnvDTE80;
-using System;
 
-namespace VSDocumentReopen.Documents
+namespace VSDocumentReopen.Domain.Documents
 {
 	internal sealed class DocumentTracker
 	{

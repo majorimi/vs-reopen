@@ -1,7 +1,7 @@
-﻿using VSDocumentReopen.Helpers;
+﻿using VSDocumentReopen.Infrastructure.Helpers;
 using Xunit;
 
-namespace VSDocumentReopen.Test.Helpers
+namespace VSDocumentReopen.Test.Infrastructure.Helpers
 {
 	public class PathFormatterTest
 	{

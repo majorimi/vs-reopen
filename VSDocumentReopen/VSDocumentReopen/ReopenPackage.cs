@@ -8,9 +8,9 @@ using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using VSDocumentReopen.Commands;
-using VSDocumentReopen.Documents;
-using VSDocumentReopen.ToolWindows;
+using VSDocumentReopen.Domain.Documents;
+using VSDocumentReopen.VS.Commands;
+using VSDocumentReopen.VS.ToolWindows;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen

@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 
-namespace VSDocumentReopen.ToolWindows
+namespace VSDocumentReopen.VS.ToolWindows
 {
 	/// <summary>
 	/// This class implements the tool window exposed by this package and hosts a user control.

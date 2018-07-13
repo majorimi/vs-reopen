@@ -2,10 +2,10 @@
 using System.ComponentModel.Design;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
-using VSDocumentReopen.Documents;
+using VSDocumentReopen.Domain.Documents;
 using Task = System.Threading.Tasks.Task;
 
-namespace VSDocumentReopen.Commands
+namespace VSDocumentReopen.VS.Commands
 {
 	internal sealed class ReopenClosedDocumentsCommand
 	{

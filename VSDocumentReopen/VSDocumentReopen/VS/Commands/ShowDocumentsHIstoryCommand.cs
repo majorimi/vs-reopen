@@ -3,10 +3,10 @@ using System.ComponentModel.Design;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using VSDocumentReopen.ToolWindows;
+using VSDocumentReopen.VS.ToolWindows;
 using Task = System.Threading.Tasks.Task;
 
-namespace VSDocumentReopen.Commands
+namespace VSDocumentReopen.VS.Commands
 {
 	internal sealed class ShowDocumentsHIstoryCommand
 	{
