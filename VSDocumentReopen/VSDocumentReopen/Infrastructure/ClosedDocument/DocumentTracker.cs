@@ -41,8 +41,8 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 				var historyRepository = _historyRepositoryFactory.CreateHistoryRepository(_currentSolution);
 				
 				//Load history and init state
-				var history = historyRepository.GetHistory().OrderBy(x => x.ClosedAt);
-				DocumentHistory.Instance.Initialize(history, false);
+				var history = historyRepository.GetHistory();
+				DocumentHistory.Instance.Initialize(history);
 			};
 			_solutionEvents.BeforeClosing += () =>
 			{

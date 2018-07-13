@@ -56,7 +56,9 @@
     <CodeAnalysisRuleSet>VSDocumentReopen.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Domain\Configuration.cs" />
     <Compile Include="Domain\SolutionInfo.cs" />
+    <Compile Include="Infrastructure\ConfigurationManager.cs" />
     <Compile Include="Infrastructure\Helpers\IJsonSerializer.cs" />
     <Compile Include="Infrastructure\Helpers\ServiceStackJsonSerializer.cs" />
     <Compile Include="Infrastructure\IHistoryRepositoryFactory.cs" />
@@ -90,6 +92,10 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="Resources\VsToolsMenu.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="appConfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

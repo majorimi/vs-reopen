@@ -76,14 +76,11 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 			}
 		}
 
-		public void Initialize(IEnumerable<IClosedDocument> closedDocuments, bool reverse = true)
+		public void Initialize(IEnumerable<IClosedDocument> closedDocuments)
 		{
 			Clear();
 
-			if (reverse)
-			{
-				closedDocuments = closedDocuments.Reverse();
-			}
+			closedDocuments = closedDocuments.OrderBy(x => x.ClosedAt);
 
 			foreach (var document in closedDocuments)
 			{

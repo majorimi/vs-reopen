@@ -6,7 +6,7 @@ using VSDocumentReopen.Infrastructure.Helpers;
 
 namespace VSDocumentReopen.Infrastructure.Repositories
 {
-	public class JsonHistoryRepository : IHistoryRepository
+	public sealed class JsonHistoryRepository : IHistoryRepository
 	{
 		private readonly IJsonSerializer _serializer;
 		private readonly string _historyFile;

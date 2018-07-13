@@ -5,7 +5,7 @@ using VSDocumentReopen.Infrastructure.Repositories;
 
 namespace VSDocumentReopen.Infrastructure
 {
-	public class JsonHistoryRepositoryFactory : IHistoryRepositoryFactory
+	public sealed class JsonHistoryRepositoryFactory : IHistoryRepositoryFactory
 	{
 		private readonly IJsonSerializer _jsonSerializer;
 
@@ -16,7 +16,10 @@ namespace VSDocumentReopen.Infrastructure
 
 		public IHistoryRepository CreateHistoryRepository(SolutionInfo solutionInfo)
 		{
-			var historyFile = Path.Combine(solutionInfo.FullPath, ".vs", "VSDocumentReopen", "history.json");
+			var historyFile = Path.Combine(solutionInfo.FullPath,
+				ConfigurationManager.Config.VSTempFolderName,
+				ConfigurationManager.Config.PackageWorkingDirName,
+				ConfigurationManager.Config.HistoryFileName);
 
 			return new JsonHistoryRepository(_jsonSerializer, historyFile);
 		}
