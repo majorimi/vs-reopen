@@ -11,7 +11,7 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 - Clear document history
 
 #### History menu:
-![Menu](https://github.com/majorimi/vs-reopen/blob/master/VSDocumentReopen/VSDocumentReopen/Resources/VsToolsMenu.png?raw=true "Document history menu")
+![Menu](https://raw.githubusercontent.com/majorimi/vs-reopen/feature/reorganise-menu/VSDocumentReopen/VSDocumentReopen/Resources/VsToolsMenu.png "Document history menu")
 
 #### History Tool Windwow:
-![Window](https://github.com/majorimi/vs-reopen/blob/master/VSDocumentReopen/VSDocumentReopen/Resources/VsToolsWindow.png?raw=true "Document history Tool Window")
+![Window](https://raw.githubusercontent.com/majorimi/vs-reopen/feature/reorganise-menu/VSDocumentReopen/VSDocumentReopen/Resources/VsToolsWindow.png "Document history Tool Window")
