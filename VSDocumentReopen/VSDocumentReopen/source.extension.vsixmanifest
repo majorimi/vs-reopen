@@ -6,6 +6,7 @@
         <Description xml:space="preserve">Visual Studio Extension to reopen the last closed documents with (CTRL + SHIFT + T)</Description>
         <MoreInfo>https://github.com/majorimi/vs-reopen</MoreInfo>
         <License>Resources\LICENSE.txt</License>
+        <ReleaseNotes>https://github.com/majorimi/vs-reopen/blob/master/ReleaseNotes.md</ReleaseNotes>
         <Icon>Resources\icon.png</Icon>
         <PreviewImage>Resources\VsToolsMenu.png</PreviewImage>
         <Tags>VS Reopen Document Tool</Tags>
