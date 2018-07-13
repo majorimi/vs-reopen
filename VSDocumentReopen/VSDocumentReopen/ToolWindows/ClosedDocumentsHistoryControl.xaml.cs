@@ -30,5 +30,12 @@ namespace VSDocumentReopen.ToolWindows
 				string.Format(System.Globalization.CultureInfo.CurrentUICulture, "Invoked '{0}'", this.ToString()),
 				"ClosedDocumentsHistory");
 		}
+
+		private void button2_Click(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show(
+				string.Format(System.Globalization.CultureInfo.CurrentUICulture, "Invoked '{0}'", this.ToString()),
+				"ClosedDocumentsHistory2");
+		}
 	}
 }

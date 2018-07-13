@@ -22,7 +22,7 @@ namespace VSDocumentReopen.ToolWindows
 		/// </summary>
 		public ClosedDocumentsHistory() : base(null)
 		{
-			this.Caption = "ClosedDocumentsHistory";
+			this.Caption = "Closed Documents History";
 
 			// This is the user control hosted by the tool window; Note that, even if this class implements IDisposable,
 			// we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on

@@ -7,12 +7,13 @@
              Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
              Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="250" d:DesignWidth="800"
              Name="MyToolWindow">
     <Grid>
         <StackPanel Orientation="Vertical">
             <TextBlock Margin="10" HorizontalAlignment="Center">ClosedDocumentsHistory</TextBlock>
             <Button Content="Click me!" Click="button1_Click" Width="120" Height="80" Name="button1"/>
+            <Button Content="Click me!" Click="button2_Click" Width="120" Height="80" Name="button2"/>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -1,7 +1,6 @@
 ﻿using EnvDTE;
 using EnvDTE80;
 using System;
-using System.Diagnostics;
 
 namespace VSDocumentReopen.Documents
 {
@@ -28,7 +27,10 @@ namespace VSDocumentReopen.Documents
 				DocumentHistory.Instance.Clear();
 				_documentEvents.DocumentClosing += DocumentEventsOnDocumentClosing;
 
-				Debug.WriteLine("Solution opened");
+				//TODO: Load state
+				string solutionDir = System.IO.Path.GetDirectoryName(_dte.Solution.FullName);
+				var tmpFile = System.IO.Path.Combine(solutionDir, ".vs", "VSDocumentReopen", "temp.db");
+				System.IO.File.Create(tmpFile);
 			};
 			_solutionEvents.BeforeClosing += () =>
 			{
@@ -36,7 +38,7 @@ namespace VSDocumentReopen.Documents
 				_documentEvents.DocumentClosing -= DocumentEventsOnDocumentClosing;
 				DocumentHistory.Instance.Clear();
 
-				Debug.WriteLine("Solution closing");
+				//TODO: Save state
 			};
 		}
 
