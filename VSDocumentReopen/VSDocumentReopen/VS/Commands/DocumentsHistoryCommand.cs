@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
-using EnvDTE80;
+using EnvDTE;
 using Microsoft.VisualStudio.Shell;
-using VSDocumentReopen.Domain;
 using VSDocumentReopen.Domain.Documents;
-using VSDocumentReopen.Infrastructure;
 using VSDocumentReopen.Infrastructure.ClosedDocument;
 using VSDocumentReopen.Infrastructure.Helpers;
 using Task = System.Threading.Tasks.Task;
@@ -29,9 +27,9 @@ namespace VSDocumentReopen.VS.Commands
 		private const string HistoryItemKey = "HistoryItem";
 
 		private readonly AsyncPackage _package;
-		private readonly DTE2 _dte;
+		private readonly _DTE _dte;
 
-		private DocumentsHistoryCommand(AsyncPackage package, OleMenuCommandService commandService, DTE2 dte)
+		private DocumentsHistoryCommand(AsyncPackage package, OleMenuCommandService commandService, _DTE dte)
 		{
 			_package = package ?? throw new ArgumentNullException(nameof(package));
 			commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -59,7 +57,7 @@ namespace VSDocumentReopen.VS.Commands
 			}
 
 			var history = DocumentHistory.Instance.GetAll()
-				.Take(ConfigurationManager.Config.MaxNumberOfHistoryItemsOnMenu);
+				.Take(Infrastructure.ConfigurationManager.Config.MaxNumberOfHistoryItemsOnMenu);
 
 			currentCommand.Visible = true;
 			currentCommand.Text = history.Any() ? "<History>" : "<No History>";
@@ -104,7 +102,7 @@ namespace VSDocumentReopen.VS.Commands
 
 		private IAsyncServiceProvider ServiceProvider => _package;
 
-		public static async Task InitializeAsync(AsyncPackage package, DTE2 dte)
+		public static async Task InitializeAsync(AsyncPackage package, _DTE dte)
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
 
