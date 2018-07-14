@@ -66,6 +66,7 @@ namespace VSDocumentReopen
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
 
+			//TODO: union some of the loops, put shortcuts to config, enforce ToolWindow shortcut as well
 			var commands = new List<Command>();
 			foreach (Command command in _dte.Commands)
 			{

@@ -7,5 +7,9 @@
 		public string PackageWorkingDirName { get; set; }
 
 		public string HistoryFileName { get; set; }
+
+		public int MaxNumberOfHistoryItemsOnMenu { get; set; }
+
+		public int MaxAllowedHistoryItems { get; set; }
 	}
 }

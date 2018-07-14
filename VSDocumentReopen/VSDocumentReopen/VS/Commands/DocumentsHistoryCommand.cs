@@ -6,6 +6,7 @@ using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using VSDocumentReopen.Domain;
 using VSDocumentReopen.Domain.Documents;
+using VSDocumentReopen.Infrastructure;
 using VSDocumentReopen.Infrastructure.ClosedDocument;
 using VSDocumentReopen.Infrastructure.Helpers;
 using Task = System.Threading.Tasks.Task;
@@ -26,7 +27,6 @@ namespace VSDocumentReopen.VS.Commands
 
 		private static readonly List<OleMenuCommand> Commands = new List<OleMenuCommand>();
 		private const string HistoryItemKey = "HistoryItem";
-		private const int MaxNumberOfHistoryItems = 5;
 
 		private readonly AsyncPackage _package;
 		private readonly DTE2 _dte;
@@ -58,7 +58,8 @@ namespace VSDocumentReopen.VS.Commands
 				mcs.RemoveCommand(cmd);
 			}
 
-			var history = DocumentHistory.Instance.GetAll().Take(MaxNumberOfHistoryItems);
+			var history = DocumentHistory.Instance.GetAll()
+				.Take(ConfigurationManager.Config.MaxNumberOfHistoryItemsOnMenu);
 
 			currentCommand.Visible = true;
 			currentCommand.Text = history.Any() ? "<History>" : "<No History>";
