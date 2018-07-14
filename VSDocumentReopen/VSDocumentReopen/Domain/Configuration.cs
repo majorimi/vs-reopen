@@ -11,5 +11,9 @@
 		public int MaxNumberOfHistoryItemsOnMenu { get; set; }
 
 		public int MaxAllowedHistoryItems { get; set; }
+
+		public string ReopenCommandBinding { get; set; }
+
+		public string ShowMoreCommandBinding { get; set; }
 	}
 }
