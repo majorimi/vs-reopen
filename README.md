@@ -2,6 +2,7 @@
 Visual Studio Extension to reopen the last closed document(s) with (CTRL + SHIFT + T) shortcut.
 
 Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=major.VSDocumentReopen).
+For version history see [release notes](https://github.com/majorimi/vs-reopen/blob/master/ReleaseNotes.md).
 
 ### Advantages compared to build in "Recent files" menu:
 - Convenient shortcut key (CTRL + SHIFT + T)
