@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace VSDocumentReopen.VS.ToolWindows
 {
@@ -15,27 +13,18 @@ namespace VSDocumentReopen.VS.ToolWindows
 		public ClosedDocumentsHistoryControl()
 		{
 			this.InitializeComponent();
+
+			Infrastructure.ClosedDocument.DocumentHistory.Instance.HistoryChanged += DocumentHistoryChanged;
 		}
 
-		/// <summary>
-		/// Handles click on the button by displaying a message box.
-		/// </summary>
-		/// <param name="sender">The event sender.</param>
-		/// <param name="e">The event args.</param>
-		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "Sample code")]
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Default event handler naming pattern")]
-		private void button1_Click(object sender, RoutedEventArgs e)
+		private void DocumentHistoryChanged(object sender, System.EventArgs e)
 		{
-			MessageBox.Show(
-				string.Format(System.Globalization.CultureInfo.CurrentUICulture, "Invoked '{0}'", this.ToString()),
-				"ClosedDocumentsHistory");
-		}
+			_listView.Items.Clear();
 
-		private void button2_Click(object sender, RoutedEventArgs e)
-		{
-			MessageBox.Show(
-				string.Format(System.Globalization.CultureInfo.CurrentUICulture, "Invoked '{0}'", this.ToString()),
-				"ClosedDocumentsHistory2");
+			foreach (var doc in Infrastructure.ClosedDocument.DocumentHistory.Instance.GetAll())
+			{
+				_listView.Items.Add(doc);
+			}
 		}
 	}
 }

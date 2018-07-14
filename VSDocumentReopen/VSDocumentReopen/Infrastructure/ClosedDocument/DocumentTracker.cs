@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using EnvDTE;
 using EnvDTE80;
 using VSDocumentReopen.Domain;

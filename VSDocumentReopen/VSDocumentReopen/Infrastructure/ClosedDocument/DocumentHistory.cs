@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using EnvDTE;
 using VSDocumentReopen.Domain.Documents;
 
 namespace VSDocumentReopen.Infrastructure.ClosedDocument
 {
-	public sealed class DocumentHistory : INotifyPropertyChanged
+	public sealed class DocumentHistory
 	{
-		public event PropertyChangedEventHandler PropertyChanged;
+		public event EventHandler HistoryChanged;
 
 		private static readonly Stack<IClosedDocument> CloseDocuments;
 
@@ -27,7 +25,7 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 		public void Clear()
 		{
 			CloseDocuments.Clear();
-			OnPropertyChanged();
+			OnHistoryChanged();
 		}
 
 		public void AddClosed(Document document)
@@ -46,7 +44,7 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 				ClosedAt = DateTime.Now,
 			});
 
-			OnPropertyChanged();
+			OnHistoryChanged();
 		}
 
 		public IClosedDocument GetLastClosed()
@@ -54,7 +52,7 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 			if (CloseDocuments.Count > 0)
 			{
 				var ret = CloseDocuments.Pop();
-				OnPropertyChanged();
+				OnHistoryChanged();
 
 				return ret;
 			}
@@ -87,12 +85,12 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 				CloseDocuments.Push(document);
 			}
 
-			OnPropertyChanged();
+			OnHistoryChanged();
 		}
 
-		private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		private void OnHistoryChanged()
 		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+			HistoryChanged?.Invoke(this, new EventArgs());
 		}
 	}
 }

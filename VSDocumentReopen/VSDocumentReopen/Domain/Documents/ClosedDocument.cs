@@ -3,7 +3,7 @@ using System.IO;
 
 namespace VSDocumentReopen.Domain.Documents
 {
-	internal sealed class ClosedDocument : IClosedDocument
+	public sealed class ClosedDocument : IClosedDocument
 	{
 		public string FullName { get; set; }
 
