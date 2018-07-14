@@ -1,21 +1,67 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <Extern href="stdidcmd.h"/>
-  <Extern href="vsshlids.h"/>
+  <Extern href="stdidcmd.h" />
+  <Extern href="vsshlids.h" />
 
   <Commands package="guidReopenPackage">
     <Groups>
-      <Group guid="guidReopenPackageCmdSet" id="MyMenuGroup" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+      <Group guid="guidReopenPackageCmdSet" id="MyGroupForSubmenu" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
+      </Group>
+      <Group guid="guidReopenPackageCmdSet" id="MyGroupForReopen" priority="0x0100">
+        <Parent guid="guidReopenPackageCmdSet" id="MySubmenu" />
+      </Group>
+      <Group guid="guidReopenPackageCmdSet" id="MyGroupForHistory" priority="0x0101">
+        <Parent guid="guidReopenPackageCmdSet" id="MySubmenu" />
+      </Group>
+      <Group guid="guidReopenPackageCmdSet" id="MyGroupForShowMore" priority="0x0102">
+        <Parent guid="guidReopenPackageCmdSet" id="MySubmenu" />
+      </Group>
+      <Group guid="guidReopenPackageCmdSet" id="MyGroupForClear" priority="0x0103">
+        <Parent guid="guidReopenPackageCmdSet" id="MySubmenu" />
       </Group>
     </Groups>
 
+    <Menus>
+      <Menu guid="guidReopenPackageCmdSet" id="MySubmenu" type="Menu">
+        <Parent guid="guidReopenPackageCmdSet" id="MyGroupForSubmenu" />
+        <Strings>
+          <ButtonText>Reopen recent document(s)</ButtonText>
+        </Strings>
+      </Menu>
+    </Menus>
+
     <Buttons>
       <Button guid="guidReopenPackageCmdSet" id="ReopenId" priority="0x0100" type="Button">
-        <Parent guid="guidReopenPackageCmdSet" id="MyMenuGroup" />
+        <Parent guid="guidReopenPackageCmdSet" id="MyGroupForReopen" />
         <Strings>
-          <ButtonText>Reopen closed document</ButtonText>
+          <ButtonText>Reopen closed document(s)</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidReopenPackageCmdSet" id="HistoryId" priority="0x103">
+        <Parent guid="guidReopenPackageCmdSet" id="MyGroupForHistory" />
+        <CommandFlag>DynamicItemStart</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>TextChanges</CommandFlag>
+        <!-- This text does not appear. -->
+        <Strings>
+          <ButtonText>History</ButtonText>
+        </Strings>
+      </Button>
+      <!--Dynamic commands for history-->
+      <Button guid="guidReopenPackageCmdSet" id="ShowMoreId" priority="0x0110" type="Button">
+        <Parent guid="guidReopenPackageCmdSet" id="MyGroupForShowMore" />
+        <Strings>
+          <ButtonText>Show more...</ButtonText>
+        </Strings>
+      </Button>
+      
+      <Button guid="guidReopenPackageCmdSet" id="ClearId" priority="0x0102" type="Button">
+        <Parent guid="guidReopenPackageCmdSet" id="MyGroupForClear" />
+        <Strings>
+          <ButtonText>Clear history</ButtonText>
         </Strings>
       </Button>
     </Buttons>
@@ -23,6 +69,7 @@
 
   <KeyBindings>
     <KeyBinding guid="guidReopenPackageCmdSet" id="ReopenId" editor="guidVSStd97" key1="T" mod1="Control" mod2="Shift" />
+    <KeyBinding guid="guidReopenPackageCmdSet" id="ShowMoreId" editor="guidVSStd97" key1="R" mod1="Control" mod2="Shift" />
   </KeyBindings>
 
   <Symbols>
@@ -31,8 +78,18 @@
 
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidReopenPackageCmdSet" value="{d968b4de-3a69-4eb1-b676-942055da9dfd}">
-      <IDSymbol name="MyMenuGroup" value="0x1020" />
-      <IDSymbol name="ReopenId" value="0x0100" />
+      <IDSymbol name="MyGroupForSubmenu" value="0x1020" />
+      <IDSymbol name="MyGroupForReopen" value="0x1021" />
+      <IDSymbol name="MyGroupForHistory" value="0x1022" />
+      <IDSymbol name="MyGroupForShowMore" value="0x1023" />
+      <IDSymbol name="MyGroupForClear" value="0x1024" />
+      <IDSymbol name="MySubmenu" value="0x0100" />
+
+      <!-- Warning!!: Keep the values in sync with the code! -->
+      <IDSymbol name="ReopenId" value="0x0101" />
+      <IDSymbol name="ClearId" value="0x0102" />
+      <IDSymbol name="HistoryId" value="0x0103" />
+      <IDSymbol name="ShowMoreId" value="0x0110" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>

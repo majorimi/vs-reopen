@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -9,6 +8,11 @@ using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using VSDocumentReopen.Infrastructure;
+using VSDocumentReopen.Infrastructure.ClosedDocument;
+using VSDocumentReopen.Infrastructure.Helpers;
+using VSDocumentReopen.VS.Commands;
+using VSDocumentReopen.VS.ToolWindows;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen
@@ -19,6 +23,7 @@ namespace VSDocumentReopen
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
 	[Guid(ReopenPackage.PackageGuidString)]
 	[ProvideAutoLoad(UIContextGuids.NoSolution)]
+	[ProvideToolWindow(typeof(ClosedDocumentsHistory))]
 	public sealed class ReopenPackage : AsyncPackage
 	{
 		/// <summary>
@@ -27,48 +32,31 @@ namespace VSDocumentReopen
 		public const string PackageGuidString = "b30147a1-6fbc-4b94-bf01-123d837c4fe2";
 
 		private readonly DTE2 _dte;
-		private readonly SolutionEvents _solutionEvents;
-		private readonly DocumentEvents _documentEvents;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Reopen"/> class.
+		/// Initializes a new instance of the <see cref="ReopenClosedDocumentsCommand"/> class.
 		/// </summary>
 		public ReopenPackage()
 		{
 			_dte = GetGlobalService(typeof(DTE)) as DTE2 ?? throw new NullReferenceException($"Unable to get service {nameof(DTE2)}");
-
-			_solutionEvents = _dte.Events.SolutionEvents;
-			_documentEvents = _dte.Events.DocumentEvents;
 		}
 
 		protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
 		{
-			// When initialized asynchronously, the current thread may be a background thread at this point.
-			// Do any initialization that requires the UI thread after switching to the UI thread.
-			await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-			await Reopen.InitializeAsync(this, _dte);
+			await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+
+			//Init Commands
+			await ReopenClosedDocumentsCommand.InitializeAsync(this, _dte);
+			await ClearDocumentsHistoryCommand.InitializeAsync(this);
+			await DocumentsHistoryCommand.InitializeAsync(this, _dte);
+
+			//Init ToolWindow Commands
+			await ShowDocumentsHIstoryCommand.InitializeAsync(this, _dte);
 
 			EnforceKeyBinding();
 
-			_solutionEvents.Opened += () =>
-			{
-				DocumentTracker.Instance.Clear();
-				_documentEvents.DocumentClosing += DocumentEventsOnDocumentClosing;
-
-				Debug.WriteLine("Solution opened");
-			};
-			_solutionEvents.AfterClosing += () =>
-			{
-				_documentEvents.DocumentClosing -= DocumentEventsOnDocumentClosing;
-				DocumentTracker.Instance.Clear();
-
-				Debug.WriteLine("Solution closed");
-			};
-		}
-
-		private void DocumentEventsOnDocumentClosing(Document document)
-		{
-			DocumentTracker.Instance.AddClosed(document);
+			new DocumentTracker(_dte, 
+				new JsonHistoryRepositoryFactory(new ServiceStackJsonSerializer()));
 		}
 
 		/// <summary>
@@ -76,6 +64,8 @@ namespace VSDocumentReopen
 		/// </summary>
 		private void EnforceKeyBinding()
 		{
+			ThreadHelper.ThrowIfNotOnUIThread();
+
 			var commands = new List<Command>();
 			foreach (Command command in _dte.Commands)
 			{
@@ -84,7 +74,7 @@ namespace VSDocumentReopen
 			}
 
 			Command comm;
-			var guid = Reopen.CommandSet.ToString("B").ToUpper();
+			var guid = ReopenClosedDocumentsCommand.CommandSet.ToString("B").ToUpper();
 			var binding = "Global::Ctrl+Shift+T";
 
 			foreach (var command in commands)
