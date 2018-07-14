@@ -1,6 +1,6 @@
 ﻿namespace VSDocumentReopen.Domain
 {
-	public sealed class Configuration
+	public sealed class Configuration : IConfiguration
 	{
 		public string VSTempFolderName { get; set; }
 
