@@ -12,7 +12,7 @@ For version history see [release notes](https://github.com/majorimi/vs-reopen/bl
 - Clear document history
 
 #### History menu:
-![Menu](https://raw.githubusercontent.com/majorimi/vs-reopen/feature/reorganise-menu/VSDocumentReopen/VSDocumentReopen/Resources/VsToolsMenu.png "Document history menu")
+![Menu](https://raw.githubusercontent.com/majorimi/vs-reopen/master/VSDocumentReopen/VSDocumentReopen/Resources/VsToolsMenu.png "Document history menu")
 
 #### History Tool Windwow:
-![Window](https://raw.githubusercontent.com/majorimi/vs-reopen/feature/reorganise-menu/VSDocumentReopen/VSDocumentReopen/Resources/VsToolsWindow.png "Document history Tool Window")
+![Window](https://raw.githubusercontent.com/majorimi/vs-reopen/master/VSDocumentReopen/VSDocumentReopen/Resources/VsToolsWindow.png "Document history Tool Window")
