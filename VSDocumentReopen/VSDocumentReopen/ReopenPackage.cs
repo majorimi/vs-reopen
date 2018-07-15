@@ -101,5 +101,11 @@ namespace VSDocumentReopen
 				}
 			}
 		}
+
+		protected override void Dispose(bool disposing)
+		{
+			_documentTracker.Dispose();
+			base.Dispose(disposing);
+		}
 	}
 }

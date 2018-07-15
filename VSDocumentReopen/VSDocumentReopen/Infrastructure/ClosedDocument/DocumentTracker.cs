@@ -5,7 +5,14 @@ using VSDocumentReopen.Domain;
 
 namespace VSDocumentReopen.Infrastructure.ClosedDocument
 {
-	internal sealed class DocumentTracker
+	public enum SolutionStates
+	{
+		None = 0,
+		Opened = 1,
+		StartedToClose = 2
+	}
+
+	public sealed class DocumentTracker : IDisposable
 	{
 		private readonly _DTE _dte;
 		private readonly IHistoryRepositoryFactory _historyRepositoryFactory;
@@ -13,6 +20,8 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 		private readonly DocumentEvents _documentEvents;
 
 		private SolutionInfo _currentSolution;
+
+		public SolutionStates SolutionState { get; private set; }
 
 		public DocumentTracker(_DTE dte, IHistoryRepositoryFactory historyRepositoryFactory)
 		{
@@ -27,41 +36,67 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 
 		private void Initialize()
 		{
-			_solutionEvents.Opened += () =>
+			SolutionState = SolutionStates.None;
+
+			_solutionEvents.Opened += OnSolutionEventsOnOpened;
+			_solutionEvents.BeforeClosing += OnSolutionEventsOnBeforeClosing;
+			_solutionEvents.AfterClosing += OnSolutionEventsOnAfterClosing;
+		}
+
+		private void OnSolutionEventsOnOpened()
+		{
+			_documentEvents.DocumentClosing += DocumentEventsOnDocumentClosing;
+			SolutionState = SolutionStates.Opened;
+
+			var solutionDir = Path.GetDirectoryName(_dte.Solution.FullName);
+			var solutionName = Path.GetFileName(_dte.Solution.FullName).Replace(".sln", string.Empty);
+			_currentSolution = new SolutionInfo(solutionDir, solutionName);
+
+			//Create history repo
+			var historyRepository = _historyRepositoryFactory.CreateHistoryRepository(_currentSolution);
+
+			//Load history and init state
+			var history = historyRepository.GetHistory();
+			DocumentHistory.Instance.Initialize(history);
+		}
+
+		private void OnSolutionEventsOnBeforeClosing()
+		{
+			//TODO: try to validate if it was closed or canceled...
+			SolutionState = SolutionStates.StartedToClose;
+		}
+
+		private void OnSolutionEventsOnAfterClosing()
+		{
+			_documentEvents.DocumentClosing -= DocumentEventsOnDocumentClosing;
+
+			//Save state
+			var historyRepository = _historyRepositoryFactory.CreateHistoryRepository(_currentSolution);
+			if (!historyRepository.SaveHistory(DocumentHistory.Instance.GetAll()))
 			{
-				_documentEvents.DocumentClosing += DocumentEventsOnDocumentClosing;
+				//TODO: log and notify user...
+			}
 
-				var solutionDir = Path.GetDirectoryName(_dte.Solution.FullName);
-				var solutionName = Path.GetFileName(_dte.Solution.FullName).Replace(".sln", string.Empty);
-				_currentSolution = new SolutionInfo(solutionDir, solutionName);
-				
-				//Create history repo
-				var historyRepository = _historyRepositoryFactory.CreateHistoryRepository(_currentSolution);
-				
-				//Load history and init state
-				var history = historyRepository.GetHistory();
-				DocumentHistory.Instance.Initialize(history);
-			};
-			_solutionEvents.BeforeClosing += () =>
-			{
-				//TODO: User can cancel the "Close" operation which means no history after that. However using the "AfterClosing" event will push all opened doc to the history...
-				_documentEvents.DocumentClosing -= DocumentEventsOnDocumentClosing;
-
-				//Save state
-				var historyRepository = _historyRepositoryFactory.CreateHistoryRepository(_currentSolution);
-				if (!historyRepository.SaveHistory(DocumentHistory.Instance.GetAll()))
-				{
-					//TODO: log and notify user...
-				}
-
-				_currentSolution = null;
-				DocumentHistory.Instance.Clear();
-			};
+			SolutionState = SolutionStates.None;
+			_currentSolution = null;
+			DocumentHistory.Instance.Clear();
 		}
 
 		private void DocumentEventsOnDocumentClosing(Document document)
 		{
-			DocumentHistory.Instance.AddClosed(document);
+			if (SolutionState == SolutionStates.Opened)
+			{
+				DocumentHistory.Instance.AddClosed(document);
+			}
+		}
+
+		public void Dispose()
+		{
+			_solutionEvents.Opened -= OnSolutionEventsOnOpened;
+			_solutionEvents.BeforeClosing -= OnSolutionEventsOnBeforeClosing;
+			_solutionEvents.AfterClosing -= OnSolutionEventsOnAfterClosing;
+
+			_documentEvents.DocumentClosing -= DocumentEventsOnDocumentClosing;
 		}
 	}
 }
