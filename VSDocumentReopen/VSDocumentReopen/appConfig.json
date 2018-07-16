@@ -1,5 +1,9 @@
 ﻿{
   "VSTempFolderName": ".vs",
   "PackageWorkingDirName": "VSDocumentReopen",
-  "HistoryFileName": "history.json"
+  "HistoryFileName": "history.json",
+  "MaxNumberOfHistoryItemsOnMenu": 5,
+  "MaxAllowedHistoryItems": 1000,
+  "ReopenCommandBinding": "Global::Ctrl+Shift+T",
+  "ShowMoreCommandBinding": "Global::Ctrl+Shift+R"
 }

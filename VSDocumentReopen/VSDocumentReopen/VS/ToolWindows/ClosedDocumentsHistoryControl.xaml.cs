@@ -12,12 +12,18 @@ namespace VSDocumentReopen.VS.ToolWindows
 		/// </summary>
 		public ClosedDocumentsHistoryControl()
 		{
-			this.InitializeComponent();
+			InitializeComponent();
 
 			Infrastructure.ClosedDocument.DocumentHistory.Instance.HistoryChanged += DocumentHistoryChanged;
+			RefreshView();
 		}
 
 		private void DocumentHistoryChanged(object sender, System.EventArgs e)
+		{
+			RefreshView();
+		}
+
+		private void RefreshView()
 		{
 			_listView.Items.Clear();
 

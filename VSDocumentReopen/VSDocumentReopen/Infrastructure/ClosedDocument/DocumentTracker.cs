@@ -1,21 +1,20 @@
 ﻿using System;
 using System.IO;
 using EnvDTE;
-using EnvDTE80;
 using VSDocumentReopen.Domain;
 
 namespace VSDocumentReopen.Infrastructure.ClosedDocument
 {
 	internal sealed class DocumentTracker
 	{
-		private readonly DTE2 _dte;
+		private readonly _DTE _dte;
 		private readonly IHistoryRepositoryFactory _historyRepositoryFactory;
 		private readonly SolutionEvents _solutionEvents;
 		private readonly DocumentEvents _documentEvents;
 
 		private SolutionInfo _currentSolution;
 
-		public DocumentTracker(DTE2 dte, IHistoryRepositoryFactory historyRepositoryFactory)
+		public DocumentTracker(_DTE dte, IHistoryRepositoryFactory historyRepositoryFactory)
 		{
 			_dte = dte ?? throw new ArgumentNullException(nameof(dte));
 			_historyRepositoryFactory = historyRepositoryFactory;
