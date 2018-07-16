@@ -9,15 +9,16 @@
              mc:Ignorable="d"
              d:DesignHeight="250" d:DesignWidth="800"
              Name="DocumentHistory">
-    <StackPanel Orientation="Vertical">
-        <ListView Margin="2" Name="_listView" SelectionMode="Single">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Width="270" Header="File path" DisplayMemberBinding="{Binding FullName}" />
-                    <GridViewColumn Width="180" Header="File name" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn Width="180" Header="Closed at" DisplayMemberBinding="{Binding ClosedAt}" />
-                </GridView>
-            </ListView.View>
-        </ListView>
-    </StackPanel>
+    <ListView Margin="2" Name="_listView" VerticalAlignment="Top" 
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                ScrollViewer.CanContentScroll="True" 
+                SelectionMode="Single">
+        <ListView.View>
+            <GridView>
+                <GridViewColumn Width="300" Header="File path" DisplayMemberBinding="{Binding FullName}" />
+                <GridViewColumn Width="180" Header="File name" DisplayMemberBinding="{Binding Name}" />
+                <GridViewColumn Width="180" Header="Closed at" DisplayMemberBinding="{Binding ClosedAt}" />
+            </GridView>
+        </ListView.View>
+    </ListView>
 </UserControl>

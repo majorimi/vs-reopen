@@ -4,6 +4,11 @@ Visual Studio Extension to reopen the last closed document(s) with (CTRL + SHIFT
 Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=major.VSDocumentReopen).
 
 ## Version history
+
+##### v. 1.1.1
+- Enforce key bindigs for menu commands
+- Enable vertical scroll in History Tool Window
+- Bugfix: History Tool Window does not initialized with history data
     
 ##### v. 1.1.0
 - Reorganized menu command: under the Tools menu child menu

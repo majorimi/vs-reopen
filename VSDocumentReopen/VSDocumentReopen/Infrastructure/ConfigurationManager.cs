@@ -8,19 +8,21 @@ namespace VSDocumentReopen.Infrastructure
 {
 	public static class ConfigurationManager
 	{
-		private static Lazy<Configuration> _loadConfig;
+		private const string ConfigFileName = "appConfig.json";
+
+		private static Lazy<IConfiguration> _loadConfig;
 
 		static ConfigurationManager()
 		{
-			_loadConfig = new Lazy<Configuration>(LoadConfig);
+			_loadConfig = new Lazy<IConfiguration>(LoadConfig);
 		}
 
-		public static Configuration Config => _loadConfig.Value;
+		public static IConfiguration Config => _loadConfig.Value;
 
-		private static Configuration LoadConfig()
+		private static IConfiguration LoadConfig()
 		{
 			var workingDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-			var config = Path.Combine(workingDir, "appConfig.json");
+			var config = Path.Combine(workingDir, ConfigFileName);
 
 			var json = File.ReadAllText(config);
 			return new ServiceStackJsonSerializer().Deserialize<Configuration>(json);

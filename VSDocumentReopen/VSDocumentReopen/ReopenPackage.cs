@@ -32,6 +32,7 @@ namespace VSDocumentReopen
 		public const string PackageGuidString = "b30147a1-6fbc-4b94-bf01-123d837c4fe2";
 
 		private readonly DTE2 _dte;
+		private readonly DocumentTracker _documentTracker;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ReopenClosedDocumentsCommand"/> class.
@@ -39,6 +40,9 @@ namespace VSDocumentReopen
 		public ReopenPackage()
 		{
 			_dte = GetGlobalService(typeof(DTE)) as DTE2 ?? throw new NullReferenceException($"Unable to get service {nameof(DTE2)}");
+
+			_documentTracker = new DocumentTracker(_dte,
+				new JsonHistoryRepositoryFactory(new ServiceStackJsonSerializer()));
 		}
 
 		protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
@@ -54,9 +58,6 @@ namespace VSDocumentReopen
 			await ShowDocumentsHIstoryCommand.InitializeAsync(this, _dte);
 
 			EnforceKeyBinding();
-
-			new DocumentTracker(_dte, 
-				new JsonHistoryRepositoryFactory(new ServiceStackJsonSerializer()));
 		}
 
 		/// <summary>
@@ -66,36 +67,37 @@ namespace VSDocumentReopen
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
 
-			var commands = new List<Command>();
+			var commandsGuid = ReopenClosedDocumentsCommand.CommandSet.ToString("B").ToUpper();
+			var reopenCommandBinding = Infrastructure.ConfigurationManager.Config.ReopenCommandBinding;
+			var showMoreCommandBinding = Infrastructure.ConfigurationManager.Config.ShowMoreCommandBinding;
+
+			var myCommands = new List<Command>();
 			foreach (Command command in _dte.Commands)
 			{
-				if (!string.IsNullOrEmpty(command.Name))
-					commands.Add(command);
-			}
+				if (command.Guid == commandsGuid)
+				{
+					myCommands.Add(command);
+				}
 
-			Command comm;
-			var guid = ReopenClosedDocumentsCommand.CommandSet.ToString("B").ToUpper();
-			var binding = "Global::Ctrl+Shift+T";
-
-			foreach (var command in commands)
-			{
 				if (command.Bindings is object[] bindings && bindings.Length > 0)
 				{
 					var bind = string.Join(" ", bindings.Select(x => (string)x));
-					if (bind.Contains(binding) && command.Guid != guid)
+					if (bind.Contains(reopenCommandBinding) || bind.Contains(showMoreCommandBinding))
 					{
 						command.Bindings = new object[0];
 					}
 				}
 			}
 
-			foreach (var command in commands)
+			Bind(ReopenClosedDocumentsCommand.CommandId, reopenCommandBinding);
+			Bind(ShowDocumentsHIstoryCommand.CommandId, showMoreCommandBinding);
+
+			void Bind(int commandId, string keyBinding)
 			{
-				if (command.Guid == guid)
+				var command = myCommands.SingleOrDefault(x => x.ID == commandId);
+				if (command != null)
 				{
-					comm = command;
-					comm.Bindings = binding;
-					break;
+					command.Bindings = keyBinding;
 				}
 			}
 		}

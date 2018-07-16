@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Design;
-using EnvDTE80;
+using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using VSDocumentReopen.VS.ToolWindows;
@@ -21,9 +21,9 @@ namespace VSDocumentReopen.VS.Commands
 		public static readonly Guid CommandSet = new Guid("d968b4de-3a69-4eb1-b676-942055da9dfd");
 
 		private readonly AsyncPackage _package;
-		private readonly DTE2 _dte;
+		private readonly _DTE _dte;
 
-		private ShowDocumentsHIstoryCommand(AsyncPackage package, OleMenuCommandService commandService, DTE2 dte)
+		private ShowDocumentsHIstoryCommand(AsyncPackage package, OleMenuCommandService commandService, _DTE dte)
 		{
 			_package = package ?? throw new ArgumentNullException(nameof(package));
 			commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -40,7 +40,7 @@ namespace VSDocumentReopen.VS.Commands
 			private set;
 		}
 
-		public static async Task InitializeAsync(AsyncPackage package, DTE2 dte)
+		public static async Task InitializeAsync(AsyncPackage package, _DTE dte)
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
 
