@@ -7,18 +7,75 @@
              Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
              Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
              mc:Ignorable="d"
-             d:DesignHeight="250" d:DesignWidth="800"
+             d:DesignHeight="250" d:DesignWidth="960"
              Name="DocumentHistory">
-    <ListView Margin="2" Name="_listView" VerticalAlignment="Top" 
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions >
+            <RowDefinition Height="26"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Background="#EEEDF2">
+            <Label Content="Number of items in History:"></Label>
+            <Label Name="_numberOfItems" FontWeight="Bold" Content="0"></Label>
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            
+            <TextBox Name="_search" Width="150" Margin="2" Height="20" VerticalContentAlignment="Center" >
+                <TextBox.Style>
+                    <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                        <Style.Resources>
+                            <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None" >
+                                <VisualBrush.Visual>
+                                    <Label Content="Search..." Foreground="LightGray" Width="150" Background="#EFEFEF" />
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </Style.Resources>
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                            </Trigger>
+                            <Trigger Property="Text" Value="{x:Null}">
+                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter Property="Background" Value="White" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+            <Button Name="_openSelected" Content="Open" Margin="2"/>
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+            <Button Name="_removeSelected" Content="Remove" Margin="2"/>
+            <Button Name="_clearAll" Content="Clear" Margin="2"/>
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+        </StackPanel>
+
+        <ListView Margin="3" Name="_listView" Grid.Row="1" VerticalAlignment="Top" 
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.CanContentScroll="True" 
-                SelectionMode="Single">
-        <ListView.View>
-            <GridView>
-                <GridViewColumn Width="300" Header="File path" DisplayMemberBinding="{Binding FullName}" />
-                <GridViewColumn Width="180" Header="File name" DisplayMemberBinding="{Binding Name}" />
-                <GridViewColumn Width="180" Header="Closed at" DisplayMemberBinding="{Binding ClosedAt}" />
-            </GridView>
-        </ListView.View>
-    </ListView>
+                SelectionMode="Extended"
+                MouseDoubleClick="_listView_OnMouseDoubleClick"
+                KeyUp="_listView_OnKeyUp">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="30" Header="#" DisplayMemberBinding="{Binding Index}" />
+                    <GridViewColumn Width="400" Header="File path" DisplayMemberBinding="{Binding FullName}" />
+                    <GridViewColumn Width="200" Header="File name" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Width="35" Header="Icon" DisplayMemberBinding="{Binding ClosedAt}" />
+                    <GridViewColumn Width="180" Header="Closed at" DisplayMemberBinding="{Binding ClosedAt}" />
+                    <GridViewColumn Width="50" Header="Exists" DisplayMemberBinding="{Binding IsExists}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+
 </UserControl>
