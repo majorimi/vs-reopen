@@ -61,11 +61,18 @@
     <Compile Include="Domain\SolutionInfo.cs" />
     <Compile Include="Infrastructure\ConfigurationManager.cs" />
     <Compile Include="Infrastructure\Helpers\IJsonSerializer.cs" />
+    <Compile Include="Infrastructure\Helpers\ImageConverterHelper.cs" />
     <Compile Include="Infrastructure\Helpers\ServiceStackJsonSerializer.cs" />
+    <Compile Include="Infrastructure\Helpers\WpfImageSourceConverter.cs" />
     <Compile Include="Infrastructure\IHistoryRepositoryFactory.cs" />
     <Compile Include="Infrastructure\JsonHistoryRepositoryFactory.cs" />
     <Compile Include="Infrastructure\Repositories\JsonHistoryRepository.cs" />
     <Compile Include="Infrastructure\Repositories\IHistoryRepository.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="VS\ToolWindows\ClosedDocumentsHistory.cs" />
     <Compile Include="VS\ToolWindows\ClosedDocumentsHistoryControl.xaml.cs">
       <DependentUpon>ClosedDocumentsHistoryControl.xaml</DependentUpon>
@@ -85,13 +92,13 @@
     <Compile Include="VS\ToolWindows\ClosedDocumentsHistoryControl_Events.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\ClearWindowContent_16x.png" />
+    <None Include="Resources\ClearWindowContent_16x.png" />
     <Content Include="Resources\icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Resources\OpenFile_16x.png" />
-    <Content Include="Resources\RemoveGuide_16x.png" />
+    <None Include="Resources\OpenFile_16x.png" />
+    <None Include="Resources\RemoveGuide_16x.png" />
     <Content Include="Resources\VsToolsMenu.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -211,6 +218,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
       <ManifestResourceName>VSPackage</ManifestResourceName>

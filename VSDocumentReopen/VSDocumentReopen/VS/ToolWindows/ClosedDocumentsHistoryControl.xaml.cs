@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 using VSDocumentReopen.Domain.Documents;
+using VSDocumentReopen.Infrastructure.Helpers;
 
 namespace VSDocumentReopen.VS.ToolWindows
 {
@@ -34,6 +35,12 @@ namespace VSDocumentReopen.VS.ToolWindows
 		public ClosedDocumentsHistoryControl()
 		{
 			InitializeComponent();
+
+			_openSelectedImg.Source = WpfImageSourceConverter.CreateBitmapSource(Properties.Resources.OpenFile_16x);
+			_removeSelectedImg.Source = WpfImageSourceConverter.CreateBitmapSource(Properties.Resources.RemoveGuide_16x);
+			_clearAllImg.Source = WpfImageSourceConverter.CreateBitmapSource(Properties.Resources.ClearWindowContent_16x);
+
+			_listView.Focus();
 
 			//Sort: http://www.wpf-tutorial.com/listview-control/listview-how-to-column-sorting/
 			Infrastructure.ClosedDocument.DocumentHistory.Instance.HistoryChanged += DocumentHistoryChanged;

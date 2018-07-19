@@ -10,6 +10,17 @@
              d:DesignHeight="250" d:DesignWidth="960"
              Name="DocumentHistory">
 
+    <UserControl.Resources>
+        <Style x:Key="MenuButton">
+            <Setter Property="Control.Background" Value="{x:Null}" />
+            <Setter Property="Control.BorderBrush" Value="{x:Null}" />
+            <Setter Property="Control.BorderThickness" Value="0" />
+            <Setter Property="Control.Margin" Value="4" />
+            <Setter Property="Control.Width" Value="18" />
+            <Setter Property="Control.Height" Value="18" />
+        </Style>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -22,7 +33,7 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal" Background="#EEEDF2">
             <Label Content="Number of items in History:"></Label>
             <Label Name="_numberOfItems" FontWeight="Bold" Content="0"></Label>
-            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
             
             <TextBox Name="_search" Width="150" Margin="2" Height="20" VerticalContentAlignment="Center" >
                 <TextBox.Style>
@@ -48,14 +59,19 @@
                     </Style>
                 </TextBox.Style>
             </TextBox>
-            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
-            <Button Name="_openSelected" Content="Open" Margin="2"/>
-            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            <Button Name="_openSelected" ToolTip="Reopen all selected Document(s)" Style="{StaticResource MenuButton}">
+                <Image Name="_openSelectedImg" Source="/Resources/OpenFile_16x.png" />
+            </Button>
+            <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
-            <Button Name="_removeSelected" Content="Remove" Margin="2"/>
-            <Button Name="_clearAll" Content="Clear" Margin="2"/>
-            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            <Button Name="_removeSelected" ToolTip="Remove selected Document(s) from History" Style="{StaticResource MenuButton}">
+                <Image Name="_removeSelectedImg" Source="/Resources/RemoveGuide_16x.png" />
+            </Button>
+            <Button Name="_clearAll" ToolTip="Clear History" Style="{StaticResource MenuButton}">
+                <Image Name="_clearAllImg" Source="/Resources/ClearWindowContent_16x.png" />
+            </Button>
 
         </StackPanel>
 
