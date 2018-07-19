@@ -82,12 +82,16 @@
     <Compile Include="VS\Commands\ClearDocumentsHistoryCommand.cs" />
     <Compile Include="VS\Commands\ReopenClosedDocumentsCommand.cs" />
     <Compile Include="ReopenPackage.cs" />
+    <Compile Include="VS\ToolWindows\ClosedDocumentsHistoryControl_Events.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\ClearWindowContent_16x.png" />
     <Content Include="Resources\icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="Resources\OpenFile_16x.png" />
+    <Content Include="Resources\RemoveGuide_16x.png" />
     <Content Include="Resources\VsToolsMenu.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>

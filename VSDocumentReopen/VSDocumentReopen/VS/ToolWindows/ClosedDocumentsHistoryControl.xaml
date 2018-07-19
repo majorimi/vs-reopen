@@ -70,7 +70,7 @@
                     <GridViewColumn Width="30" Header="#" DisplayMemberBinding="{Binding Index}" />
                     <GridViewColumn Width="400" Header="File path" DisplayMemberBinding="{Binding FullName}" />
                     <GridViewColumn Width="200" Header="File name" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn Width="35" Header="Icon" DisplayMemberBinding="{Binding ClosedAt}" />
+                    <GridViewColumn Width="35" Header="Type" DisplayMemberBinding="{Binding ClosedAt}" />
                     <GridViewColumn Width="180" Header="Closed at" DisplayMemberBinding="{Binding ClosedAt}" />
                     <GridViewColumn Width="50" Header="Exists" DisplayMemberBinding="{Binding IsExists}" />
                 </GridView>

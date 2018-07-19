@@ -133,4 +133,13 @@
   <data name="VsToolsMenu" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\VsToolsMenu.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ClearWindowContent_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ClearWindowContent_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="OpenFile_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\OpenFile_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RemoveGuide_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\RemoveGuide_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
