@@ -35,7 +35,8 @@
             <Label Name="_numberOfItems" FontWeight="Bold" Content="0"></Label>
             <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
             
-            <TextBox Name="_search" Width="150" Margin="2" Height="20" VerticalContentAlignment="Center" >
+            <TextBox Name="_search" TextChanged="_search_TextChanged" ToolTip="Search in File path or File name"
+                     Width="150" Margin="2" Height="20" VerticalContentAlignment="Center">
                 <TextBox.Style>
                     <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
                         <Style.Resources>
@@ -61,15 +62,15 @@
             </TextBox>
             <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
-            <Button Name="_openSelected" ToolTip="Reopen all selected Document(s)" Style="{StaticResource MenuButton}">
+            <Button Name="_openSelected" Click="_openSelected_Click" ToolTip="Reopen all selected Document(s)" Style="{StaticResource MenuButton}">
                 <Image Name="_openSelectedImg" Source="/Resources/OpenFile_16x.png" />
             </Button>
             <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
-            <Button Name="_removeSelected" ToolTip="Remove selected Document(s) from History" Style="{StaticResource MenuButton}">
+            <Button Name="_removeSelected" Click="_removeSelected_Click" ToolTip="Remove selected Document(s) from History" Style="{StaticResource MenuButton}">
                 <Image Name="_removeSelectedImg" Source="/Resources/RemoveGuide_16x.png" />
             </Button>
-            <Button Name="_clearAll" ToolTip="Clear History" Style="{StaticResource MenuButton}">
+            <Button Name="_clearAll" Click="_clearAll_Click" ToolTip="Clear History" Style="{StaticResource MenuButton}">
                 <Image Name="_clearAllImg" Source="/Resources/ClearWindowContent_16x.png" />
             </Button>
 
