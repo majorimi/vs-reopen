@@ -5,6 +5,15 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 
 ## Version history
 
+##### v. 1.2.0
+- Enhance History Tool Window:
+    - Reopen any closed document by double clicking or selected document(s) using toolbar menu button
+    - Remove selected document(s) using toolbar menu button or Delete key
+    - Clear history with toolbar menu button
+    - Filter history by document name or path
+    - More info about the documents
+- Code enhancements, small issue fixes
+
 ##### v. 1.1.1
 - Enforce key bindigs for menu commands
 - Enable vertical scroll in History Tool Window
