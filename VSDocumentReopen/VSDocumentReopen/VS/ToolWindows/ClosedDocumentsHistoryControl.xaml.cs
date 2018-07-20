@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using VSDocumentReopen.Domain.Documents;
 using VSDocumentReopen.Infrastructure.ClosedDocument;
-using VSDocumentReopen.Infrastructure.Helpers;
+using VSDocumentReopen.VS.ToolWindows.IconHandling;
+using VSDocumentReopen.VS.ToolWindows.IconHandling.ButtonStates;
 
 namespace VSDocumentReopen.VS.ToolWindows
 {
@@ -22,8 +22,10 @@ namespace VSDocumentReopen.VS.ToolWindows
 
 			public DateTime ClosedAt => _closedDocument.ClosedAt;
 			public string FullName => _closedDocument.FullName;
-
 			public string Name => _closedDocument.Name;
+
+			public string Type => _closedDocument.Language;
+			public Image Icon => null;
 
 			public ClosedDocumentHistoryItem(IClosedDocument closedDocument, int index)
 			{
@@ -39,9 +41,20 @@ namespace VSDocumentReopen.VS.ToolWindows
 		{
 			InitializeComponent();
 
-			_openSelectedImg.Source = WpfImageSourceConverter.CreateBitmapSource(Properties.Resources.OpenFile_16x);
-			_removeSelectedImg.Source = WpfImageSourceConverter.CreateBitmapSource(Properties.Resources.RemoveGuide_16x);
-			_clearAllImg.Source = WpfImageSourceConverter.CreateBitmapSource(Properties.Resources.ClearWindowContent_16x);
+			var openState = new ButtonDisabledState(_openSelected,
+				new Image() {Source = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.OpenFile_16x)},
+				new Image() {Source = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.OpenFile_16x_Gray)});
+			openState.Disable();
+
+			var removeState = new ButtonDisabledState(_removeSelected,
+				new Image() {Source = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.RemoveGuide_16x)},
+				new Image() {Source = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.RemoveGuide_16x_Gray)});
+			removeState.Disable();
+
+			var clearState = new ButtonDisabledState(_clearAll,
+				new Image() {Source = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.ClearWindowContent_16x)},
+				new Image() {Source = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.ClearWindowContent_16x_Gray)});
+			clearState.Disable();
 
 			_listView.Focus();
 
@@ -72,9 +85,17 @@ namespace VSDocumentReopen.VS.ToolWindows
 				i++;
 			}
 
-			var count = history.Count();
+			var count = i - 1;
 
-			_clearAll.IsEnabled = count > 0;
+			if (count > 0)
+			{
+				_clearAll.GetImageButtonState().Enable();
+			}
+			else
+			{
+				_clearAll.GetImageButtonState().Disable();
+			}
+
 			_numberOfItems.Content = _listView.Items.Count == count
 				? count.ToString()
 				: $"{_listView.Items.Count}/{count}";

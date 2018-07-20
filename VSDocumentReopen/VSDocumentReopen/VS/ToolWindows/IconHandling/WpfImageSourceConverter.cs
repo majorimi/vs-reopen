@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
-namespace VSDocumentReopen.Infrastructure.Helpers
+namespace VSDocumentReopen.VS.ToolWindows.IconHandling
 {
 	public class WpfImageSourceConverter
 	{

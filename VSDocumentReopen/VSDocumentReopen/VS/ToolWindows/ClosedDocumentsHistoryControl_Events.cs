@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using VSDocumentReopen.Infrastructure.ClosedDocument;
+using VSDocumentReopen.VS.ToolWindows.IconHandling.ButtonStates;
 
 namespace VSDocumentReopen.VS.ToolWindows
 {
@@ -27,7 +28,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 
 		private void _search_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			var searchText = (e.Source as TextBox).Text;
+			var searchText = (e.Source as TextBox)?.Text;
 
 			if(string.IsNullOrWhiteSpace(searchText))
 			{
@@ -36,10 +37,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 			else
 			{
 				searchText = searchText.ToLower();
-				UpdateHistoryView((doc) =>
-				{
-					return doc.FullName.ToLower().Contains(searchText) || doc.Name.ToLower().Contains(searchText);
-				});
+				UpdateHistoryView((doc) => doc.FullName.ToLower().Contains(searchText) || doc.Name.ToLower().Contains(searchText));
 			}
 		}
 
@@ -62,9 +60,15 @@ namespace VSDocumentReopen.VS.ToolWindows
 
 		private void _listView_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			_openSelected.IsEnabled = 
-			_removeSelected.IsEnabled =
-				_listView.SelectedItems.Count > 0;
+			if (_listView.SelectedItems.Count > 0)
+			{
+				_openSelected.GetImageButtonState().Enable();
+				_removeSelected.GetImageButtonState().Enable();
+				return;
+			}
+
+			_openSelected.GetImageButtonState().Disable();
+			_removeSelected.GetImageButtonState().Disable();
 		}
 
 		private void HandleOperatons(IEnumerable<ClosedDocumentHistoryItem> selectedItems) //TODO: add CommandFactory

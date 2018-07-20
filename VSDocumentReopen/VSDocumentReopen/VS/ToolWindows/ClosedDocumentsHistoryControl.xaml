@@ -19,6 +19,11 @@
             <Setter Property="Control.Width" Value="18" />
             <Setter Property="Control.Height" Value="18" />
             <Setter Property="Control.IsEnabled" Value="False" />
+            <!--<Style.Triggers>
+                <Trigger Property="Control.IsEnabled" Value="False">
+                    <Setter Property="Control.Opacity" Value="1.0"></Setter>
+                </Trigger>
+            </Style.Triggers>-->
         </Style>
     </UserControl.Resources>
 
@@ -64,15 +69,15 @@
             <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
             <Button Name="_openSelected" Click="_openSelected_Click" ToolTip="Reopen all selected Document(s)" Style="{StaticResource MenuButton}">
-                <Image Name="_openSelectedImg" Source="/Resources/OpenFile_16x.png" />
+                <Image Name="_openSelectedImg" Source="/Resources/OpenFile_16x_Gray.png" />
             </Button>
             <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
             <Button Name="_removeSelected" Click="_removeSelected_Click" ToolTip="Remove selected Document(s) from History" Style="{StaticResource MenuButton}">
-                <Image Name="_removeSelectedImg" Source="/Resources/RemoveGuide_16x.png" />
+                <Image Name="_removeSelectedImg" Source="/Resources/RemoveGuide_16x_Gray.png" />
             </Button>
             <Button Name="_clearAll" Click="_clearAll_Click" ToolTip="Clear History" Style="{StaticResource MenuButton}">
-                <Image Name="_clearAllImg" Source="/Resources/ClearWindowContent_16x.png" />
+                <Image Name="_clearAllImg" Source="/Resources/ClearWindowContent_16x_Gray.png" />
             </Button>
 
         </StackPanel>
@@ -89,7 +94,7 @@
                     <GridViewColumn Width="30" Header="#" DisplayMemberBinding="{Binding Index}" />
                     <GridViewColumn Width="400" Header="File path" DisplayMemberBinding="{Binding FullName}" />
                     <GridViewColumn Width="200" Header="File name" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn Width="35" Header="Type" DisplayMemberBinding="{Binding ClosedAt}" />
+                    <GridViewColumn Width="35" Header="Type" DisplayMemberBinding="{Binding Type}" />
                     <GridViewColumn Width="180" Header="Closed at" DisplayMemberBinding="{Binding ClosedAt}" />
                     <GridViewColumn Width="50" Header="Exists" DisplayMemberBinding="{Binding IsExists}" />
                 </GridView>

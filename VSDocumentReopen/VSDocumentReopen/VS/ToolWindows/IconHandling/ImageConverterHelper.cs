@@ -2,7 +2,7 @@
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace VSDocumentReopen.Infrastructure.Helpers
+namespace VSDocumentReopen.VS.ToolWindows.IconHandling
 {
 	public class ImageConverterHelper
 	{

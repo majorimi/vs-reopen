@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace VSDocumentReopen.Properties {
+namespace VSDocumentReopen {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace VSDocumentReopen.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("VSDocumentReopen.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("VSDocumentReopen.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -73,6 +73,16 @@ namespace VSDocumentReopen.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap ClearWindowContent_16x_Gray {
+            get {
+                object obj = ResourceManager.GetObject("ClearWindowContent_16x_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap OpenFile_16x {
             get {
                 object obj = ResourceManager.GetObject("OpenFile_16x", resourceCulture);
@@ -83,9 +93,29 @@ namespace VSDocumentReopen.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap OpenFile_16x_Gray {
+            get {
+                object obj = ResourceManager.GetObject("OpenFile_16x_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap RemoveGuide_16x {
             get {
                 object obj = ResourceManager.GetObject("RemoveGuide_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap RemoveGuide_16x_Gray {
+            get {
+                object obj = ResourceManager.GetObject("RemoveGuide_16x_Gray", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
