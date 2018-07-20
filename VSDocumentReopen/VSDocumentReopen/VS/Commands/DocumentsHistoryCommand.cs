@@ -56,7 +56,7 @@ namespace VSDocumentReopen.VS.Commands
 				mcs.RemoveCommand(cmd);
 			}
 
-			var history = DocumentHistory.Instance.GetAll()
+			var history = DocumentHistoryManager.Instance.GetAll()
 				.Take(Infrastructure.ConfigurationManager.Config.MaxNumberOfHistoryItemsOnMenu);
 
 			currentCommand.Visible = true;
@@ -91,7 +91,7 @@ namespace VSDocumentReopen.VS.Commands
 				_dte.ItemOperations.OpenFile(document.FullName, document.Kind);
 			}
 			
-			DocumentHistory.Instance.Remove(document);
+			DocumentHistoryManager.Instance.Remove(document);
 		}
 
 		public static DocumentsHistoryCommand Instance

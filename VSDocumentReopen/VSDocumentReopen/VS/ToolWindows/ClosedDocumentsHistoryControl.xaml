@@ -8,7 +8,7 @@
              Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
              mc:Ignorable="d"
              d:DesignHeight="250" d:DesignWidth="960"
-             Name="DocumentHistory">
+             Name="DocumentHistoryWindow">
 
     <UserControl.Resources>
         <Style x:Key="MenuButton">
@@ -18,6 +18,7 @@
             <Setter Property="Control.Margin" Value="4" />
             <Setter Property="Control.Width" Value="18" />
             <Setter Property="Control.Height" Value="18" />
+            <Setter Property="Control.IsEnabled" Value="False" />
         </Style>
     </UserControl.Resources>
 
@@ -81,6 +82,7 @@
                 ScrollViewer.CanContentScroll="True" 
                 SelectionMode="Extended"
                 MouseDoubleClick="_listView_OnMouseDoubleClick"
+                SelectionChanged="_listView_SelectionChanged"
                 KeyUp="_listView_OnKeyUp">
             <ListView.View>
                 <GridView>

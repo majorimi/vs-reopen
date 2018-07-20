@@ -12,7 +12,7 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 		StartedToClose = 2
 	}
 
-	public sealed class DocumentTracker : IDisposable
+	public sealed class DocumentEventsTracker : IDisposable
 	{
 		private readonly _DTE _dte;
 		private readonly IHistoryRepositoryFactory _historyRepositoryFactory;
@@ -23,7 +23,7 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 
 		public SolutionStates SolutionState { get; private set; }
 
-		public DocumentTracker(_DTE dte, IHistoryRepositoryFactory historyRepositoryFactory)
+		public DocumentEventsTracker(_DTE dte, IHistoryRepositoryFactory historyRepositoryFactory)
 		{
 			_dte = dte ?? throw new ArgumentNullException(nameof(dte));
 			_historyRepositoryFactory = historyRepositoryFactory;
@@ -57,7 +57,7 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 
 			//Load history and init state
 			var history = historyRepository.GetHistory();
-			DocumentHistory.Instance.Initialize(history);
+			DocumentHistoryManager.Instance.Initialize(history);
 		}
 
 		private void OnSolutionEventsOnBeforeClosing()
@@ -72,21 +72,21 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 
 			//Save state
 			var historyRepository = _historyRepositoryFactory.CreateHistoryRepository(_currentSolution);
-			if (!historyRepository.SaveHistory(DocumentHistory.Instance.GetAll()))
+			if (!historyRepository.SaveHistory(DocumentHistoryManager.Instance.GetAll()))
 			{
 				//TODO: log and notify user...
 			}
 
 			SolutionState = SolutionStates.None;
 			_currentSolution = null;
-			DocumentHistory.Instance.Clear();
+			DocumentHistoryManager.Instance.Clear();
 		}
 
 		private void DocumentEventsOnDocumentClosing(Document document)
 		{
 			if (SolutionState == SolutionStates.Opened)
 			{
-				DocumentHistory.Instance.AddClosed(document);
+				DocumentHistoryManager.Instance.AddClosed(document);
 			}
 		}
 

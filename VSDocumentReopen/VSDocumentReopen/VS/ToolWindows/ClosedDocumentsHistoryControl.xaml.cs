@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
 using VSDocumentReopen.Domain.Documents;
+using VSDocumentReopen.Infrastructure.ClosedDocument;
 using VSDocumentReopen.Infrastructure.Helpers;
 
 namespace VSDocumentReopen.VS.ToolWindows
@@ -43,26 +46,43 @@ namespace VSDocumentReopen.VS.ToolWindows
 			_listView.Focus();
 
 			//Sort: http://www.wpf-tutorial.com/listview-control/listview-how-to-column-sorting/
-			Infrastructure.ClosedDocument.DocumentHistory.Instance.HistoryChanged += DocumentHistoryChanged;
-			RefreshView();
+			DocumentHistoryManager.Instance.HistoryChanged += DocumentHistoryChanged;
+			UpdateHistoryView(GetFullHistory);
 		}
 
-		private void DocumentHistoryChanged(object sender, System.EventArgs e)
+		private void DocumentHistoryChanged(object sender, EventArgs e)
 		{
-			RefreshView();
+			UpdateHistoryView(GetFullHistory);
 		}
 
-		private void RefreshView()
+		private void UpdateHistoryView(Func<IClosedDocument, bool> documentFilter)
 		{
 			_listView.Items.Clear();
 
+			var history = DocumentHistoryManager.Instance.GetAll();
 			var i = 1;
-			foreach (var doc in Infrastructure.ClosedDocument.DocumentHistory.Instance.GetAll())
+
+			foreach (var doc in history)
 			{
-				_listView.Items.Add(new ClosedDocumentHistoryItem(doc, i++));
+				if (documentFilter(doc))
+				{
+					_listView.Items.Add(new ClosedDocumentHistoryItem(doc, i));
+				}
+
+				i++;
 			}
 
-			_numberOfItems.Content = _listView.Items.Count;
+			var count = history.Count();
+
+			_clearAll.IsEnabled = count > 0;
+			_numberOfItems.Content = _listView.Items.Count == count
+				? count.ToString()
+				: $"{_listView.Items.Count}/{count}";
+		}
+
+		private bool GetFullHistory(IClosedDocument document)
+		{
+			return true;
 		}
 	}
 }

@@ -1,6 +1,8 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using VSDocumentReopen.Infrastructure.ClosedDocument;
 
 namespace VSDocumentReopen.VS.ToolWindows
 {
@@ -10,7 +12,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 		{
 			if (((FrameworkElement)e.OriginalSource).DataContext is ClosedDocumentHistoryItem item)
 			{
-
+				HandleOperatons(new List<ClosedDocumentHistoryItem>() { item });
 			}
 		}
 
@@ -18,28 +20,54 @@ namespace VSDocumentReopen.VS.ToolWindows
 		{
 			if (e.Key == Key.Delete)
 			{
-				var selectedItems = _listView.SelectedItems;
+				//HandleOperatons(_listView.SelectedItems);
 			}
 		}
 
 
 		private void _search_TextChanged(object sender, TextChangedEventArgs e)
 		{
+			var searchText = (e.Source as TextBox).Text;
 
+			if(string.IsNullOrWhiteSpace(searchText))
+			{
+				UpdateHistoryView(GetFullHistory);
+			}
+			else
+			{
+				searchText = searchText.ToLower();
+				UpdateHistoryView((doc) =>
+				{
+					return doc.FullName.ToLower().Contains(searchText) || doc.Name.ToLower().Contains(searchText);
+				});
+			}
 		}
 
 
-		private void _openSelected_Click(object sender, System.Windows.RoutedEventArgs e)
+		private void _openSelected_Click(object sender, RoutedEventArgs e)
 		{
-
+			//HandleOperatons(_listView.SelectedItems);
 		}
 
-		private void _removeSelected_Click(object sender, System.Windows.RoutedEventArgs e)
+		private void _removeSelected_Click(object sender, RoutedEventArgs e)
 		{
-
+			//HandleOperatons(_listView.SelectedItems);
 		}
 
-		private void _clearAll_Click(object sender, System.Windows.RoutedEventArgs e)
+		private void _clearAll_Click(object sender, RoutedEventArgs e)
+		{
+			DocumentHistoryManager.Instance.Clear();
+		}
+
+
+		private void _listView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			_openSelected.IsEnabled = 
+			_removeSelected.IsEnabled =
+				_listView.SelectedItems.Count > 0;
+		}
+
+		private void HandleOperatons(IEnumerable<ClosedDocumentHistoryItem> selectedItems) //TODO: add CommandFactory
 		{
 
 		}

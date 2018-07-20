@@ -80,8 +80,8 @@
     <Compile Include="VS\Commands\DocumentsHistoryCommand.cs" />
     <Compile Include="VS\Commands\ShowDocumentsHIstoryCommand.cs" />
     <Compile Include="Domain\Documents\ClosedDocument.cs" />
-    <Compile Include="Infrastructure\ClosedDocument\DocumentHistory.cs" />
-    <Compile Include="Infrastructure\ClosedDocument\DocumentTracker.cs" />
+    <Compile Include="Infrastructure\ClosedDocument\DocumentHistoryManager.cs" />
+    <Compile Include="Infrastructure\ClosedDocument\DocumentEventsTracker.cs" />
     <Compile Include="Domain\Documents\IClosedDocument.cs" />
     <Compile Include="Domain\Documents\NullDocument.cs" />
     <Compile Include="Infrastructure\Helpers\PathFormatter.cs" />

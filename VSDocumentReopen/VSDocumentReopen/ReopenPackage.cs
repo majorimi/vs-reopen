@@ -32,7 +32,7 @@ namespace VSDocumentReopen
 		public const string PackageGuidString = "b30147a1-6fbc-4b94-bf01-123d837c4fe2";
 
 		private readonly DTE2 _dte;
-		private readonly DocumentTracker _documentTracker;
+		private readonly DocumentEventsTracker _documentTracker;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ReopenClosedDocumentsCommand"/> class.
@@ -41,7 +41,7 @@ namespace VSDocumentReopen
 		{
 			_dte = GetGlobalService(typeof(DTE)) as DTE2 ?? throw new NullReferenceException($"Unable to get service {nameof(DTE2)}");
 
-			_documentTracker = new DocumentTracker(_dte,
+			_documentTracker = new DocumentEventsTracker(_dte,
 				new JsonHistoryRepositoryFactory(new ServiceStackJsonSerializer()));
 		}
 

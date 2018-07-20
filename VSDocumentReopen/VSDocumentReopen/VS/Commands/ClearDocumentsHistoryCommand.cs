@@ -50,7 +50,7 @@ namespace VSDocumentReopen.VS.Commands
 
 		private void Execute(object sender, EventArgs e)
 		{
-			DocumentHistory.Instance.Clear();
+			DocumentHistoryManager.Instance.Clear();
 		}
 	}
 }

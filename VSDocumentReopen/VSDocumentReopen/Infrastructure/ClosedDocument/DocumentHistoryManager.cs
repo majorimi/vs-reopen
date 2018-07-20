@@ -6,21 +6,21 @@ using VSDocumentReopen.Domain.Documents;
 
 namespace VSDocumentReopen.Infrastructure.ClosedDocument
 {
-	public sealed class DocumentHistory
+	public sealed class DocumentHistoryManager
 	{
 		public event EventHandler HistoryChanged;
 
 		private static readonly Stack<IClosedDocument> CloseDocuments;
 
-		private DocumentHistory() { }
+		private DocumentHistoryManager() { }
 
-		static DocumentHistory()
+		static DocumentHistoryManager()
 		{
-			Instance = new DocumentHistory();
+			Instance = new DocumentHistoryManager();
 			CloseDocuments = new Stack<IClosedDocument>();
 		}
 
-		public static DocumentHistory Instance { get; }
+		public static DocumentHistoryManager Instance { get; }
 
 		public void Clear()
 		{
