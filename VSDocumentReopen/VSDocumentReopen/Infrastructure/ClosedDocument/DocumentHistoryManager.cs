@@ -74,6 +74,25 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 			}
 		}
 
+		public void Remove(IEnumerable<IClosedDocument> closedDocuments)
+		{
+			var items = GetAll().ToList();
+
+			bool removed = false;
+			foreach (var item in closedDocuments)
+			{
+				if (items.Remove(item))
+				{
+					removed = true;
+				}
+			}
+
+			if(removed)
+			{
+				Initialize(items);
+			}
+		}
+
 		public void Initialize(IEnumerable<IClosedDocument> closedDocuments)
 		{
 			Clear();

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -13,7 +14,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 		{
 			if (((FrameworkElement)e.OriginalSource).DataContext is ClosedDocumentHistoryItem item)
 			{
-				HandleOperatons(new List<ClosedDocumentHistoryItem>() { item });
+				HandleOperatons(true);
 			}
 		}
 
@@ -21,7 +22,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 		{
 			if (e.Key == Key.Delete)
 			{
-				//HandleOperatons(_listView.SelectedItems);
+				HandleOperatons(false);
 			}
 		}
 
@@ -44,12 +45,12 @@ namespace VSDocumentReopen.VS.ToolWindows
 
 		private void _openSelected_Click(object sender, RoutedEventArgs e)
 		{
-			//HandleOperatons(_listView.SelectedItems);
+			HandleOperatons(true);
 		}
 
 		private void _removeSelected_Click(object sender, RoutedEventArgs e)
 		{
-			//HandleOperatons(_listView.SelectedItems);
+			HandleOperatons(false);
 		}
 
 		private void _clearAll_Click(object sender, RoutedEventArgs e)
@@ -71,9 +72,21 @@ namespace VSDocumentReopen.VS.ToolWindows
 			_removeSelected.GetImageButtonState().Disable();
 		}
 
-		private void HandleOperatons(IEnumerable<ClosedDocumentHistoryItem> selectedItems) //TODO: add CommandFactory
+		private void HandleOperatons(bool executeCommand)
 		{
+			var selectedItems = _listView.SelectedItems.Cast<ClosedDocumentHistoryItem>()
+				.Select(s => s.ClosedDocument);
 
+			if (executeCommand)
+			{
+				foreach (var doc in selectedItems)
+				{
+					var command = _documentCommandFactory.CreateCommand(doc);
+					command.Execute();
+				}
+			}
+
+			DocumentHistoryManager.Instance.Remove(selectedItems);
 		}
 	}
 }

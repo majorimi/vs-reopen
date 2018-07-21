@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using VSDocumentReopen.Infrastructure;
 using VSDocumentReopen.Infrastructure.ClosedDocument;
+using VSDocumentReopen.Infrastructure.Commands;
 using VSDocumentReopen.Infrastructure.Helpers;
 using VSDocumentReopen.VS.Commands;
 using VSDocumentReopen.VS.ToolWindows;
@@ -56,6 +57,8 @@ namespace VSDocumentReopen
 
 			//Init ToolWindow Commands
 			await ShowDocumentsHIstoryCommand.InitializeAsync(this, _dte);
+			await ClosedDocumentsHistory.InitializeAsync(this, _dte,
+				new ReopenDocumentCommandFactory(_dte));
 
 			EnforceKeyBinding();
 		}

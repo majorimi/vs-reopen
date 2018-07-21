@@ -1,5 +1,9 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
+using EnvDTE;
 using Microsoft.VisualStudio.Shell;
+using VSDocumentReopen.Infrastructure.Commands;
+using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.VS.ToolWindows
 {
@@ -20,14 +24,26 @@ namespace VSDocumentReopen.VS.ToolWindows
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ClosedDocumentsHistory"/> class.
 		/// </summary>
-		public ClosedDocumentsHistory() : base(null)
+		public ClosedDocumentsHistory()
+			: base(null)
 		{
-			this.Caption = "Closed Documents History";
+			Caption = "Closed Documents History";
 
 			// This is the user control hosted by the tool window; Note that, even if this class implements IDisposable,
 			// we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on
 			// the object returned by the Content property.
-			this.Content = new ClosedDocumentsHistoryControl();
+
+			Content = ContentWindow;
+		}
+
+
+		private static ClosedDocumentsHistoryControl ContentWindow;
+
+		public static async Task InitializeAsync(AsyncPackage package, _DTE dte, IDocumentCommandFactory documentCommandFactory)
+		{
+			ContentWindow = new ClosedDocumentsHistoryControl(documentCommandFactory);
+
+			await Task.CompletedTask;
 		}
 	}
 }

@@ -82,7 +82,7 @@
 
         </StackPanel>
 
-        <ListView Margin="3" Name="_listView" Grid.Row="1" VerticalAlignment="Top" 
+        <ListView Margin="3" Name="_listView" Grid.Row="1" VerticalAlignment="Stretch" 
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.CanContentScroll="True" 
                 SelectionMode="Extended"
@@ -92,10 +92,10 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="30" Header="#" DisplayMemberBinding="{Binding Index}" />
-                    <GridViewColumn Width="400" Header="File path" DisplayMemberBinding="{Binding FullName}" />
-                    <GridViewColumn Width="200" Header="File name" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn Width="35" Header="Type" DisplayMemberBinding="{Binding Type}" />
-                    <GridViewColumn Width="180" Header="Closed at" DisplayMemberBinding="{Binding ClosedAt}" />
+                    <GridViewColumn Width="400" Header="File path" DisplayMemberBinding="{Binding Path=ClosedDocument.FullName}" />
+                    <GridViewColumn Width="200" Header="File name" DisplayMemberBinding="{Binding Path=ClosedDocument.Name}" />
+                    <GridViewColumn Width="50" Header="Type" DisplayMemberBinding="{Binding Path=ClosedDocument.Language}" />
+                    <GridViewColumn Width="160" Header="Closed at" DisplayMemberBinding="{Binding Path=ClosedDocument.ClosedAt}" />
                     <GridViewColumn Width="50" Header="Exists" DisplayMemberBinding="{Binding IsExists}" />
                 </GridView>
             </ListView.View>

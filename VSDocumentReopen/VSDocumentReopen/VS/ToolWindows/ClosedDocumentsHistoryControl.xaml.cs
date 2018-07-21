@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using VSDocumentReopen.Domain.Documents;
 using VSDocumentReopen.Infrastructure.ClosedDocument;
+using VSDocumentReopen.Infrastructure.Commands;
 using VSDocumentReopen.VS.ToolWindows.IconHandling;
 using VSDocumentReopen.VS.ToolWindows.IconHandling.ButtonStates;
 
@@ -14,29 +15,26 @@ namespace VSDocumentReopen.VS.ToolWindows
 	{
 		private class ClosedDocumentHistoryItem
 		{
-			private readonly IClosedDocument _closedDocument;
-
 			public int Index { get; }
-			public bool IsExists => _closedDocument.IsValid();
+			public bool IsExists => ClosedDocument.IsValid();
+			public Image Icon => null; //TODO: show icon
 
-			public DateTime ClosedAt => _closedDocument.ClosedAt;
-			public string FullName => _closedDocument.FullName;
-			public string Name => _closedDocument.Name;
-
-			public string Type => _closedDocument.Language;
-			public Image Icon => null;
+			public IClosedDocument ClosedDocument { get; }
 
 			public ClosedDocumentHistoryItem(IClosedDocument closedDocument, int index)
 			{
 				Index = index;
-				_closedDocument = closedDocument;
+				ClosedDocument = closedDocument;
 			}
 		}
+
+		private readonly Func<IClosedDocument, bool> GetFullHistory = _ => true;
+		private readonly IDocumentCommandFactory _documentCommandFactory;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ClosedDocumentsHistoryControl"/> class.
 		/// </summary>
-		public ClosedDocumentsHistoryControl()
+		public ClosedDocumentsHistoryControl(IDocumentCommandFactory documentCommandFactory)
 		{
 			InitializeComponent();
 
@@ -57,9 +55,10 @@ namespace VSDocumentReopen.VS.ToolWindows
 
 			_listView.Focus();
 
-			//Sort: http://www.wpf-tutorial.com/listview-control/listview-how-to-column-sorting/
+			//TODO: sort: http://www.wpf-tutorial.com/listview-control/listview-how-to-column-sorting/
 			DocumentHistoryManager.Instance.HistoryChanged += DocumentHistoryChanged;
 			UpdateHistoryView(GetFullHistory);
+			_documentCommandFactory = documentCommandFactory;
 		}
 
 		private void DocumentHistoryChanged(object sender, EventArgs e)
@@ -98,11 +97,6 @@ namespace VSDocumentReopen.VS.ToolWindows
 			_numberOfItems.Content = _listView.Items.Count == count
 				? count.ToString()
 				: $"{_listView.Items.Count}/{count}";
-		}
-
-		private bool GetFullHistory(IClosedDocument document)
-		{
-			return true;
 		}
 	}
 }
