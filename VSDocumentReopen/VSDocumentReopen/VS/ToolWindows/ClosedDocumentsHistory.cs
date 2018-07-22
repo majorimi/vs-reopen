@@ -1,8 +1,7 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using EnvDTE;
+﻿using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
-using VSDocumentReopen.Infrastructure.Commands;
+using VSDocumentReopen.Infrastructure.DocumentTracking;
+using VSDocumentReopen.Infrastructure.HistoryCommands;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.VS.ToolWindows
@@ -39,9 +38,17 @@ namespace VSDocumentReopen.VS.ToolWindows
 
 		private static ClosedDocumentsHistoryControl ContentWindow;
 
-		public static async Task InitializeAsync(AsyncPackage package, _DTE dte, IDocumentCommandFactory documentCommandFactory)
+		public static async Task InitializeAsync(IDocumentHistoryQueries documentHistoryQueries,
+			IHistoryCommand reopenLastClosdCommand,
+			IHistoryCommandFactory reopenSomeDocumentsCommandFactory,
+			IHistoryCommandFactory removeSomeDocumentsCommandFactory,
+			IHistoryCommand clearHistoryCommand)
 		{
-			ContentWindow = new ClosedDocumentsHistoryControl(documentCommandFactory);
+			ContentWindow = new ClosedDocumentsHistoryControl(documentHistoryQueries,
+				reopenLastClosdCommand,
+				reopenSomeDocumentsCommandFactory,
+				removeSomeDocumentsCommandFactory,
+				clearHistoryCommand);
 
 			await Task.CompletedTask;
 		}

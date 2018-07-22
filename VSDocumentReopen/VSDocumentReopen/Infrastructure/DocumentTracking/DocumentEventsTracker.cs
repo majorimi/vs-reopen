@@ -2,8 +2,9 @@
 using System.IO;
 using EnvDTE;
 using VSDocumentReopen.Domain;
+using VSDocumentReopen.Domain.Documents;
 
-namespace VSDocumentReopen.Infrastructure.ClosedDocument
+namespace VSDocumentReopen.Infrastructure.DocumentTracking
 {
 	public enum SolutionStates
 	{
@@ -15,7 +16,9 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 	public sealed class DocumentEventsTracker : IDisposable
 	{
 		private readonly _DTE _dte;
+		private readonly IDocumentHistoryManager _documentHistoryManager;
 		private readonly IHistoryRepositoryFactory _historyRepositoryFactory;
+
 		private readonly SolutionEvents _solutionEvents;
 		private readonly DocumentEvents _documentEvents;
 
@@ -23,9 +26,12 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 
 		public SolutionStates SolutionState { get; private set; }
 
-		public DocumentEventsTracker(_DTE dte, IHistoryRepositoryFactory historyRepositoryFactory)
+		public DocumentEventsTracker(_DTE dte,
+			IDocumentHistoryManager documentHistoryManager,
+			IHistoryRepositoryFactory historyRepositoryFactory)
 		{
 			_dte = dte ?? throw new ArgumentNullException(nameof(dte));
+			_documentHistoryManager = documentHistoryManager;
 			_historyRepositoryFactory = historyRepositoryFactory;
 
 			_solutionEvents = _dte.Events.SolutionEvents;
@@ -57,7 +63,7 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 
 			//Load history and init state
 			var history = historyRepository.GetHistory();
-			DocumentHistoryManager.Instance.Initialize(history);
+			_documentHistoryManager.Initialize(history);
 		}
 
 		private void OnSolutionEventsOnBeforeClosing()
@@ -72,21 +78,30 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 
 			//Save state
 			var historyRepository = _historyRepositoryFactory.CreateHistoryRepository(_currentSolution);
-			if (!historyRepository.SaveHistory(DocumentHistoryManager.Instance.GetAll()))
+			if (!historyRepository.SaveHistory(_documentHistoryManager.GetAll()))
 			{
 				//TODO: log and notify user...
 			}
 
 			SolutionState = SolutionStates.None;
 			_currentSolution = null;
-			DocumentHistoryManager.Instance.Clear();
+			_documentHistoryManager.Clear();
 		}
 
 		private void DocumentEventsOnDocumentClosing(Document document)
 		{
 			if (SolutionState == SolutionStates.Opened)
 			{
-				DocumentHistoryManager.Instance.AddClosed(document);
+				var doc = new ClosedDocument()
+				{
+					FullName = document.FullName,
+					Name = document.Name,
+					Kind = document.Kind,
+					Language = document.Language,
+					ClosedAt = DateTime.Now,
+				};
+
+				_documentHistoryManager.Add(doc);
 			}
 		}
 

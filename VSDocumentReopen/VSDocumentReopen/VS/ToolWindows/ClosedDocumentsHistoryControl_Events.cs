@@ -1,29 +1,27 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using VSDocumentReopen.Infrastructure.ClosedDocument;
+using VSDocumentReopen.Infrastructure.HistoryCommands;
 using VSDocumentReopen.VS.ToolWindows.IconHandling.ButtonStates;
 
 namespace VSDocumentReopen.VS.ToolWindows
 {
 	public partial class ClosedDocumentsHistoryControl
 	{
-		private void _listView_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+		private void _openSelected_Click(object sender, RoutedEventArgs e)
 		{
-			if (((FrameworkElement)e.OriginalSource).DataContext is ClosedDocumentHistoryItem item)
-			{
-				HandleOperatons(true);
-			}
+			HandleOperatons(_reopenSomeDocumentsCommandFactory);
 		}
 
-		private void _listView_OnKeyUp(object sender, KeyEventArgs e)
+		private void _removeSelected_Click(object sender, RoutedEventArgs e)
 		{
-			if (e.Key == Key.Delete)
-			{
-				HandleOperatons(false);
-			}
+			HandleOperatons(_removeSomeDocumentsCommandFactory);
+		}
+
+		private void _clearAll_Click(object sender, RoutedEventArgs e)
+		{
+			_clearHistoryCommand.Execute();
 		}
 
 
@@ -31,7 +29,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 		{
 			var searchText = (e.Source as TextBox)?.Text;
 
-			if(string.IsNullOrWhiteSpace(searchText))
+			if (string.IsNullOrWhiteSpace(searchText))
 			{
 				UpdateHistoryView(GetFullHistory);
 			}
@@ -42,22 +40,22 @@ namespace VSDocumentReopen.VS.ToolWindows
 			}
 		}
 
-
-		private void _openSelected_Click(object sender, RoutedEventArgs e)
+		private void _listView_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
-			HandleOperatons(true);
+			if (((FrameworkElement)e.OriginalSource).DataContext is ClosedDocumentHistoryItem item)
+			{
+				var command = _reopenSomeDocumentsCommandFactory.CreateCommand(item.ClosedDocument);
+				command.Execute();
+			}
 		}
 
-		private void _removeSelected_Click(object sender, RoutedEventArgs e)
+		private void _listView_OnKeyUp(object sender, KeyEventArgs e)
 		{
-			HandleOperatons(false);
+			if (e.Key == Key.Delete)
+			{
+				HandleOperatons(_removeSomeDocumentsCommandFactory);
+			}
 		}
-
-		private void _clearAll_Click(object sender, RoutedEventArgs e)
-		{
-			DocumentHistoryManager.Instance.Clear();
-		}
-
 
 		private void _listView_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
@@ -72,21 +70,14 @@ namespace VSDocumentReopen.VS.ToolWindows
 			_removeSelected.GetImageButtonState().Disable();
 		}
 
-		private void HandleOperatons(bool executeCommand)
+
+		private void HandleOperatons(IHistoryCommandFactory historyCommandFactory)
 		{
 			var selectedItems = _listView.SelectedItems.Cast<ClosedDocumentHistoryItem>()
 				.Select(s => s.ClosedDocument);
 
-			if (executeCommand)
-			{
-				foreach (var doc in selectedItems)
-				{
-					var command = _documentCommandFactory.CreateCommand(doc);
-					command.Execute();
-				}
-			}
-
-			DocumentHistoryManager.Instance.Remove(selectedItems);
+			var command = historyCommandFactory.CreateCommand(selectedItems.ToArray());
+			command.Execute();
 		}
 	}
 }

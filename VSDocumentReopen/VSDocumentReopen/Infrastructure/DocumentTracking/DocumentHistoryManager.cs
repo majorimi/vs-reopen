@@ -1,26 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EnvDTE;
 using VSDocumentReopen.Domain.Documents;
 
-namespace VSDocumentReopen.Infrastructure.ClosedDocument
+namespace VSDocumentReopen.Infrastructure.DocumentTracking
 {
-	public sealed class DocumentHistoryManager
+	public sealed class DocumentHistoryManager : IDocumentHistoryManager
 	{
 		public event EventHandler HistoryChanged;
 
-		private static readonly Stack<IClosedDocument> CloseDocuments;
+		private readonly Stack<IClosedDocument> CloseDocuments;
 
-		private DocumentHistoryManager() { }
-
-		static DocumentHistoryManager()
+		public DocumentHistoryManager()
 		{
-			Instance = new DocumentHistoryManager();
 			CloseDocuments = new Stack<IClosedDocument>();
 		}
-
-		public static DocumentHistoryManager Instance { get; }
 
 		public void Clear()
 		{
@@ -28,26 +22,18 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 			OnHistoryChanged();
 		}
 
-		public void AddClosed(Document document)
+		public void Add(ClosedDocument document)
 		{
 			if(document == null)
 			{
 				return;
 			}
 
-			CloseDocuments.Push(new Domain.Documents.ClosedDocument()
-			{
-				FullName = document.FullName,
-				Name = document.Name,
-				Kind = document.Kind,
-				Language = document.Language,
-				ClosedAt = DateTime.Now,
-			});
-
+			CloseDocuments.Push(document);
 			OnHistoryChanged();
 		}
 
-		public IClosedDocument GetLastClosed()
+		public IClosedDocument RemoveLast()
 		{
 			if (CloseDocuments.Count > 0)
 			{
@@ -59,6 +45,8 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 
 			return NullDocument.Instance;
 		}
+
+		public IEnumerable<IClosedDocument> Get(int number) => CloseDocuments.ToList().Take(number);
 
 		public IEnumerable<IClosedDocument> GetAll()
 		{

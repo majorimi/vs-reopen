@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
-using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using VSDocumentReopen.Domain.Documents;
-using VSDocumentReopen.Infrastructure.ClosedDocument;
+using VSDocumentReopen.Infrastructure.DocumentTracking;
 using VSDocumentReopen.Infrastructure.Helpers;
+using VSDocumentReopen.Infrastructure.HistoryCommands;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.VS.Commands
@@ -27,13 +27,18 @@ namespace VSDocumentReopen.VS.Commands
 		private const string HistoryItemKey = "HistoryItem";
 
 		private readonly AsyncPackage _package;
-		private readonly _DTE _dte;
+		private readonly IDocumentHistoryQueries _documentHistoryQueries;
+		private readonly IHistoryCommandFactory _reopenSomeDocumentsCommandFactory;
 
-		private DocumentsHistoryCommand(AsyncPackage package, OleMenuCommandService commandService, _DTE dte)
+		private DocumentsHistoryCommand(AsyncPackage package,
+			OleMenuCommandService commandService,
+			IDocumentHistoryQueries documentHistoryQueries,
+			IHistoryCommandFactory reopenSomeDocumentsCommandFactory)
 		{
 			_package = package ?? throw new ArgumentNullException(nameof(package));
 			commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-			_dte = dte ?? throw new ArgumentNullException(nameof(dte));
+			_documentHistoryQueries = documentHistoryQueries ?? throw new ArgumentNullException(nameof(documentHistoryQueries));
+			_reopenSomeDocumentsCommandFactory = reopenSomeDocumentsCommandFactory ?? throw new ArgumentNullException(nameof(reopenSomeDocumentsCommandFactory));
 
 			var menuCommandId = new CommandID(CommandSet, CommandId);
 			var command = new OleMenuCommand(Execute, menuCommandId)
@@ -41,6 +46,7 @@ namespace VSDocumentReopen.VS.Commands
 				Visible = false,
 				Enabled = false
 			};
+
 			command.BeforeQueryStatus += DynamicStartBeforeQueryStatus;
 			commandService.AddCommand(command);
 		}
@@ -56,8 +62,7 @@ namespace VSDocumentReopen.VS.Commands
 				mcs.RemoveCommand(cmd);
 			}
 
-			var history = DocumentHistoryManager.Instance.GetAll()
-				.Take(Infrastructure.ConfigurationManager.Config.MaxNumberOfHistoryItemsOnMenu);
+			var history = _documentHistoryQueries.Get(Infrastructure.ConfigurationManager.Config.MaxNumberOfHistoryItemsOnMenu);
 
 			currentCommand.Visible = true;
 			currentCommand.Text = history.Any() ? "<History>" : "<No History>";
@@ -86,12 +91,8 @@ namespace VSDocumentReopen.VS.Commands
 			var cmd = (OleMenuCommand)sender ?? throw new InvalidCastException($"Unable to cast {nameof(sender)} to {typeof(OleMenuCommand)}");
 
 			var document = (cmd.Properties[HistoryItemKey] as IClosedDocument) ?? NullDocument.Instance;
-			if (document.IsValid())
-			{
-				_dte.ItemOperations.OpenFile(document.FullName, document.Kind);
-			}
-			
-			DocumentHistoryManager.Instance.Remove(document);
+			var command = _reopenSomeDocumentsCommandFactory.CreateCommand(document);
+			command.Execute();
 		}
 
 		public static DocumentsHistoryCommand Instance
@@ -102,12 +103,12 @@ namespace VSDocumentReopen.VS.Commands
 
 		private IAsyncServiceProvider ServiceProvider => _package;
 
-		public static async Task InitializeAsync(AsyncPackage package, _DTE dte)
+		public static async Task InitializeAsync(AsyncPackage package, IDocumentHistoryQueries documentHistoryQueries, IHistoryCommandFactory reopenSomeDocumentsCommandFactory)
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
 
 			OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
-			Instance = new DocumentsHistoryCommand(package, commandService, dte);
+			Instance = new DocumentsHistoryCommand(package, commandService, documentHistoryQueries, reopenSomeDocumentsCommandFactory);
 		}
 
 		private void Execute(object sender, EventArgs e)

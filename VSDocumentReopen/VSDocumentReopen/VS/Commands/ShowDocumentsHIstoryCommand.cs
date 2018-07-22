@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Design;
-using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using VSDocumentReopen.VS.ToolWindows;
@@ -21,13 +20,11 @@ namespace VSDocumentReopen.VS.Commands
 		public static readonly Guid CommandSet = new Guid("d968b4de-3a69-4eb1-b676-942055da9dfd");
 
 		private readonly AsyncPackage _package;
-		private readonly _DTE _dte;
 
-		private ShowDocumentsHIstoryCommand(AsyncPackage package, OleMenuCommandService commandService, _DTE dte)
+		private ShowDocumentsHIstoryCommand(AsyncPackage package, OleMenuCommandService commandService)
 		{
 			_package = package ?? throw new ArgumentNullException(nameof(package));
 			commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-			_dte = dte ?? throw new ArgumentNullException(nameof(dte));
 
 			var menuCommandId = new CommandID(CommandSet, CommandId);
 			var menuItem = new MenuCommand(Execute, menuCommandId);
@@ -40,12 +37,12 @@ namespace VSDocumentReopen.VS.Commands
 			private set;
 		}
 
-		public static async Task InitializeAsync(AsyncPackage package, _DTE dte)
+		public static async Task InitializeAsync(AsyncPackage package)
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
 
 			OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
-			Instance = new ShowDocumentsHIstoryCommand(package, commandService, dte);
+			Instance = new ShowDocumentsHIstoryCommand(package, commandService);
 		}
 
 		private void Execute(object sender, EventArgs e)

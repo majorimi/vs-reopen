@@ -9,11 +9,13 @@ using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using VSDocumentReopen.Infrastructure;
-using VSDocumentReopen.Infrastructure.ClosedDocument;
-using VSDocumentReopen.Infrastructure.Commands;
+using VSDocumentReopen.Infrastructure.DocumentCommands;
+using VSDocumentReopen.Infrastructure.DocumentTracking;
 using VSDocumentReopen.Infrastructure.Helpers;
+using VSDocumentReopen.Infrastructure.HistoryCommands;
 using VSDocumentReopen.VS.Commands;
 using VSDocumentReopen.VS.ToolWindows;
+using ConfigurationManager = VSDocumentReopen.Infrastructure.ConfigurationManager;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen
@@ -22,7 +24,7 @@ namespace VSDocumentReopen
 	[InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
 	[ProvideMenuResource("Menus.ctmenu", 1)]
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-	[Guid(ReopenPackage.PackageGuidString)]
+	[Guid(PackageGuidString)]
 	[ProvideAutoLoad(UIContextGuids.NoSolution)]
 	[ProvideToolWindow(typeof(ClosedDocumentsHistory))]
 	public sealed class ReopenPackage : AsyncPackage
@@ -32,17 +34,38 @@ namespace VSDocumentReopen
 		/// </summary>
 		public const string PackageGuidString = "b30147a1-6fbc-4b94-bf01-123d837c4fe2";
 
-		private readonly DTE2 _dte;
+		private readonly _DTE _dte;
 		private readonly DocumentEventsTracker _documentTracker;
+		private readonly IDocumentHistoryCommands _documentHistoryCommands;
+		private readonly IDocumentHistoryQueries _documentHistoryQueries;
+
+		private readonly IHistoryCommand _reopenLastClosdCommand;
+		private readonly IHistoryCommandFactory _reopenSomeDocumentsCommandFactory;
+		private readonly IHistoryCommandFactory _removeSomeDocumentsCommandFactory;
+		private readonly IHistoryCommand _clearHistoryCommand;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ReopenClosedDocumentsCommand"/> class.
 		/// </summary>
 		public ReopenPackage()
 		{
+			//DI
 			_dte = GetGlobalService(typeof(DTE)) as DTE2 ?? throw new NullReferenceException($"Unable to get service {nameof(DTE2)}");
 
+			IDocumentHistoryManager documentHistory = new DocumentHistoryManager();
+			_documentHistoryCommands = documentHistory;
+			_documentHistoryQueries = documentHistory;
+			//Commands
+			_reopenLastClosdCommand = new RemoveLastCommand(_documentHistoryCommands,
+				new ReopenDocumentCommandFactory(_dte));
+			_reopenSomeDocumentsCommandFactory = new HistoryCommandFactory<RemoveSomeCommand>(_documentHistoryCommands,
+				new ReopenDocumentCommandFactory(_dte));
+			_removeSomeDocumentsCommandFactory = new HistoryCommandFactory<RemoveSomeCommand>(_documentHistoryCommands,
+				new DoNothingDocumentCommandFactory());
+			_clearHistoryCommand = new ClearHistoryCommand(_documentHistoryCommands);
+
 			_documentTracker = new DocumentEventsTracker(_dte,
+				documentHistory,
 				new JsonHistoryRepositoryFactory(new ServiceStackJsonSerializer()));
 		}
 
@@ -50,15 +73,18 @@ namespace VSDocumentReopen
 		{
 			await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
-			//Init Commands
-			await ReopenClosedDocumentsCommand.InitializeAsync(this, _dte);
-			await ClearDocumentsHistoryCommand.InitializeAsync(this);
-			await DocumentsHistoryCommand.InitializeAsync(this, _dte);
+			//Init Commands with DI
+			await ReopenClosedDocumentsCommand.InitializeAsync(this, _reopenLastClosdCommand);
+			await ClearDocumentsHistoryCommand.InitializeAsync(this, _clearHistoryCommand);
+			await DocumentsHistoryCommand.InitializeAsync(this, _documentHistoryQueries, _reopenSomeDocumentsCommandFactory);
 
-			//Init ToolWindow Commands
-			await ShowDocumentsHIstoryCommand.InitializeAsync(this, _dte);
-			await ClosedDocumentsHistory.InitializeAsync(this, _dte,
-				new ReopenDocumentCommandFactory(_dte));
+			//Init ToolWindow Commands with DI
+			await ShowDocumentsHIstoryCommand.InitializeAsync(this);
+			await ClosedDocumentsHistory.InitializeAsync(_documentHistoryQueries,
+				_reopenLastClosdCommand,
+				_reopenSomeDocumentsCommandFactory,
+				_removeSomeDocumentsCommandFactory,
+				_clearHistoryCommand);
 
 			EnforceKeyBinding();
 		}
@@ -71,8 +97,8 @@ namespace VSDocumentReopen
 			ThreadHelper.ThrowIfNotOnUIThread();
 
 			var commandsGuid = ReopenClosedDocumentsCommand.CommandSet.ToString("B").ToUpper();
-			var reopenCommandBinding = Infrastructure.ConfigurationManager.Config.ReopenCommandBinding;
-			var showMoreCommandBinding = Infrastructure.ConfigurationManager.Config.ShowMoreCommandBinding;
+			var reopenCommandBinding = ConfigurationManager.Config.ReopenCommandBinding;
+			var showMoreCommandBinding = ConfigurationManager.Config.ShowMoreCommandBinding;
 
 			var myCommands = new List<Command>();
 			foreach (Command command in _dte.Commands)
