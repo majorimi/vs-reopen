@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Infrastructure\Helpers\PathFormatterTest.cs" />
+    <Compile Include="Infrastructure\Helpers\ServiceStackJsonSerializerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

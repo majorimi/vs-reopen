@@ -59,9 +59,35 @@
     <Compile Include="Domain\Configuration.cs" />
     <Compile Include="Domain\IConfiguration.cs" />
     <Compile Include="Domain\SolutionInfo.cs" />
+    <Compile Include="Infrastructure\DocumentCommands\DoNothingCommand.cs" />
+    <Compile Include="Infrastructure\DocumentCommands\DoNothingDocumentCommandFactory.cs" />
+    <Compile Include="Infrastructure\DocumentCommands\IDocumentCommand.cs" />
+    <Compile Include="Infrastructure\DocumentCommands\IDocumentCommandFactory.cs" />
+    <Compile Include="Infrastructure\DocumentCommands\ReopenDocumentCommand.cs" />
+    <Compile Include="Infrastructure\DocumentCommands\ReopenDocumentCommandFactory.cs" />
     <Compile Include="Infrastructure\ConfigurationManager.cs" />
+    <Compile Include="Infrastructure\DocumentTracking\IDocumentHistoryCommands.cs" />
+    <Compile Include="Infrastructure\DocumentTracking\IDocumentHistoryManager.cs" />
+    <Compile Include="Infrastructure\DocumentTracking\IDocumentHistoryQueries.cs" />
     <Compile Include="Infrastructure\Helpers\IJsonSerializer.cs" />
+    <Compile Include="Infrastructure\HistoryCommands\ClearHistoryCommand.cs" />
+    <Compile Include="Infrastructure\HistoryCommands\HistoryCommandFactory.cs" />
+    <Compile Include="Infrastructure\HistoryCommands\IHistoryCommand.cs" />
+    <Compile Include="Infrastructure\HistoryCommands\IHistoryCommandFactory.cs" />
+    <Compile Include="Infrastructure\HistoryCommands\RemoveLastCommand.cs" />
+    <Compile Include="Infrastructure\HistoryCommands\RemoveSomeCommand.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ButtonDisabledState.cs" />
+    <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ButtonEnabledState.cs" />
+    <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ImageButtonState.cs" />
+    <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ButtonStateExtensions.cs" />
+    <Compile Include="VS\ToolWindows\IconHandling\ImageConverterHelper.cs" />
     <Compile Include="Infrastructure\Helpers\ServiceStackJsonSerializer.cs" />
+    <Compile Include="VS\ToolWindows\IconHandling\WpfImageSourceConverter.cs" />
     <Compile Include="Infrastructure\IHistoryRepositoryFactory.cs" />
     <Compile Include="Infrastructure\JsonHistoryRepositoryFactory.cs" />
     <Compile Include="Infrastructure\Repositories\JsonHistoryRepository.cs" />
@@ -73,8 +99,8 @@
     <Compile Include="VS\Commands\DocumentsHistoryCommand.cs" />
     <Compile Include="VS\Commands\ShowDocumentsHIstoryCommand.cs" />
     <Compile Include="Domain\Documents\ClosedDocument.cs" />
-    <Compile Include="Infrastructure\ClosedDocument\DocumentHistory.cs" />
-    <Compile Include="Infrastructure\ClosedDocument\DocumentTracker.cs" />
+    <Compile Include="Infrastructure\DocumentTracking\DocumentHistoryManager.cs" />
+    <Compile Include="Infrastructure\DocumentTracking\DocumentEventsTracker.cs" />
     <Compile Include="Domain\Documents\IClosedDocument.cs" />
     <Compile Include="Domain\Documents\NullDocument.cs" />
     <Compile Include="Infrastructure\Helpers\PathFormatter.cs" />
@@ -82,12 +108,19 @@
     <Compile Include="VS\Commands\ClearDocumentsHistoryCommand.cs" />
     <Compile Include="VS\Commands\ReopenClosedDocumentsCommand.cs" />
     <Compile Include="ReopenPackage.cs" />
+    <Compile Include="VS\ToolWindows\ClosedDocumentsHistoryControl_Events.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\ClearWindowContent_16x.png" />
+    <Content Include="Resources\ClearWindowContent_16x_Gray.png" />
     <Content Include="Resources\icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <None Include="Resources\OpenFile_16x.png" />
+    <None Include="Resources\RemoveGuide_16x.png" />
+    <Content Include="Resources\OpenFile_16x_Gray.png" />
+    <Content Include="Resources\RemoveGuide_16x_Gray.png" />
     <Content Include="Resources\VsToolsMenu.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -207,6 +240,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
       <ManifestResourceName>VSPackage</ManifestResourceName>

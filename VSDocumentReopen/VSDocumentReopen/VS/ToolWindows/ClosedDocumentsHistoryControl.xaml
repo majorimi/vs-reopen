@@ -7,18 +7,99 @@
              Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
              Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
              mc:Ignorable="d"
-             d:DesignHeight="250" d:DesignWidth="800"
-             Name="DocumentHistory">
-    <ListView Margin="2" Name="_listView" VerticalAlignment="Top" 
+             d:DesignHeight="250" d:DesignWidth="960"
+             Name="DocumentHistoryWindow">
+
+    <UserControl.Resources>
+        <Style x:Key="MenuButton">
+            <Setter Property="Control.Background" Value="{x:Null}" />
+            <Setter Property="Control.BorderBrush" Value="{x:Null}" />
+            <Setter Property="Control.BorderThickness" Value="0" />
+            <Setter Property="Control.Margin" Value="4" />
+            <Setter Property="Control.Width" Value="18" />
+            <Setter Property="Control.Height" Value="18" />
+            <Setter Property="Control.IsEnabled" Value="False" />
+            <!--<Style.Triggers>
+                <Trigger Property="Control.IsEnabled" Value="False">
+                    <Setter Property="Control.Opacity" Value="1.0"></Setter>
+                </Trigger>
+            </Style.Triggers>-->
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions >
+            <RowDefinition Height="26"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Background="#EEEDF2">
+            <Label Content="Number of items in History:"></Label>
+            <Label Name="_numberOfItems" FontWeight="Bold" Content="0"></Label>
+            <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            
+            <TextBox Name="_search" TextChanged="_search_TextChanged" ToolTip="Search in File path or File name"
+                     Width="150" Margin="2" Height="20" VerticalContentAlignment="Center">
+                <TextBox.Style>
+                    <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                        <Style.Resources>
+                            <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None" >
+                                <VisualBrush.Visual>
+                                    <Label Content="Search..." Foreground="LightGray" Width="150" Background="#EFEFEF" />
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </Style.Resources>
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                            </Trigger>
+                            <Trigger Property="Text" Value="{x:Null}">
+                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter Property="Background" Value="White" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+            <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+            <Button Name="_openSelected" Click="_openSelected_Click" ToolTip="Reopen all selected Document(s)" Style="{StaticResource MenuButton}">
+                <Image Name="_openSelectedImg" Source="/Resources/OpenFile_16x_Gray.png" />
+            </Button>
+            <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+            <Button Name="_removeSelected" Click="_removeSelected_Click" ToolTip="Remove selected Document(s) from History" Style="{StaticResource MenuButton}">
+                <Image Name="_removeSelectedImg" Source="/Resources/RemoveGuide_16x_Gray.png" />
+            </Button>
+            <Button Name="_clearAll" Click="_clearAll_Click" ToolTip="Clear History" Style="{StaticResource MenuButton}">
+                <Image Name="_clearAllImg" Source="/Resources/ClearWindowContent_16x_Gray.png" />
+            </Button>
+
+        </StackPanel>
+
+        <ListView Margin="3" Name="_listView" Grid.Row="1" VerticalAlignment="Stretch" 
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.CanContentScroll="True" 
-                SelectionMode="Single">
-        <ListView.View>
-            <GridView>
-                <GridViewColumn Width="300" Header="File path" DisplayMemberBinding="{Binding FullName}" />
-                <GridViewColumn Width="180" Header="File name" DisplayMemberBinding="{Binding Name}" />
-                <GridViewColumn Width="180" Header="Closed at" DisplayMemberBinding="{Binding ClosedAt}" />
-            </GridView>
-        </ListView.View>
-    </ListView>
+                SelectionMode="Extended"
+                MouseDoubleClick="_listView_OnMouseDoubleClick"
+                SelectionChanged="_listView_SelectionChanged"
+                KeyUp="_listView_OnKeyUp">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="30" Header="#" DisplayMemberBinding="{Binding Index}" />
+                    <GridViewColumn Width="400" Header="File path" DisplayMemberBinding="{Binding Path=ClosedDocument.FullName}" />
+                    <GridViewColumn Width="200" Header="File name" DisplayMemberBinding="{Binding Path=ClosedDocument.Name}" />
+                    <GridViewColumn Width="50" Header="Type" DisplayMemberBinding="{Binding Path=ClosedDocument.Language}" />
+                    <GridViewColumn Width="160" Header="Closed at" DisplayMemberBinding="{Binding Path=ClosedDocument.ClosedAt}" />
+                    <GridViewColumn Width="50" Header="Exists" DisplayMemberBinding="{Binding IsExists}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+
 </UserControl>
