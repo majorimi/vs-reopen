@@ -77,38 +77,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 
 		private void DocumentHistoryChanged(object sender, EventArgs e)
 		{
-			UpdateHistoryView(GetFullHistory);
-		}
-
-		private void UpdateHistoryView(Func<IClosedDocument, bool> documentFilter)
-		{
-			_listView.Items.Clear();
-
-			var history = _documentHistoryQueries.GetAll();
-			var i = 1;
-
-			foreach (var doc in history)
-			{
-				if (documentFilter(doc))
-				{
-					_listView.Items.Add(new ClosedDocumentHistoryItem(doc, i));
-				}
-				i++;
-			}
-
-			var count = i - 1;
-			if (count > 0)
-			{
-				_clearAll.GetImageButtonState().Enable();
-			}
-			else
-			{
-				_clearAll.GetImageButtonState().Disable();
-			}
-
-			_numberOfItems.Content = _listView.Items.Count == count
-				? count.ToString()
-				: $"{_listView.Items.Count}/{count}";
+			HandleSearch();
 		}
 	}
 }

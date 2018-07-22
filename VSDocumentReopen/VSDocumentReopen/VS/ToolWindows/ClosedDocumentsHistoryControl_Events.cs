@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using VSDocumentReopen.Domain.Documents;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
 using VSDocumentReopen.VS.ToolWindows.IconHandling.ButtonStates;
 
@@ -27,18 +29,9 @@ namespace VSDocumentReopen.VS.ToolWindows
 
 		private void _search_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			var searchText = (e.Source as TextBox)?.Text;
-
-			if (string.IsNullOrWhiteSpace(searchText))
-			{
-				UpdateHistoryView(GetFullHistory);
-			}
-			else
-			{
-				searchText = searchText.ToLower();
-				UpdateHistoryView((doc) => doc.FullName.ToLower().Contains(searchText) || doc.Name.ToLower().Contains(searchText));
-			}
+			HandleSearch();
 		}
+
 
 		private void _listView_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
@@ -79,5 +72,52 @@ namespace VSDocumentReopen.VS.ToolWindows
 			var command = historyCommandFactory.CreateCommand(selectedItems.ToArray());
 			command.Execute();
 		}
+
+		private void HandleSearch()
+		{
+			var searchText = _search.Text;
+
+			if (string.IsNullOrWhiteSpace(searchText))
+			{
+				UpdateHistoryView(GetFullHistory);
+			}
+			else
+			{
+				searchText = searchText.ToLower();
+				UpdateHistoryView((doc) => doc.FullName.ToLower().Contains(searchText) || doc.Name.ToLower().Contains(searchText));
+			}
+		}
+
+		private void UpdateHistoryView(Func<IClosedDocument, bool> documentFilter)
+		{
+			_listView.Items.Clear();
+
+			var history = _documentHistoryQueries.GetAll();
+			var i = 1;
+
+			foreach (var doc in history)
+			{
+				if (documentFilter(doc))
+				{
+					_listView.Items.Add(new ClosedDocumentHistoryItem(doc, i));
+				}
+				i++;
+			}
+
+			var count = i - 1;
+			if (count > 0)
+			{
+				_clearAll.GetImageButtonState().Enable();
+			}
+			else
+			{
+				_clearAll.GetImageButtonState().Disable();
+			}
+
+			_numberOfItems.Content = string.IsNullOrWhiteSpace(_search.Text)
+				? count.ToString()
+				: $"{_listView.Items.Count}/{count}";
+		}
+
 	}
 }
