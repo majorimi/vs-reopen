@@ -1,9 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using Microsoft.VisualStudio.Shell;
-using VSDocumentReopen.Domain;
-using VSDocumentReopen.Domain.Documents;
-using VSDocumentReopen.Infrastructure.ClosedDocument;
+using VSDocumentReopen.Infrastructure.HistoryCommands;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.VS.Commands
@@ -21,10 +19,12 @@ namespace VSDocumentReopen.VS.Commands
 		public static readonly Guid CommandSet = new Guid("d968b4de-3a69-4eb1-b676-942055da9dfd");
 
 		private readonly AsyncPackage _package;
+		private readonly IHistoryCommand _clearHistoryCommand;
 
-		private ClearDocumentsHistoryCommand(AsyncPackage package, OleMenuCommandService commandService)
+		private ClearDocumentsHistoryCommand(AsyncPackage package, OleMenuCommandService commandService, IHistoryCommand clearHistoryCommand)
 		{
 			_package = package ?? throw new ArgumentNullException(nameof(package));
+			_clearHistoryCommand = clearHistoryCommand ?? throw new ArgumentNullException(nameof(clearHistoryCommand));
 			commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
 			var menuCommandId = new CommandID(CommandSet, CommandId);
@@ -40,17 +40,17 @@ namespace VSDocumentReopen.VS.Commands
 
 		private IAsyncServiceProvider ServiceProvider => _package;
 
-		public static async Task InitializeAsync(AsyncPackage package)
+		public static async Task InitializeAsync(AsyncPackage package, IHistoryCommand clearHistoryCommand)
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
 
 			OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
-			Instance = new ClearDocumentsHistoryCommand(package, commandService);
+			Instance = new ClearDocumentsHistoryCommand(package, commandService, clearHistoryCommand);
 		}
 
 		private void Execute(object sender, EventArgs e)
 		{
-			DocumentHistory.Instance.Clear();
+			_clearHistoryCommand.Execute();
 		}
 	}
 }

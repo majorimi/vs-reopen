@@ -9,6 +9,8 @@ For version history see [release notes](https://github.com/majorimi/vs-reopen/bl
 - Tracks the history by opened solution, not irrelevant files from other solutions
 - Infinite history, not just a few which can fit into the menu
 - See all history in Tool Window
+- Reopen any document(s)
+- Remove any document(s) from history without reopening
 - Clear document history
 
 #### History menu:

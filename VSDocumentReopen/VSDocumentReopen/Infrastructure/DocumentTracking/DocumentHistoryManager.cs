@@ -1,26 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EnvDTE;
 using VSDocumentReopen.Domain.Documents;
 
-namespace VSDocumentReopen.Infrastructure.ClosedDocument
+namespace VSDocumentReopen.Infrastructure.DocumentTracking
 {
-	public sealed class DocumentHistory
+	public sealed class DocumentHistoryManager : IDocumentHistoryManager
 	{
 		public event EventHandler HistoryChanged;
 
-		private static readonly Stack<IClosedDocument> CloseDocuments;
+		private readonly Stack<IClosedDocument> CloseDocuments;
 
-		private DocumentHistory() { }
-
-		static DocumentHistory()
+		public DocumentHistoryManager()
 		{
-			Instance = new DocumentHistory();
 			CloseDocuments = new Stack<IClosedDocument>();
 		}
-
-		public static DocumentHistory Instance { get; }
 
 		public void Clear()
 		{
@@ -28,26 +22,18 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 			OnHistoryChanged();
 		}
 
-		public void AddClosed(Document document)
+		public void Add(ClosedDocument document)
 		{
 			if(document == null)
 			{
 				return;
 			}
 
-			CloseDocuments.Push(new Domain.Documents.ClosedDocument()
-			{
-				FullName = document.FullName,
-				Name = document.Name,
-				Kind = document.Kind,
-				Language = document.Language,
-				ClosedAt = DateTime.Now,
-			});
-
+			CloseDocuments.Push(document);
 			OnHistoryChanged();
 		}
 
-		public IClosedDocument GetLastClosed()
+		public IClosedDocument RemoveLast()
 		{
 			if (CloseDocuments.Count > 0)
 			{
@@ -60,6 +46,8 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 			return NullDocument.Instance;
 		}
 
+		public IEnumerable<IClosedDocument> Get(int number) => CloseDocuments.ToList().Take(number);
+
 		public IEnumerable<IClosedDocument> GetAll()
 		{
 			return CloseDocuments.ToArray();
@@ -69,6 +57,25 @@ namespace VSDocumentReopen.Infrastructure.ClosedDocument
 		{
 			var items = GetAll().ToList();
 			if (items.Remove(closedDocument))
+			{
+				Initialize(items);
+			}
+		}
+
+		public void Remove(IEnumerable<IClosedDocument> closedDocuments)
+		{
+			var items = GetAll().ToList();
+
+			bool removed = false;
+			foreach (var item in closedDocuments)
+			{
+				if (items.Remove(item))
+				{
+					removed = true;
+				}
+			}
+
+			if(removed)
 			{
 				Initialize(items);
 			}
