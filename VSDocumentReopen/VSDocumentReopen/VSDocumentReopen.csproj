@@ -113,6 +113,8 @@
   <ItemGroup>
     <None Include="Resources\ClearWindowContent_16x.png" />
     <Content Include="Resources\ClearWindowContent_16x_Gray.png" />
+    <Content Include="Resources\FileError_16x.png" />
+    <Content Include="Resources\FileOK_16x.png" />
     <Content Include="Resources\icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>

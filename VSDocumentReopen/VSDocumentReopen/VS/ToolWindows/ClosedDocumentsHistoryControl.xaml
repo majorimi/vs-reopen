@@ -96,7 +96,15 @@
                     <GridViewColumn Width="200" Header="File name" DisplayMemberBinding="{Binding Path=ClosedDocument.Name}" />
                     <GridViewColumn Width="50" Header="Type" DisplayMemberBinding="{Binding Path=ClosedDocument.Language}" />
                     <GridViewColumn Width="160" Header="Closed at" DisplayMemberBinding="{Binding Path=ClosedDocument.ClosedAt}" />
-                    <GridViewColumn Width="50" Header="Exists" DisplayMemberBinding="{Binding IsExists}" />
+                    <GridViewColumn Width="40" Header="Exists">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" MinWidth="25" HorizontalAlignment="Center">
+                                    <Image Width="18" Height="18" ToolTip="{Binding IsExistsTooltip}" Source="{Binding IsExistsIcon}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using VSDocumentReopen.Domain.Documents;
 using VSDocumentReopen.Infrastructure.DocumentTracking;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
@@ -15,9 +16,16 @@ namespace VSDocumentReopen.VS.ToolWindows
 	{
 		private class ClosedDocumentHistoryItem
 		{
+			private static BitmapSource _existsImage = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.FileOK_16x);
+			private static BitmapSource _notExistsImage = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.FileError_16x);
+
 			public int Index { get; }
-			public bool IsExists => ClosedDocument.IsValid();
-			public Image Icon => null; //TODO: show icon
+
+			public bool IsExists { get; }
+			public string IsExistsTooltip => IsExists ? "Yes" : "No";
+			public BitmapSource IsExistsIcon => IsExists ? _existsImage : _notExistsImage;
+
+			public Image LanguageIcon => null; //TODO: show icon
 
 			public IClosedDocument ClosedDocument { get; }
 
@@ -25,6 +33,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 			{
 				Index = index;
 				ClosedDocument = closedDocument;
+				IsExists = ClosedDocument.IsValid();
 			}
 		}
 
