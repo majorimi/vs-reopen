@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using VSDocumentReopen.Domain.Documents;
@@ -15,6 +17,9 @@ namespace VSDocumentReopen.VS.ToolWindows
 	/// </summary>
 	public partial class ClosedDocumentsHistoryControl : UserControl
 	{
+		private static readonly Dictionary<string, BitmapSource> _fileTypeImages
+			= new Dictionary<string, BitmapSource>();
+
 		private class ClosedDocumentHistoryItem
 		{
 			private static BitmapSource _existsImage = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.FileOK_16x);
@@ -92,6 +97,21 @@ namespace VSDocumentReopen.VS.ToolWindows
 		private void DocumentHistoryChanged(object sender, EventArgs e)
 		{
 			HandleSearch();
+		}
+
+		private BitmapSource GetFileTypeBitmapSource(IClosedDocument doc)
+		{
+			var extension = Path.GetExtension(doc.FullName).ToLower();
+
+			if (!_fileTypeImages.ContainsKey(extension))
+			{
+				var bitmapSource = WpfImageSourceConverter.CreateBitmapSource(_fileExtensionIconResolver.GetIcon(doc).ToBitmap());
+
+				_fileTypeImages.Add(extension, bitmapSource);
+				return bitmapSource;
+			}
+
+			return _fileTypeImages[extension];
 		}
 	}
 }

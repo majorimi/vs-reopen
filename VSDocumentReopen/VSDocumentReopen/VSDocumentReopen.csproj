@@ -71,6 +71,7 @@
     <Compile Include="Infrastructure\DocumentTracking\IDocumentHistoryQueries.cs" />
     <Compile Include="Infrastructure\FileIcons\CachedFileExtensionIconResolver.cs" />
     <Compile Include="Infrastructure\FileIcons\IFileExtensionIconResolver.cs" />
+    <Compile Include="Infrastructure\FileIcons\VisualStudioFileExtensionIconResolver.cs" />
     <Compile Include="Infrastructure\FileIcons\WindowsFileExtensionIconResolver.cs" />
     <Compile Include="Infrastructure\Helpers\IJsonSerializer.cs" />
     <Compile Include="Infrastructure\HistoryCommands\ClearHistoryCommand.cs" />
@@ -135,7 +136,9 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <None Include="Key.snk" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Resources\LICENSE.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -170,6 +173,9 @@
     </Reference>
     <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.VisualStudio.CoreUtility.15.0.26201\lib\net45\Microsoft.VisualStudio.CoreUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.ImageCatalog, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.VisualStudio.ImageCatalog.15.7.27703\lib\net45\Microsoft.VisualStudio.ImageCatalog.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Imaging, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.VisualStudio.Imaging.15.0.26201\lib\net45\Microsoft.VisualStudio.Imaging.dll</HintPath>

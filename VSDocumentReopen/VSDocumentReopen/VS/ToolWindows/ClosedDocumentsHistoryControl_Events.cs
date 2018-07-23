@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using VSDocumentReopen.Domain.Documents;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
 using VSDocumentReopen.VS.ToolWindows.IconHandling;
@@ -101,7 +102,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 				if (documentFilter(doc))
 				{
 					_listView.Items.Add(new ClosedDocumentHistoryItem(doc, i,
-						WpfImageSourceConverter.CreateBitmapSource(_fileExtensionIconResolver.GetIcon(doc))));
+						GetFileTypeBitmapSource(doc)));
 				}
 				i++;
 			}
@@ -120,6 +121,5 @@ namespace VSDocumentReopen.VS.ToolWindows
 				? count.ToString()
 				: $"{_listView.Items.Count}/{count}";
 		}
-
 	}
 }

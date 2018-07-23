@@ -98,7 +98,7 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" MinWidth="25" HorizontalAlignment="Center">
-                                    <Image Width="18" Height="18" ToolTip="{Binding Path=ClosedDocument.Language}" Source="{Binding LanguageIcon}"/>
+                                    <Image Width="16" Height="16" ToolTip="{Binding Path=ClosedDocument.Language}" Source="{Binding LanguageIcon}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -108,7 +108,7 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" MinWidth="25" HorizontalAlignment="Center">
-                                    <Image Width="18" Height="18" ToolTip="{Binding IsExistsTooltip}" Source="{Binding IsExistsIcon}"/>
+                                    <Image Width="16" Height="16" ToolTip="{Binding IsExistsTooltip}" Source="{Binding IsExistsIcon}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>

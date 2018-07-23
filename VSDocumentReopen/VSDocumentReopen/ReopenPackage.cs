@@ -79,6 +79,8 @@ namespace VSDocumentReopen
 			await ClearDocumentsHistoryCommand.InitializeAsync(this, _clearHistoryCommand);
 			await DocumentsHistoryCommand.InitializeAsync(this, _documentHistoryQueries, _reopenSomeDocumentsCommandFactory);
 
+			var imageService = (IVsImageService2)Package.GetGlobalService(typeof(SVsImageService));
+
 			//Init ToolWindow Commands with DI
 			await ShowDocumentsHIstoryCommand.InitializeAsync(this);
 			await ClosedDocumentsHistory.InitializeAsync(_documentHistoryQueries,
@@ -87,7 +89,7 @@ namespace VSDocumentReopen
 				_removeSomeDocumentsCommandFactory,
 				_clearHistoryCommand,
 				new CachedFileExtensionIconResolver(
-					new WindowsFileExtensionIconResolver()));
+					new VisualStudioFileExtensionIconResolver(imageService)));
 
 			EnforceKeyBinding();
 		}
