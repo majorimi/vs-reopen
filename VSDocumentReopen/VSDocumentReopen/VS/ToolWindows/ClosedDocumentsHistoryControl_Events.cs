@@ -3,10 +3,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using VSDocumentReopen.Domain.Documents;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
-using VSDocumentReopen.VS.ToolWindows.IconHandling;
 using VSDocumentReopen.VS.ToolWindows.IconHandling.ButtonStates;
 
 namespace VSDocumentReopen.VS.ToolWindows
