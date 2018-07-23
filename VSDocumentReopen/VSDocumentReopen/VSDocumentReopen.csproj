@@ -69,6 +69,9 @@
     <Compile Include="Infrastructure\DocumentTracking\IDocumentHistoryCommands.cs" />
     <Compile Include="Infrastructure\DocumentTracking\IDocumentHistoryManager.cs" />
     <Compile Include="Infrastructure\DocumentTracking\IDocumentHistoryQueries.cs" />
+    <Compile Include="Infrastructure\FileIcons\CachedFileExtensionIconResolver.cs" />
+    <Compile Include="Infrastructure\FileIcons\IFileExtensionIconResolver.cs" />
+    <Compile Include="Infrastructure\FileIcons\WindowsFileExtensionIconResolver.cs" />
     <Compile Include="Infrastructure\Helpers\IJsonSerializer.cs" />
     <Compile Include="Infrastructure\HistoryCommands\ClearHistoryCommand.cs" />
     <Compile Include="Infrastructure\HistoryCommands\HistoryCommandFactory.cs" />
@@ -85,7 +88,7 @@
     <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ButtonEnabledState.cs" />
     <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ImageButtonState.cs" />
     <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ButtonStateExtensions.cs" />
-    <Compile Include="VS\ToolWindows\IconHandling\ImageConverterHelper.cs" />
+    <Compile Include="Infrastructure\Helpers\ImageConverterHelper.cs" />
     <Compile Include="Infrastructure\Helpers\ServiceStackJsonSerializer.cs" />
     <Compile Include="VS\ToolWindows\IconHandling\WpfImageSourceConverter.cs" />
     <Compile Include="Infrastructure\IHistoryRepositoryFactory.cs" />

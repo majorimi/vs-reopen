@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using VSDocumentReopen.Domain.Documents;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
+using VSDocumentReopen.VS.ToolWindows.IconHandling;
 using VSDocumentReopen.VS.ToolWindows.IconHandling.ButtonStates;
 
 namespace VSDocumentReopen.VS.ToolWindows
@@ -99,7 +100,8 @@ namespace VSDocumentReopen.VS.ToolWindows
 			{
 				if (documentFilter(doc))
 				{
-					_listView.Items.Add(new ClosedDocumentHistoryItem(doc, i));
+					_listView.Items.Add(new ClosedDocumentHistoryItem(doc, i,
+						WpfImageSourceConverter.CreateBitmapSource(_fileExtensionIconResolver.GetIcon(doc))));
 				}
 				i++;
 			}

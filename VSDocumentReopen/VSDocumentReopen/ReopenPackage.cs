@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using VSDocumentReopen.Infrastructure;
 using VSDocumentReopen.Infrastructure.DocumentCommands;
 using VSDocumentReopen.Infrastructure.DocumentTracking;
+using VSDocumentReopen.Infrastructure.FileIcons;
 using VSDocumentReopen.Infrastructure.Helpers;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
 using VSDocumentReopen.VS.Commands;
@@ -84,7 +85,9 @@ namespace VSDocumentReopen
 				_reopenLastClosdCommand,
 				_reopenSomeDocumentsCommandFactory,
 				_removeSomeDocumentsCommandFactory,
-				_clearHistoryCommand);
+				_clearHistoryCommand,
+				new CachedFileExtensionIconResolver(
+					new WindowsFileExtensionIconResolver()));
 
 			EnforceKeyBinding();
 		}

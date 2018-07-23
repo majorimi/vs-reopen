@@ -94,7 +94,15 @@
                     <GridViewColumn Width="30" Header="#" DisplayMemberBinding="{Binding Index}" />
                     <GridViewColumn Width="400" Header="File path" DisplayMemberBinding="{Binding Path=ClosedDocument.FullName}" />
                     <GridViewColumn Width="200" Header="File name" DisplayMemberBinding="{Binding Path=ClosedDocument.Name}" />
-                    <GridViewColumn Width="50" Header="Type" DisplayMemberBinding="{Binding Path=ClosedDocument.Language}" />
+                    <GridViewColumn Width="40" Header="Type">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" MinWidth="25" HorizontalAlignment="Center">
+                                    <Image Width="18" Height="18" ToolTip="{Binding Path=ClosedDocument.Language}" Source="{Binding LanguageIcon}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Width="160" Header="Closed at" DisplayMemberBinding="{Binding Path=ClosedDocument.ClosedAt}" />
                     <GridViewColumn Width="40" Header="Exists">
                         <GridViewColumn.CellTemplate>

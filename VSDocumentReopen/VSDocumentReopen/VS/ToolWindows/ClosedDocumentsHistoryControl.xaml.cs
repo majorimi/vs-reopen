@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using VSDocumentReopen.Domain.Documents;
 using VSDocumentReopen.Infrastructure.DocumentTracking;
+using VSDocumentReopen.Infrastructure.FileIcons;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
 using VSDocumentReopen.VS.ToolWindows.IconHandling;
 using VSDocumentReopen.VS.ToolWindows.IconHandling.ButtonStates;
@@ -25,15 +26,16 @@ namespace VSDocumentReopen.VS.ToolWindows
 			public string IsExistsTooltip => IsExists ? "Yes" : "No";
 			public BitmapSource IsExistsIcon => IsExists ? _existsImage : _notExistsImage;
 
-			public Image LanguageIcon => null; //TODO: show icon
+			public BitmapSource LanguageIcon { get; }
 
 			public IClosedDocument ClosedDocument { get; }
 
-			public ClosedDocumentHistoryItem(IClosedDocument closedDocument, int index)
+			public ClosedDocumentHistoryItem(IClosedDocument closedDocument, int index, BitmapSource typeIcon)
 			{
 				Index = index;
 				ClosedDocument = closedDocument;
 				IsExists = ClosedDocument.IsValid();
+				LanguageIcon = typeIcon;
 			}
 		}
 
@@ -44,6 +46,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 		private readonly IHistoryCommandFactory _reopenSomeDocumentsCommandFactory;
 		private readonly IHistoryCommandFactory _removeSomeDocumentsCommandFactory;
 		private readonly IHistoryCommand _clearHistoryCommand;
+		private readonly IFileExtensionIconResolver _fileExtensionIconResolver;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ClosedDocumentsHistoryControl"/> class.
@@ -52,7 +55,8 @@ namespace VSDocumentReopen.VS.ToolWindows
 			IHistoryCommand reopenLastClosdCommand,
 			IHistoryCommandFactory reopenSomeDocumentsCommandFactory,
 			IHistoryCommandFactory removeSomeDocumentsCommandFactory,
-			IHistoryCommand clearHistoryCommand)
+			IHistoryCommand clearHistoryCommand,
+			IFileExtensionIconResolver fileExtensionIconResolver)
 		{
 			InitializeComponent();
 
@@ -61,6 +65,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 			_reopenSomeDocumentsCommandFactory = reopenSomeDocumentsCommandFactory;
 			_removeSomeDocumentsCommandFactory = removeSomeDocumentsCommandFactory;
 			_clearHistoryCommand = clearHistoryCommand;
+			_fileExtensionIconResolver = fileExtensionIconResolver;
 
 			var openState = new ButtonDisabledState(_openSelected,
 				new Image() {Source = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.OpenFile_16x)},
