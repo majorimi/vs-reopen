@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using VSDocumentReopen.Domain.Documents;
 using VSDocumentReopen.Infrastructure.DocumentTracking;
+using VSDocumentReopen.Infrastructure.FileIcons;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
 using VSDocumentReopen.VS.ToolWindows.IconHandling;
 using VSDocumentReopen.VS.ToolWindows.IconHandling.ButtonStates;
@@ -13,18 +17,30 @@ namespace VSDocumentReopen.VS.ToolWindows
 	/// </summary>
 	public partial class ClosedDocumentsHistoryControl : UserControl
 	{
+		private static readonly Dictionary<string, BitmapSource> _fileTypeImages
+			= new Dictionary<string, BitmapSource>();
+
 		private class ClosedDocumentHistoryItem
 		{
+			private static BitmapSource _existsImage = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.FileOK_16x);
+			private static BitmapSource _notExistsImage = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.FileError_16x);
+
 			public int Index { get; }
-			public bool IsExists => ClosedDocument.IsValid();
-			public Image Icon => null; //TODO: show icon
+
+			public bool IsExists { get; }
+			public string IsExistsTooltip => IsExists ? "Yes" : "No";
+			public BitmapSource IsExistsIcon => IsExists ? _existsImage : _notExistsImage;
+
+			public BitmapSource LanguageIcon { get; }
 
 			public IClosedDocument ClosedDocument { get; }
 
-			public ClosedDocumentHistoryItem(IClosedDocument closedDocument, int index)
+			public ClosedDocumentHistoryItem(IClosedDocument closedDocument, int index, BitmapSource typeIcon)
 			{
 				Index = index;
 				ClosedDocument = closedDocument;
+				IsExists = ClosedDocument.IsValid();
+				LanguageIcon = typeIcon;
 			}
 		}
 
@@ -35,6 +51,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 		private readonly IHistoryCommandFactory _reopenSomeDocumentsCommandFactory;
 		private readonly IHistoryCommandFactory _removeSomeDocumentsCommandFactory;
 		private readonly IHistoryCommand _clearHistoryCommand;
+		private readonly IFileExtensionIconResolver _fileExtensionIconResolver;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ClosedDocumentsHistoryControl"/> class.
@@ -43,7 +60,8 @@ namespace VSDocumentReopen.VS.ToolWindows
 			IHistoryCommand reopenLastClosdCommand,
 			IHistoryCommandFactory reopenSomeDocumentsCommandFactory,
 			IHistoryCommandFactory removeSomeDocumentsCommandFactory,
-			IHistoryCommand clearHistoryCommand)
+			IHistoryCommand clearHistoryCommand,
+			IFileExtensionIconResolver fileExtensionIconResolver)
 		{
 			InitializeComponent();
 
@@ -52,6 +70,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 			_reopenSomeDocumentsCommandFactory = reopenSomeDocumentsCommandFactory;
 			_removeSomeDocumentsCommandFactory = removeSomeDocumentsCommandFactory;
 			_clearHistoryCommand = clearHistoryCommand;
+			_fileExtensionIconResolver = fileExtensionIconResolver;
 
 			var openState = new ButtonDisabledState(_openSelected,
 				new Image() {Source = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.OpenFile_16x)},
@@ -78,6 +97,21 @@ namespace VSDocumentReopen.VS.ToolWindows
 		private void DocumentHistoryChanged(object sender, EventArgs e)
 		{
 			HandleSearch();
+		}
+
+		private BitmapSource GetFileTypeBitmapSource(IClosedDocument doc)
+		{
+			var extension = Path.GetExtension(doc.FullName).ToLower();
+
+			if (!_fileTypeImages.ContainsKey(extension))
+			{
+				var bitmapSource = WpfImageSourceConverter.CreateBitmapSource(_fileExtensionIconResolver.GetIcon(doc).ToBitmap());
+
+				_fileTypeImages.Add(extension, bitmapSource);
+				return bitmapSource;
+			}
+
+			return _fileTypeImages[extension];
 		}
 	}
 }

@@ -99,7 +99,8 @@ namespace VSDocumentReopen.VS.ToolWindows
 			{
 				if (documentFilter(doc))
 				{
-					_listView.Items.Add(new ClosedDocumentHistoryItem(doc, i));
+					_listView.Items.Add(new ClosedDocumentHistoryItem(doc, i,
+						GetFileTypeBitmapSource(doc)));
 				}
 				i++;
 			}
@@ -118,6 +119,5 @@ namespace VSDocumentReopen.VS.ToolWindows
 				? count.ToString()
 				: $"{_listView.Items.Count}/{count}";
 		}
-
 	}
 }

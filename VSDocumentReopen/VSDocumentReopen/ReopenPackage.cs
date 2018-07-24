@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using VSDocumentReopen.Infrastructure;
 using VSDocumentReopen.Infrastructure.DocumentCommands;
 using VSDocumentReopen.Infrastructure.DocumentTracking;
+using VSDocumentReopen.Infrastructure.FileIcons;
 using VSDocumentReopen.Infrastructure.Helpers;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
 using VSDocumentReopen.VS.Commands;
@@ -78,13 +79,17 @@ namespace VSDocumentReopen
 			await ClearDocumentsHistoryCommand.InitializeAsync(this, _clearHistoryCommand);
 			await DocumentsHistoryCommand.InitializeAsync(this, _documentHistoryQueries, _reopenSomeDocumentsCommandFactory);
 
+			var imageService = (IVsImageService2)Package.GetGlobalService(typeof(SVsImageService));
+
 			//Init ToolWindow Commands with DI
 			await ShowDocumentsHIstoryCommand.InitializeAsync(this);
 			await ClosedDocumentsHistory.InitializeAsync(_documentHistoryQueries,
 				_reopenLastClosdCommand,
 				_reopenSomeDocumentsCommandFactory,
 				_removeSomeDocumentsCommandFactory,
-				_clearHistoryCommand);
+				_clearHistoryCommand,
+				new CachedFileExtensionIconResolver(
+					new VisualStudioFileExtensionIconResolver(imageService)));
 
 			EnforceKeyBinding();
 		}

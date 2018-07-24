@@ -5,7 +5,13 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 
 ## Version history
 
-##### v. 1.2.0
+#### v. 1.3.0
+- Add support for **Visual Studio 2015**
+- Enhance History Tool Window
+    - Show Solution Explorer style document Icon in "Type" column
+    - Show icon in "Exists" column
+
+#### v. 1.2.0
 - Enhance History Tool Window:
     - Reopen any closed document by double clicking or selected document(s) using toolbar menu button
     - Remove selected document(s) using toolbar menu button or Delete key
@@ -15,11 +21,11 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 - Code enhancements, small issue fixes
 
 ##### v. 1.1.1
-- Enforce key bindigs for menu commands
+- Enforce key bindings for menu commands
 - Enable vertical scroll in History Tool Window
 - Bugfix: History Tool Window does not initialized with history data
     
-##### v. 1.1.0
+#### v. 1.1.0
 - Reorganized menu command: under the Tools menu child menu
 - Track the last 5 closed document in child menu
 - Show all history in a new Tool Window
@@ -29,7 +35,7 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 
 ##### v. 1.0.1
 - Bugfix: exception when file was deleted
-- New Icon and Previw images
+- New Icon and Preview images
 
-##### v. 1.0.0
+#### v. 1.0.0
 - Initial release. Extension add new command to Tools menu and CTRL+SHIFT+T shortcut
