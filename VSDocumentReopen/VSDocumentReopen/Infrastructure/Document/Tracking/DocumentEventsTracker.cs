@@ -4,7 +4,7 @@ using EnvDTE;
 using VSDocumentReopen.Domain;
 using VSDocumentReopen.Domain.Documents;
 
-namespace VSDocumentReopen.Infrastructure.DocumentTracking
+namespace VSDocumentReopen.Infrastructure.Document.Tracking
 {
 	public enum SolutionStates
 	{
@@ -88,7 +88,7 @@ namespace VSDocumentReopen.Infrastructure.DocumentTracking
 			_documentHistoryManager.Clear();
 		}
 
-		private void DocumentEventsOnDocumentClosing(Document document)
+		private void DocumentEventsOnDocumentClosing(EnvDTE.Document document)
 		{
 			if (SolutionState == SolutionStates.Opened)
 			{

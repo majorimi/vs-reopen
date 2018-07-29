@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.Shell;
 using VSDocumentReopen.Domain.Documents;
 
-namespace VSDocumentReopen.Infrastructure.DocumentCommands
+namespace VSDocumentReopen.Infrastructure.Document.Commands
 {
 	public class ReopenDocumentCommand : IDocumentCommand
 	{

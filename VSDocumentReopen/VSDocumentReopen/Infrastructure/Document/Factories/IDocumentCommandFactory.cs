@@ -1,6 +1,7 @@
 ﻿using VSDocumentReopen.Domain.Documents;
+using VSDocumentReopen.Infrastructure.Document.Commands;
 
-namespace VSDocumentReopen.Infrastructure.DocumentCommands
+namespace VSDocumentReopen.Infrastructure.Document.Factories
 {
 	public interface IDocumentCommandFactory
 	{

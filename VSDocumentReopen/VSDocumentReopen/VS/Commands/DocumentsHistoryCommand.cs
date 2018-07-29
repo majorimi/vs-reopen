@@ -4,7 +4,7 @@ using System.ComponentModel.Design;
 using System.Linq;
 using Microsoft.VisualStudio.Shell;
 using VSDocumentReopen.Domain.Documents;
-using VSDocumentReopen.Infrastructure.DocumentTracking;
+using VSDocumentReopen.Infrastructure.Document.Tracking;
 using VSDocumentReopen.Infrastructure.Helpers;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
 using Task = System.Threading.Tasks.Task;

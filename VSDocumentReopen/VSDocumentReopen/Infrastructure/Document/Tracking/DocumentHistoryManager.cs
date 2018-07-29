@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using VSDocumentReopen.Domain.Documents;
 
-namespace VSDocumentReopen.Infrastructure.DocumentTracking
+namespace VSDocumentReopen.Infrastructure.Document.Tracking
 {
 	public sealed class DocumentHistoryManager : IDocumentHistoryManager
 	{
