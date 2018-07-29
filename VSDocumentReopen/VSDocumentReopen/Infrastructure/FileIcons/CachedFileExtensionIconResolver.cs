@@ -14,8 +14,10 @@ namespace VSDocumentReopen.Infrastructure.FileIcons
 
 		static CachedFileExtensionIconResolver()
 		{
-			Icons = new Dictionary<string, Icon>();
-			Icons.Add(NoIconKey, Icon.FromHandle(Resources.FileError_16x.GetHicon()));
+			Icons = new Dictionary<string, Icon>
+			{
+				{ NoIconKey, Icon.FromHandle(Resources.FileError_16x.GetHicon()) }
+			};
 		}
 
 		public CachedFileExtensionIconResolver(IFileExtensionIconResolver fileExtensionIconResolver)
