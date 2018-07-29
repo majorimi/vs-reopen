@@ -135,6 +135,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Infrastructure\FileIcons\CachedFileExtensionIconResolverTest.cs" />
     <Compile Include="Infrastructure\FileIcons\VisualStudioFileExtensionIconResolverTest.cs" />
     <Compile Include="Infrastructure\FileIcons\WindowsFileExtensionIconResolverTest.cs" />
     <Compile Include="Infrastructure\Helpers\PathFormatterTest.cs" />

@@ -58,8 +58,9 @@ namespace VSDocumentReopen.Test.Infrastructure.FileIcons
 		[Fact]
 		public void ItShouldHandle_Document()
 		{
+			var ico = Icon.FromHandle(Resources.FileError_16x.GetHbitmap());
 			_iVsImageService2Mock.Setup(s => s.GetIconForFile(It.Is<string>(o => o == "test.cs"), It.IsAny<__VSUIDATAFORMAT>()))
-				.Returns(() => new WinFormsIconUIObject(Icon.FromHandle(Resources.FileError_16x.GetHbitmap())));
+				.Returns(() => new WinFormsIconUIObject(ico));
 
 			var icon = _fileExtensionIconResolver.GetIcon(new ClosedDocument()
 			{
@@ -68,6 +69,7 @@ namespace VSDocumentReopen.Test.Infrastructure.FileIcons
 			});
 
 			Assert.NotNull(icon);
+			Assert.Same(ico, icon);
 			_iVsImageService2Mock.Verify(v => v.GetIconForFile(It.Is<string>(o => o == "test.cs"), It.IsAny<__VSUIDATAFORMAT>()), Times.Once);
 		}
 	}
