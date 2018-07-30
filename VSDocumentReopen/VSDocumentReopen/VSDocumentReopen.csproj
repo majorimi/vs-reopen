@@ -113,6 +113,7 @@
     <Compile Include="VS\Commands\ReopenClosedDocumentsCommand.cs" />
     <Compile Include="ReopenPackage.cs" />
     <Compile Include="VS\ToolWindows\ClosedDocumentsHistoryControl_Events.cs" />
+    <Compile Include="VS\ToolWindows\SortAdorner.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ClearWindowContent_16x.png" />

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using VSDocumentReopen.Domain.Documents;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
@@ -11,6 +14,9 @@ namespace VSDocumentReopen.VS.ToolWindows
 {
 	public partial class ClosedDocumentsHistoryControl
 	{
+		private GridViewColumnHeader listViewSortCol = null;
+		private SortAdorner listViewSortAdorner = null;
+
 		private void _openSelected_Click(object sender, RoutedEventArgs e)
 		{
 			HandleOperatons(_reopenSomeDocumentsCommandFactory);
@@ -63,6 +69,41 @@ namespace VSDocumentReopen.VS.ToolWindows
 			_removeSelected.GetImageButtonState().Disable();
 		}
 
+		private void _listViewColumnHeader_Click(object sender, RoutedEventArgs e)
+		{
+			var column = (sender as GridViewColumnHeader);
+			string sortBy = column.Tag.ToString();
+
+			if (listViewSortCol != null)
+			{
+				AdornerLayer.GetAdornerLayer(listViewSortCol)?.Remove(listViewSortAdorner);
+				_listView.Items.SortDescriptions.Clear();
+			}
+
+			var newDir = ListSortDirection.Ascending;
+			if (listViewSortCol == column && listViewSortAdorner.Direction == newDir)
+			{
+				newDir = ListSortDirection.Descending;
+			}
+
+			listViewSortCol = column;
+			listViewSortAdorner = new SortAdorner(listViewSortCol, newDir);
+
+			AdornerLayer.GetAdornerLayer(listViewSortCol).Add(listViewSortAdorner);
+			_listView.Items.SortDescriptions.Add(new SortDescription(sortBy, newDir));
+		}
+
+		private void _listViewColumnHeader_SizeChanged(object sender, SizeChangedEventArgs e)
+		{
+			var header = ((GridViewColumnHeader)sender);
+			var min = (header.Content as TextBlock)?.MinWidth ?? 35;
+
+			if (e.NewSize.Width < min)
+			{
+				e.Handled = true;
+				header.Column.Width = min;
+			}
+		}
 
 		private void HandleOperatons(IHistoryCommandFactory historyCommandFactory)
 		{
@@ -118,6 +159,17 @@ namespace VSDocumentReopen.VS.ToolWindows
 			_numberOfItems.Content = string.IsNullOrWhiteSpace(_search.Text)
 				? count.ToString()
 				: $"{_listView.Items.Count}/{count}";
+
+			//sort
+			if (_listView.Items.SortDescriptions.Count > 0)
+			{
+				var sort = _listView.Items.SortDescriptions.First();
+
+				_listView.Items.SortDescriptions.Clear();
+				_listView.Items.SortDescriptions.Add(sort);
+
+				_listView.Items.Refresh();
+			}
 		}
 	}
 }

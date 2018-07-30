@@ -87,7 +87,6 @@ namespace VSDocumentReopen.VS.ToolWindows
 				new Image() {Source = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.ClearWindowContent_16x_Gray)});
 			clearState.Disable();
 
-			//TODO: sort: http://www.wpf-tutorial.com/listview-control/listview-how-to-column-sorting/
 			_documentHistoryQueries.HistoryChanged += DocumentHistoryChanged;
 			UpdateHistoryView(GetFullHistory);
 
