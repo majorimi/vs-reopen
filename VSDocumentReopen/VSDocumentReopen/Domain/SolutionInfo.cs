@@ -11,7 +11,7 @@
 			Name = name;
 		}
 
-		public void Deconstruct(out string name, out string fullPath)
+		public void Deconstruct(out string fullPath, out string name)
 		{
 			name = Name;
 			fullPath = FullPath;

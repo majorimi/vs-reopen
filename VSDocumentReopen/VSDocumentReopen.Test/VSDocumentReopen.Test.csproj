@@ -135,6 +135,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\Documents\ClosedDocumentTest.cs" />
+    <Compile Include="Domain\Documents\NullDocumentTest.cs" />
+    <Compile Include="Domain\SolutionInfoTest.cs" />
     <Compile Include="Infrastructure\FileIcons\CachedFileExtensionIconResolverTest.cs" />
     <Compile Include="Infrastructure\FileIcons\VisualStudioFileExtensionIconResolverTest.cs" />
     <Compile Include="Infrastructure\FileIcons\WindowsFileExtensionIconResolverTest.cs" />
@@ -156,9 +159,7 @@
       <Name>VSDocumentReopen</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Domain\Documents\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
