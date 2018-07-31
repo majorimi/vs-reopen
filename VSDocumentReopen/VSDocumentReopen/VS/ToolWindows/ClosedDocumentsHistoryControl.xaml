@@ -79,15 +79,24 @@
 
         </StackPanel>
 
-        <ListView Margin="3" Name="_listView" Grid.Row="1" VerticalAlignment="Stretch" 
+        <ListView Margin="3" Name="_listView" Grid.Row="1"
+                VerticalAlignment="Stretch" 
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.CanContentScroll="True" 
                 SelectionMode="Extended"
                 MouseDoubleClick="_listView_OnMouseDoubleClick"
                 SelectionChanged="_listView_SelectionChanged"
                 KeyUp="_listView_OnKeyUp">
+            <ListView.Resources>
+                <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+            </ListView.Resources>
+            <ListView.ContextMenu>
+                <ContextMenu Visibility="{Binding Path=ContextMenuVisible, Converter={StaticResource BoolToVisConverter} }">
+                    <MenuItem Header="Remove sorting" Click="_listViewRemoveSort_Click" />
+                </ContextMenu>
+            </ListView.ContextMenu>
             <ListView.View>
-                <GridView>
+                <GridView AllowsColumnReorder="False">
                     <GridViewColumn Width="35" DisplayMemberBinding="{Binding Index}">
                         <GridViewColumn.Header>
                             <GridViewColumnHeader HorizontalContentAlignment="Left" Tag="Index" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged">

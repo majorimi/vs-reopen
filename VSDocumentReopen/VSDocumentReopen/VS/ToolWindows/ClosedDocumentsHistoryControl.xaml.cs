@@ -20,30 +20,6 @@ namespace VSDocumentReopen.VS.ToolWindows
 		private static readonly Dictionary<string, BitmapSource> _fileTypeImages
 			= new Dictionary<string, BitmapSource>();
 
-		private class ClosedDocumentHistoryItem
-		{
-			private static BitmapSource _existsImage = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.FileOK_16x);
-			private static BitmapSource _notExistsImage = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.FileError_16x);
-
-			public int Index { get; }
-
-			public bool IsExists { get; }
-			public string IsExistsTooltip => IsExists ? "Yes" : "No";
-			public BitmapSource IsExistsIcon => IsExists ? _existsImage : _notExistsImage;
-
-			public BitmapSource LanguageIcon { get; }
-
-			public IClosedDocument ClosedDocument { get; }
-
-			public ClosedDocumentHistoryItem(IClosedDocument closedDocument, int index, BitmapSource typeIcon)
-			{
-				Index = index;
-				ClosedDocument = closedDocument;
-				IsExists = ClosedDocument.IsValid();
-				LanguageIcon = typeIcon;
-			}
-		}
-
 		private readonly Func<IClosedDocument, bool> GetFullHistory = _ => true;
 
 		private readonly IDocumentHistoryQueries _documentHistoryQueries;
@@ -52,6 +28,11 @@ namespace VSDocumentReopen.VS.ToolWindows
 		private readonly IHistoryCommandFactory _removeSomeDocumentsCommandFactory;
 		private readonly IHistoryCommand _clearHistoryCommand;
 		private readonly IFileExtensionIconResolver _fileExtensionIconResolver;
+
+		private GridViewColumnHeader listViewSortCol = null;
+		private SortAdorner listViewSortAdorner = null;
+
+		public bool ContextMenuVisible => listViewSortCol != null;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ClosedDocumentsHistoryControl"/> class.

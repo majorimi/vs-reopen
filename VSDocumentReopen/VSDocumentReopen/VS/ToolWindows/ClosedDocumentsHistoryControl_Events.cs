@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using VSDocumentReopen.Domain.Documents;
@@ -14,9 +13,6 @@ namespace VSDocumentReopen.VS.ToolWindows
 {
 	public partial class ClosedDocumentsHistoryControl
 	{
-		private GridViewColumnHeader listViewSortCol = null;
-		private SortAdorner listViewSortAdorner = null;
-
 		private void _openSelected_Click(object sender, RoutedEventArgs e)
 		{
 			HandleOperatons(_reopenSomeDocumentsCommandFactory);
@@ -104,6 +100,20 @@ namespace VSDocumentReopen.VS.ToolWindows
 				header.Column.Width = min;
 			}
 		}
+
+		private void _listViewRemoveSort_Click(object sender, RoutedEventArgs e)
+		{
+			if (listViewSortCol != null)
+			{
+				AdornerLayer.GetAdornerLayer(listViewSortCol)?.Remove(listViewSortAdorner);
+				_listView.Items.SortDescriptions.Clear();
+				_listView.Items.Refresh();
+
+				listViewSortCol = null;
+				listViewSortAdorner = null;
+			}
+		}
+
 
 		private void HandleOperatons(IHistoryCommandFactory historyCommandFactory)
 		{
