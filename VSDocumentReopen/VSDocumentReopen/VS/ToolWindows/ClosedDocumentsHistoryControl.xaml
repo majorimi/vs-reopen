@@ -79,32 +79,84 @@
 
         </StackPanel>
 
-        <ListView Margin="3" Name="_listView" Grid.Row="1" VerticalAlignment="Stretch" 
+        <ListView Margin="3" Name="_listView" Grid.Row="1"
+                VerticalAlignment="Stretch" 
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.CanContentScroll="True" 
                 SelectionMode="Extended"
                 MouseDoubleClick="_listView_OnMouseDoubleClick"
                 SelectionChanged="_listView_SelectionChanged"
                 KeyUp="_listView_OnKeyUp">
+            <ListView.Resources>
+                <!--<BooleanToVisibilityConverter x:Key="BoolToVisConverter" />-->
+                <ContextMenu x:Key="ListViewContextMenu" >
+                    <MenuItem Header="Remove sorting" Click="_listViewRemoveSort_Click" />
+                </ContextMenu>
+            </ListView.Resources>
+            <ListView.Style>
+                <Style TargetType="{x:Type ListView}">
+                    <Setter Property="ContextMenu" Value="{StaticResource ListViewContextMenu}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ContextMenuVisible}" Value="False">
+                            <Setter Property="ContextMenu" Value="{x:Null}" />
+                            <!--<Setter Property="Visibility" Value="Hidden"/>-->
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Style>
             <ListView.View>
-                <GridView>
-                    <GridViewColumn Width="30" Header="#" DisplayMemberBinding="{Binding Index}" />
-                    <GridViewColumn Width="400" Header="File path" DisplayMemberBinding="{Binding Path=ClosedDocument.FullName}" />
-                    <GridViewColumn Width="200" Header="File name" DisplayMemberBinding="{Binding Path=ClosedDocument.Name}" />
-                    <GridViewColumn Width="40" Header="Type">
+                <GridView AllowsColumnReorder="False">
+                    <GridViewColumn Width="35" DisplayMemberBinding="{Binding Index}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader HorizontalContentAlignment="Left" Tag="Index" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged">
+                                <TextBlock Text=" #" MinWidth="35"/>
+                            </GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="400" DisplayMemberBinding="{Binding Path=ClosedDocument.FullName}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader HorizontalContentAlignment="Left" Tag="ClosedDocument.FullName" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged">
+                                <TextBlock Text=" File path" MinWidth="200" />
+                            </GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="200" DisplayMemberBinding="{Binding Path=ClosedDocument.Name}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader HorizontalContentAlignment="Left" Tag="ClosedDocument.Name" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged">
+                                <TextBlock Text=" File name" MinWidth="100"/>
+                            </GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="55">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader HorizontalContentAlignment="Left" Tag="ClosedDocument.Language" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged">
+                                <TextBlock Text=" Type" MinWidth="50" />
+                            </GridViewColumnHeader>
+                        </GridViewColumn.Header>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal" MinWidth="25" HorizontalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <Image Width="16" Height="16" ToolTip="{Binding Path=ClosedDocument.Language}" Source="{Binding LanguageIcon}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="160" Header="Closed at" DisplayMemberBinding="{Binding Path=ClosedDocument.ClosedAt}" />
-                    <GridViewColumn Width="40" Header="Exists">
+                    <GridViewColumn Width="160" DisplayMemberBinding="{Binding Path=ClosedDocument.ClosedAt}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader HorizontalContentAlignment="Left" Tag="ClosedDocument.ClosedAt" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged">
+                                <TextBlock Text=" Closed at" MinWidth="100" />
+                            </GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="60">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader HorizontalContentAlignment="Left" Tag="IsExistsTooltip" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged">
+                                <TextBlock Text=" Exists" MinWidth="55" />
+                            </GridViewColumnHeader>
+                        </GridViewColumn.Header>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal" MinWidth="25" HorizontalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <Image Width="16" Height="16" ToolTip="{Binding IsExistsTooltip}" Source="{Binding IsExistsIcon}"/>
                                 </StackPanel>
                             </DataTemplate>

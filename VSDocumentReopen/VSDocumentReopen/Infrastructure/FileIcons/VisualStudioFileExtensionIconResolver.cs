@@ -17,8 +17,15 @@ namespace VSDocumentReopen.Infrastructure.FileIcons
 		//https://msdn.microsoft.com/en-us/library/mt628927.aspx?f=255&MSPPError=-2147217396
 		public Icon GetIcon(IClosedDocument document)
 		{
-			IVsUIObject uIObj = _vsImageService2.GetIconForFile(document.Name, __VSUIDATAFORMAT.VSDF_WINFORMS);
-			Icon icon = (Icon)GelUtilities.GetObjectData(uIObj);
+			Icon icon = null;
+			if (!string.IsNullOrWhiteSpace(document?.Name))
+			{
+				IVsUIObject uIObj = _vsImageService2.GetIconForFile(document.Name, __VSUIDATAFORMAT.VSDF_WINFORMS);
+				if (uIObj != null)
+				{
+					icon = (Icon) GelUtilities.GetObjectData(uIObj);
+				}
+			}
 
 			return icon;
 		}

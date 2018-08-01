@@ -1,4 +1,4 @@
-﻿namespace VSDocumentReopen.Infrastructure.DocumentCommands
+﻿namespace VSDocumentReopen.Infrastructure.Document.Commands
 {
 	public class DoNothingCommand : IDocumentCommand
 	{

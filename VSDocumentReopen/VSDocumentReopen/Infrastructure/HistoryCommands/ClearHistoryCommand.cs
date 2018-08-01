@@ -1,4 +1,4 @@
-﻿using VSDocumentReopen.Infrastructure.DocumentTracking;
+﻿using VSDocumentReopen.Infrastructure.Document.Tracking;
 
 namespace VSDocumentReopen.Infrastructure.HistoryCommands
 {

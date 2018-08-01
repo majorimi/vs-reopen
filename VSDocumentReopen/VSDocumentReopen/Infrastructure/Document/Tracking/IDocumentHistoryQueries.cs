@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using VSDocumentReopen.Domain.Documents;
 
-namespace VSDocumentReopen.Infrastructure.DocumentTracking
+namespace VSDocumentReopen.Infrastructure.Document.Tracking
 {
 	public interface IDocumentHistoryQueries
 	{

@@ -5,6 +5,10 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 
 ## Version history
 
+##### v. 1.3.1
+- Order history data by clicking on column headers in History Tool Window
+- Code enhancements, small issue fixes
+
 #### v. 1.3.0
 - Add support for **Visual Studio 2015**
 - Enhance History Tool Window

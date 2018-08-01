@@ -10,5 +10,11 @@
 			FullPath = fullPath;
 			Name = name;
 		}
+
+		public void Deconstruct(out string fullPath, out string name)
+		{
+			name = Name;
+			fullPath = FullPath;
+		}
 	}
 }

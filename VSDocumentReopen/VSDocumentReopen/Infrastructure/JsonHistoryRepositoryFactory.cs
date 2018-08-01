@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.ComponentModel;
+using System.IO;
 using VSDocumentReopen.Domain;
 using VSDocumentReopen.Infrastructure.Helpers;
 using VSDocumentReopen.Infrastructure.Repositories;
@@ -16,6 +17,11 @@ namespace VSDocumentReopen.Infrastructure
 
 		public IHistoryRepository CreateHistoryRepository(SolutionInfo solutionInfo)
 		{
+			if (solutionInfo is null)
+			{
+				throw new InvalidEnumArgumentException($"Parameter: {nameof(solutionInfo)} cannot be null");
+			}
+
 			var historyFile = Path.Combine(solutionInfo.FullPath,
 				ConfigurationManager.Config.VSTempFolderName,
 				ConfigurationManager.Config.PackageWorkingDirName,

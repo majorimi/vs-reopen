@@ -8,14 +8,16 @@ namespace VSDocumentReopen.Infrastructure.FileIcons
 	public class CachedFileExtensionIconResolver : IFileExtensionIconResolver
 	{
 		private const string NoIconKey = "";
-		private static readonly Dictionary<string, Icon> _icons;
+		private static readonly Dictionary<string, Icon> Icons;
 
 		private readonly IFileExtensionIconResolver _fileExtensionIconResolver;
 
 		static CachedFileExtensionIconResolver()
 		{
-			_icons = new Dictionary<string, Icon>();
-			_icons.Add(NoIconKey, Icon.FromHandle(Resources.FileError_16x.GetHicon()));
+			Icons = new Dictionary<string, Icon>
+			{
+				{ NoIconKey, Icon.FromHandle(Resources.FileError_16x.GetHicon()) }
+			};
 		}
 
 		public CachedFileExtensionIconResolver(IFileExtensionIconResolver fileExtensionIconResolver)
@@ -25,21 +27,21 @@ namespace VSDocumentReopen.Infrastructure.FileIcons
 
 		public Icon GetIcon(IClosedDocument document)
 		{
-			var extension = Path.GetExtension(document.FullName).ToLower();
+			var extension = Path.GetExtension(document?.FullName)?.ToLower() ?? NoIconKey;
 
-			if(!_icons.ContainsKey(extension))
+			if(!Icons.ContainsKey(extension))
 			{
 				var icon = _fileExtensionIconResolver.GetIcon(document);
 				if(icon is null)
 				{
-					return _icons[NoIconKey];
+					return Icons[NoIconKey];
 				}
 
-				_icons.Add(extension, icon);
+				Icons.Add(extension, icon);
 				return icon;
 			}
 
-			return _icons[extension];
+			return Icons[extension];
 		}
 	}
 }

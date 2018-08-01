@@ -59,16 +59,16 @@
     <Compile Include="Domain\Configuration.cs" />
     <Compile Include="Domain\IConfiguration.cs" />
     <Compile Include="Domain\SolutionInfo.cs" />
-    <Compile Include="Infrastructure\DocumentCommands\DoNothingCommand.cs" />
-    <Compile Include="Infrastructure\DocumentCommands\DoNothingDocumentCommandFactory.cs" />
-    <Compile Include="Infrastructure\DocumentCommands\IDocumentCommand.cs" />
-    <Compile Include="Infrastructure\DocumentCommands\IDocumentCommandFactory.cs" />
-    <Compile Include="Infrastructure\DocumentCommands\ReopenDocumentCommand.cs" />
-    <Compile Include="Infrastructure\DocumentCommands\ReopenDocumentCommandFactory.cs" />
+    <Compile Include="Infrastructure\Document\Commands\DoNothingCommand.cs" />
+    <Compile Include="Infrastructure\Document\Factories\DoNothingDocumentCommandFactory.cs" />
+    <Compile Include="Infrastructure\Document\Commands\IDocumentCommand.cs" />
+    <Compile Include="Infrastructure\Document\Factories\IDocumentCommandFactory.cs" />
+    <Compile Include="Infrastructure\Document\Commands\ReopenDocumentCommand.cs" />
+    <Compile Include="Infrastructure\Document\Factories\ReopenDocumentCommandFactory.cs" />
     <Compile Include="Infrastructure\ConfigurationManager.cs" />
-    <Compile Include="Infrastructure\DocumentTracking\IDocumentHistoryCommands.cs" />
-    <Compile Include="Infrastructure\DocumentTracking\IDocumentHistoryManager.cs" />
-    <Compile Include="Infrastructure\DocumentTracking\IDocumentHistoryQueries.cs" />
+    <Compile Include="Infrastructure\Document\Tracking\IDocumentHistoryCommands.cs" />
+    <Compile Include="Infrastructure\Document\Tracking\IDocumentHistoryManager.cs" />
+    <Compile Include="Infrastructure\Document\Tracking\IDocumentHistoryQueries.cs" />
     <Compile Include="Infrastructure\FileIcons\CachedFileExtensionIconResolver.cs" />
     <Compile Include="Infrastructure\FileIcons\IFileExtensionIconResolver.cs" />
     <Compile Include="Infrastructure\FileIcons\VisualStudioFileExtensionIconResolver.cs" />
@@ -85,6 +85,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="VS\ToolWindows\ClosedDocumentsHistoryControl_Types.cs" />
     <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ButtonDisabledState.cs" />
     <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ButtonEnabledState.cs" />
     <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ImageButtonState.cs" />
@@ -103,8 +104,8 @@
     <Compile Include="VS\Commands\DocumentsHistoryCommand.cs" />
     <Compile Include="VS\Commands\ShowDocumentsHIstoryCommand.cs" />
     <Compile Include="Domain\Documents\ClosedDocument.cs" />
-    <Compile Include="Infrastructure\DocumentTracking\DocumentHistoryManager.cs" />
-    <Compile Include="Infrastructure\DocumentTracking\DocumentEventsTracker.cs" />
+    <Compile Include="Infrastructure\Document\Tracking\DocumentHistoryManager.cs" />
+    <Compile Include="Infrastructure\Document\Tracking\DocumentEventsTracker.cs" />
     <Compile Include="Domain\Documents\IClosedDocument.cs" />
     <Compile Include="Domain\Documents\NullDocument.cs" />
     <Compile Include="Infrastructure\Helpers\PathFormatter.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="VS\Commands\ReopenClosedDocumentsCommand.cs" />
     <Compile Include="ReopenPackage.cs" />
     <Compile Include="VS\ToolWindows\ClosedDocumentsHistoryControl_Events.cs" />
+    <Compile Include="VS\ToolWindows\SortAdorner.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ClearWindowContent_16x.png" />

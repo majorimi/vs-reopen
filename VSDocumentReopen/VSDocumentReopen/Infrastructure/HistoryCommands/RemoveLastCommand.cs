@@ -1,5 +1,5 @@
-﻿using VSDocumentReopen.Infrastructure.DocumentCommands;
-using VSDocumentReopen.Infrastructure.DocumentTracking;
+﻿using VSDocumentReopen.Infrastructure.Document.Factories;
+using VSDocumentReopen.Infrastructure.Document.Tracking;
 
 namespace VSDocumentReopen.Infrastructure.HistoryCommands
 {

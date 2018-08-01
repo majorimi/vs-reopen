@@ -1,4 +1,4 @@
-﻿namespace VSDocumentReopen.Infrastructure.DocumentTracking
+﻿namespace VSDocumentReopen.Infrastructure.Document.Tracking
 {
 	public interface IDocumentHistoryManager : IDocumentHistoryQueries, IDocumentHistoryCommands
 	{
