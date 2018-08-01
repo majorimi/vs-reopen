@@ -7,7 +7,6 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 
 ##### v. 1.3.1
 - Order history data by clicking on column headers in History Tool Window
-- Sign the Extension
 - Code enhancements, small issue fixes
 
 #### v. 1.3.0
