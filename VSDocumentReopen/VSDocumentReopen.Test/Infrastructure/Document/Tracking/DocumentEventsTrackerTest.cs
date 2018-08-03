@@ -86,11 +86,10 @@ namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
 
 			_documentEventsMock.Received(1).DocumentClosing += Arg.Any<_dispDocumentEvents_DocumentClosingEventHandler>();
 			Assert.Equal(SolutionStates.Opened, _documentEventsTracker.SolutionState);
-			_solutionMock.VerifyGet(v => v.FullName, Times.Once);
+			_solutionMock.VerifyGet(v => v.FullName, Times.Exactly(2));
 			_historyRepositoryFactoryMock.Verify(v => v.CreateHistoryRepository(It.IsAny<SolutionInfo>()), Times.Once);
 			_historyRepositoryMock.Verify(v => v.GetHistory(), Times.Never);
 			_documentHistoryManagerMock.Verify(v => v.Initialize(It.Is<IEnumerable<IClosedDocument>>(l => l == null)), Times.Once);
-
 		}
 
 		[Fact]
@@ -111,6 +110,71 @@ namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
 				Times.Once);
 			_historyRepositoryMock.Verify(v => v.GetHistory(), Times.Once);
 			_documentHistoryManagerMock.Verify(v => v.Initialize(It.Is<List<IClosedDocument>>(l => l.Count == 0)), Times.Once);
+		}
+
+		[Fact]
+		public void ItShould_Handle_SolutionBeforeClosing_Event()
+		{
+			_historyRepositoryFactoryMock.Setup(s => s.CreateHistoryRepository(It.IsAny<SolutionInfo>()))
+				.Returns(_historyRepositoryMock.Object);
+
+			_solutionEventsMock.BeforeClosing += Raise.Event<_dispSolutionEvents_BeforeClosingEventHandler>();
+
+			Assert.Equal(SolutionStates.StartedToClose, _documentEventsTracker.SolutionState);
+		}
+
+		[Fact]
+		public void ItShould_Handle_SolutionAfterClosing_Event()
+		{
+			_historyRepositoryFactoryMock.Setup(s => s.CreateHistoryRepository(It.IsAny<SolutionInfo>()))
+				.Returns(_historyRepositoryMock.Object);
+			_historyRepositoryMock.Setup(s => s.SaveHistory(It.IsAny<IEnumerable<IClosedDocument>>()));
+			_documentHistoryManagerMock.Setup(s => s.GetAll())
+				.Returns(new List<IClosedDocument>());
+
+			_solutionEventsMock.AfterClosing += Raise.Event<_dispSolutionEvents_AfterClosingEventHandler>();
+
+			_documentEventsMock.Received(1).DocumentClosing -= Arg.Any<_dispDocumentEvents_DocumentClosingEventHandler>();
+			_historyRepositoryFactoryMock.Verify(v => v.CreateHistoryRepository(It.IsAny<SolutionInfo>()), Times.Once);
+			_historyRepositoryMock.Verify(v => v.SaveHistory(It.IsAny<IEnumerable<IClosedDocument>>()), Times.Once);
+			_documentHistoryManagerMock.Verify(v => v.GetAll(), Times.Once);
+			_documentHistoryManagerMock.Verify(v => v.Clear(), Times.Once);
+			Assert.Equal(SolutionStates.None, _documentEventsTracker.SolutionState);
+		}
+
+		[Fact]
+		public void ItShould_Not_Handle_DocumentClosed_Event_Before_Solution_Loaded()
+		{
+			var doc = Substitute.For<EnvDTE.Document>();
+			_documentEventsMock.DocumentClosing += Raise.Event<_dispDocumentEvents_DocumentClosingEventHandler>(doc);
+
+			Assert.Equal(SolutionStates.None, _documentEventsTracker.SolutionState);
+			_documentEventsMock.Received(1).DocumentClosing += Raise.Event<_dispDocumentEvents_DocumentClosingEventHandler>(doc);
+			_documentHistoryManagerMock.Verify(v => v.Add(It.IsAny<IClosedDocument>()), Times.Never);
+		}
+
+		[Fact]
+		public void ItShould_Handle_DocumentClosed_Event_When_Solution_Loaded()
+		{
+			var doc = Substitute.For<EnvDTE.Document>();
+			doc.FullName.Returns("c:\\test.cs");
+			doc.Name.Returns("test.cs");
+			doc.Kind.Returns("kind");
+			doc.Language.Returns("cs");
+			var closedAt = DateTime.Now;
+
+			_documentEventsMock.DocumentClosing += Raise.Event<_dispDocumentEvents_DocumentClosingEventHandler>(doc);
+			_historyRepositoryFactoryMock.Setup(s => s.CreateHistoryRepository(It.IsAny<SolutionInfo>()))
+				.Returns(() => null);
+			_documentHistoryManagerMock.Setup(s => s.Add(It.IsAny<IClosedDocument>()));
+
+			_solutionEventsMock.Opened += Raise.Event<_dispSolutionEvents_OpenedEventHandler>();
+
+			Assert.Equal(SolutionStates.Opened, _documentEventsTracker.SolutionState);
+			_documentEventsMock.Received(1).DocumentClosing += Raise.Event<_dispDocumentEvents_DocumentClosingEventHandler>(doc);
+			_documentHistoryManagerMock.Verify(v => v.Add(It.Is<IClosedDocument>(p =>
+				p.FullName == doc.FullName && p.Name == doc.Name && p.Kind == doc.Kind && p.Language == doc.Language
+				&& p.ClosedAt >= closedAt)), Times.Once);
 		}
 
 		[Fact]

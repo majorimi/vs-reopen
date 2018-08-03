@@ -22,7 +22,7 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 			OnHistoryChanged();
 		}
 
-		public void Add(ClosedDocument document)
+		public void Add(IClosedDocument document)
 		{
 			if(document == null)
 			{
