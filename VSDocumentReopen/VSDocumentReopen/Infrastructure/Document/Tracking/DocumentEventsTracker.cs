@@ -62,7 +62,7 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 			var historyRepository = _historyRepositoryFactory.CreateHistoryRepository(_currentSolution);
 
 			//Load history and init state
-			var history = historyRepository.GetHistory();
+			var history = historyRepository?.GetHistory();
 			_documentHistoryManager.Initialize(history);
 		}
 
