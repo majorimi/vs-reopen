@@ -37,6 +37,9 @@
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.4.3.1\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
+    <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.Imaging, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.VisualStudio.Imaging.14.3.25407\lib\net45\Microsoft.VisualStudio.Imaging.dll</HintPath>
     </Reference>
@@ -138,6 +141,11 @@
     <Compile Include="Domain\Documents\ClosedDocumentTest.cs" />
     <Compile Include="Domain\Documents\NullDocumentTest.cs" />
     <Compile Include="Domain\SolutionInfoTest.cs" />
+    <Compile Include="Infrastructure\Document\Commands\DoNothingCommandTest.cs" />
+    <Compile Include="Infrastructure\Document\Commands\ReopenDocumentCommandTest.cs" />
+    <Compile Include="Infrastructure\Document\Factories\DoNothingDocumentCommandFactoryTest.cs" />
+    <Compile Include="Infrastructure\Document\Factories\ReopenDocumentCommandFactoryTest.cs" />
+    <Compile Include="Infrastructure\Document\Tracking\DocumentEventsTrackerTest.cs" />
     <Compile Include="Infrastructure\FileIcons\CachedFileExtensionIconResolverTest.cs" />
     <Compile Include="Infrastructure\FileIcons\VisualStudioFileExtensionIconResolverTest.cs" />
     <Compile Include="Infrastructure\FileIcons\WindowsFileExtensionIconResolverTest.cs" />

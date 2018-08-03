@@ -31,11 +31,11 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 			IHistoryRepositoryFactory historyRepositoryFactory)
 		{
 			_dte = dte ?? throw new ArgumentNullException(nameof(dte));
-			_documentHistoryManager = documentHistoryManager;
-			_historyRepositoryFactory = historyRepositoryFactory;
-
 			_solutionEvents = _dte.Events.SolutionEvents;
 			_documentEvents = _dte.Events.DocumentEvents;
+
+			_documentHistoryManager = documentHistoryManager ?? throw new ArgumentNullException(nameof(documentHistoryManager));
+			_historyRepositoryFactory = historyRepositoryFactory ?? throw new ArgumentNullException(nameof(historyRepositoryFactory));
 
 			Initialize();
 		}
