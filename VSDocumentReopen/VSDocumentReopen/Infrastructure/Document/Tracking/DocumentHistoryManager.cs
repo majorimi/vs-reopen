@@ -11,6 +11,8 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 
 		private readonly Stack<IClosedDocument> CloseDocuments;
 
+		public int Count => CloseDocuments.Count;
+
 		public DocumentHistoryManager()
 		{
 			CloseDocuments = new Stack<IClosedDocument>();
@@ -84,6 +86,11 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 		public void Initialize(IEnumerable<IClosedDocument> closedDocuments)
 		{
 			Clear();
+
+			if (closedDocuments is null)
+			{
+				return;
+			}
 
 			closedDocuments = closedDocuments.OrderBy(x => x.ClosedAt);
 

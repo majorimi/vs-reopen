@@ -149,6 +149,7 @@
     <Compile Include="Infrastructure\Document\Factories\DoNothingDocumentCommandFactoryTest.cs" />
     <Compile Include="Infrastructure\Document\Factories\ReopenDocumentCommandFactoryTest.cs" />
     <Compile Include="Infrastructure\Document\Tracking\DocumentEventsTrackerTest.cs" />
+    <Compile Include="Infrastructure\Document\Tracking\DocumentHistoryManagerTest.cs" />
     <Compile Include="Infrastructure\FileIcons\CachedFileExtensionIconResolverTest.cs" />
     <Compile Include="Infrastructure\FileIcons\VisualStudioFileExtensionIconResolverTest.cs" />
     <Compile Include="Infrastructure\FileIcons\WindowsFileExtensionIconResolverTest.cs" />
