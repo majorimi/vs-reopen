@@ -156,6 +156,10 @@
     <Compile Include="Infrastructure\Helpers\ImageConverterHelperTest.cs" />
     <Compile Include="Infrastructure\Helpers\PathFormatterTest.cs" />
     <Compile Include="Infrastructure\Helpers\ServiceStackJsonSerializerTest.cs" />
+    <Compile Include="Infrastructure\HistoryCommands\ClearHistoryCommandTest.cs" />
+    <Compile Include="Infrastructure\HistoryCommands\HistoryCommandFactoryTest.cs" />
+    <Compile Include="Infrastructure\HistoryCommands\RemoveLastCommandTest.cs" />
+    <Compile Include="Infrastructure\HistoryCommands\RemoveSomeCommandTest.cs" />
     <Compile Include="Infrastructure\JsonHistoryRepositoryFactoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

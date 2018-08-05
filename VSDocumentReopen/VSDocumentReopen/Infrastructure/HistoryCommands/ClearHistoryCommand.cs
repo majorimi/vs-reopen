@@ -13,7 +13,7 @@ namespace VSDocumentReopen.Infrastructure.HistoryCommands
 
 		public void Execute()
 		{
-			_documentHistoryCommands.Clear();
+			_documentHistoryCommands?.Clear();
 		}
 	}
 }

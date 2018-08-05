@@ -23,11 +23,11 @@ namespace VSDocumentReopen.Infrastructure.HistoryCommands
 		{
 			foreach (var doc in _closedDocuments)
 			{
-				var cmd = _documentCommandFactory.CreateCommand(doc);
+				var cmd = _documentCommandFactory?.CreateCommand(doc);
 				cmd.Execute();
 			}
 
-			_documentHistoryCommands.Remove(_closedDocuments);
+			_documentHistoryCommands?.Remove(_closedDocuments);
 		}
 	}
 }
