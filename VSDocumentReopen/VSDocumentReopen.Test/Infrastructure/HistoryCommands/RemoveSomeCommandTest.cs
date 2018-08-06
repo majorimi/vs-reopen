@@ -31,9 +31,21 @@ namespace VSDocumentReopen.Test.Infrastructure.HistoryCommands
 		}
 
 		[Fact]
-		public void ItShould_Handle_Nulls()
+		public void ItShould_Handle_Empty_Document_Array()
 		{
 			var command = new RemoveSomeCommand(null, null);
+
+			command.Execute();
+
+			_documentHistoryCommandsMock.Verify(v => v.RemoveLast(), Times.Never);
+			_documentCommandFactoryMock.Verify(v => v.CreateCommand(It.IsAny<IClosedDocument>()), Times.Never);
+			_documentCommandMock.Verify(v => v.Execute(), Times.Never);
+		}
+
+		[Fact]
+		public void ItShould_Handle_Nulls()
+		{
+			var command = new RemoveSomeCommand(null, null, NullDocument.Instance);
 
 			command.Execute();
 

@@ -19,7 +19,17 @@ namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
 			_documentHistoryManager.HistoryChanged += _documentHistoryManager_HistoryChanged;
 		}
 
-		private void _documentHistoryManager_HistoryChanged(object sender, System.EventArgs e) => _historyChanged = true;
+		private void _documentHistoryManager_HistoryChanged(object sender, EventArgs e) => _historyChanged = true;
+
+		[Fact]
+		public void ItShould_Handle_No_Event_Subscribers()
+		{
+			_documentHistoryManager.HistoryChanged -= _documentHistoryManager_HistoryChanged;
+
+			_documentHistoryManager.Add(NullDocument.Instance);
+
+			Assert.False(_historyChanged);
+		}
 
 		[Fact]
 		public void ItShould_Be_Empty_ByDefault()

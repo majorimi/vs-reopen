@@ -24,7 +24,7 @@ namespace VSDocumentReopen.Infrastructure.HistoryCommands
 			foreach (var doc in _closedDocuments)
 			{
 				var cmd = _documentCommandFactory?.CreateCommand(doc);
-				cmd.Execute();
+				cmd?.Execute();
 			}
 
 			_documentHistoryCommands?.Remove(_closedDocuments);
