@@ -11,6 +11,11 @@ namespace VSDocumentReopen.VS.ToolWindows.IconHandling
 	{
 		public static BitmapSource CreateBitmapSource(byte[] img)
 		{
+			if (img is null || img.Length == 0)
+			{
+				return null;
+			}
+
 			var image = ImageConverterHelper.ByteArrayToBitmap(img);
 
 			return CreateBitmapSource(image);
