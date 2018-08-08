@@ -10,6 +10,11 @@ namespace VSDocumentReopen.VS.ToolWindows.IconHandling.ButtonStates
 
 		public override void Disable()
 		{
+			if (_button is null)
+			{
+				return;
+			}
+
 			_button.IsEnabled = false;
 			_button.Content = _disabledImage;
 
@@ -18,6 +23,11 @@ namespace VSDocumentReopen.VS.ToolWindows.IconHandling.ButtonStates
 
 		public override void Enable()
 		{
+			if (_button is null)
+			{
+				return;
+			}
+
 			_button.IsEnabled = true;
 			_button.Content = _enabledImage;
 
