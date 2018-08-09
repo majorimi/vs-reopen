@@ -6,7 +6,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.VS.Commands
 {
-	internal sealed class ClearDocumentsHistoryCommand
+	public sealed class ClearDocumentsHistoryCommand
 	{
 		/// <summary>
 		/// Command ID.
@@ -38,13 +38,11 @@ namespace VSDocumentReopen.VS.Commands
 			private set;
 		}
 
-		private IAsyncServiceProvider ServiceProvider => _package;
-
 		public static async Task InitializeAsync(AsyncPackage package, IHistoryCommand clearHistoryCommand)
 		{
-			ThreadHelper.ThrowIfNotOnUIThread();
-
-			OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
+			var commandService = package == null
+				? null
+				: await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
 			Instance = new ClearDocumentsHistoryCommand(package, commandService, clearHistoryCommand);
 		}
 

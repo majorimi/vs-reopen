@@ -11,7 +11,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.VS.Commands
 {
-	internal sealed class DocumentsHistoryCommand
+	public sealed class DocumentsHistoryCommand
 	{
 		/// <summary>
 		/// Command ID.
@@ -54,7 +54,7 @@ namespace VSDocumentReopen.VS.Commands
 		private void DynamicStartBeforeQueryStatus(object sender, EventArgs e)
 		{
 			var currentCommand = sender as OleMenuCommand ?? throw new InvalidCastException($"Unable to cast {nameof(sender)} to {typeof(OleMenuCommand)}");
-			var mcs = ServiceProvider.GetServiceAsync(typeof(IMenuCommandService)).GetAwaiter().GetResult() as OleMenuCommandService
+			var mcs = _package.GetServiceAsync(typeof(IMenuCommandService)).GetAwaiter().GetResult() as OleMenuCommandService
 			          ?? throw new InvalidCastException($"Unable to cast {nameof(IMenuCommandService)} to {typeof(OleMenuCommandService)}");
 
 			foreach (var cmd in Commands)
@@ -87,7 +87,6 @@ namespace VSDocumentReopen.VS.Commands
 
 		private void DynamicCommandCallback(object sender, EventArgs e)
 		{
-			ThreadHelper.ThrowIfNotOnUIThread();
 			var cmd = (OleMenuCommand)sender ?? throw new InvalidCastException($"Unable to cast {nameof(sender)} to {typeof(OleMenuCommand)}");
 
 			var document = (cmd.Properties[HistoryItemKey] as IClosedDocument) ?? NullDocument.Instance;
@@ -101,13 +100,11 @@ namespace VSDocumentReopen.VS.Commands
 			private set;
 		}
 
-		private IAsyncServiceProvider ServiceProvider => _package;
-
 		public static async Task InitializeAsync(AsyncPackage package, IDocumentHistoryQueries documentHistoryQueries, IHistoryCommandFactory reopenSomeDocumentsCommandFactory)
 		{
-			ThreadHelper.ThrowIfNotOnUIThread();
-
-			OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
+			var commandService = package == null
+				? null
+				: await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
 			Instance = new DocumentsHistoryCommand(package, commandService, documentHistoryQueries, reopenSomeDocumentsCommandFactory);
 		}
 
