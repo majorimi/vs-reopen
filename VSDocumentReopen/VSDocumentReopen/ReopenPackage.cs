@@ -102,8 +102,8 @@ namespace VSDocumentReopen
 			ThreadHelper.ThrowIfNotOnUIThread();
 
 			var commandsGuid = ReopenClosedDocumentsCommand.CommandSet.ToString("B").ToUpper();
-			var reopenCommandBinding = ConfigurationManager.Config.ReopenCommandBinding;
-			var showMoreCommandBinding = ConfigurationManager.Config.ShowMoreCommandBinding;
+			var reopenCommandBinding = ConfigurationManager.Current.Config.ReopenCommandBinding;
+			var showMoreCommandBinding = ConfigurationManager.Current.Config.ShowMoreCommandBinding;
 
 			var myCommands = new List<Command>();
 			foreach (Command command in _dte.Commands)

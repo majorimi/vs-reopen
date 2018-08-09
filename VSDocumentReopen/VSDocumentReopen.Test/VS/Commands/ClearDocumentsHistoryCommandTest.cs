@@ -43,7 +43,7 @@ namespace VSDocumentReopen.Test.VS.Commands
 		[Fact]
 		public void ItShould_Execute_Command()
 		{
-			InvoceCommand(_clearDocumentsHistoryCommand);
+			InvokeCommand(_clearDocumentsHistoryCommand);
 
 			_historyCommandMock.Verify(v => v.Execute(), Times.Once);
 		}

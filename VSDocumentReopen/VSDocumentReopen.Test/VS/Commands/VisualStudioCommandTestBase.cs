@@ -14,7 +14,7 @@ namespace VSDocumentReopen.Test.VS.Commands
 			_asyncPackageMock = new Mock<AsyncPackage>();
 		}
 
-		protected void InvoceCommand(TCommand command, string method = "Execute", object sender = null)
+		protected void InvokeCommand(TCommand command, string method = "Execute", object sender = null)
 		{
 			var commandType = typeof(TCommand);
 			var methodInfo = commandType.GetMethod(method, BindingFlags.NonPublic | BindingFlags.Instance);

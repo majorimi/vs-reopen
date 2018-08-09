@@ -53,7 +53,7 @@ namespace VSDocumentReopen.VS.Commands
 
 		private void DynamicStartBeforeQueryStatus(object sender, EventArgs e)
 		{
-			var currentCommand = sender as OleMenuCommand ?? throw new InvalidCastException($"Unable to cast {nameof(sender)} to {typeof(OleMenuCommand)}");
+			var currentCommand = (sender as OleMenuCommand) ?? throw new InvalidCastException($"Unable to cast {nameof(sender)} to {typeof(OleMenuCommand)}");
 			var mcs = _package.GetServiceAsync(typeof(IMenuCommandService)).GetAwaiter().GetResult() as OleMenuCommandService
 			          ?? throw new InvalidCastException($"Unable to cast {nameof(IMenuCommandService)} to {typeof(OleMenuCommandService)}");
 
@@ -62,7 +62,7 @@ namespace VSDocumentReopen.VS.Commands
 				mcs.RemoveCommand(cmd);
 			}
 
-			var history = _documentHistoryQueries.Get(Infrastructure.ConfigurationManager.Config.MaxNumberOfHistoryItemsOnMenu);
+			var history = _documentHistoryQueries.Get(Infrastructure.ConfigurationManager.Current.Config.MaxNumberOfHistoryItemsOnMenu);
 
 			currentCommand.Visible = true;
 			currentCommand.Text = history.Any() ? "<History>" : "<No History>";
