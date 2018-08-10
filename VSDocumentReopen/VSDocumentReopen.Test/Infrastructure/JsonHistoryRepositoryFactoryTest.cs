@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using VSDocumentReopen.Domain;
 using VSDocumentReopen.Infrastructure;
+using VSDocumentReopen.Infrastructure.Repositories;
 using Xunit;
 
 namespace VSDocumentReopen.Test.Infrastructure
@@ -40,6 +41,7 @@ namespace VSDocumentReopen.Test.Infrastructure
 			var ret = _jsonHistoryRepositoryFactory.CreateHistoryRepository(new SolutionInfo("c:\\", "test"));
 
 			Assert.NotNull(ret);
+			Assert.IsType<JsonHistoryRepository>(ret);
 		}
 	}
 }

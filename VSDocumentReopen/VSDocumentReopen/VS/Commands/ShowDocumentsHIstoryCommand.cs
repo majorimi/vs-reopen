@@ -7,7 +7,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.VS.Commands
 {
-	internal sealed class ShowDocumentsHIstoryCommand
+	public sealed class ShowDocumentsHIstoryCommand
 	{
 		/// <summary>
 		/// Command ID.
@@ -39,19 +39,14 @@ namespace VSDocumentReopen.VS.Commands
 
 		public static async Task InitializeAsync(AsyncPackage package)
 		{
-			ThreadHelper.ThrowIfNotOnUIThread();
-
-			OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
+			var commandService = package == null
+				? null
+				: await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
 			Instance = new ShowDocumentsHIstoryCommand(package, commandService);
 		}
 
 		private void Execute(object sender, EventArgs e)
 		{
-			ThreadHelper.ThrowIfNotOnUIThread();
-
-			// Get the instance number 0 of this tool window. This window is single instance so this instance
-			// is actually the only one.
-			// The last flag is set to true so that if the tool window does not exists it will be created.
 			ToolWindowPane window = _package.FindToolWindow(typeof(ClosedDocumentsHistory), 0, true);
 			if ((null == window) || (null == window.Frame))
 			{
