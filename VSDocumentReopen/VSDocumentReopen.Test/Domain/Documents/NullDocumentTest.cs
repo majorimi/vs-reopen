@@ -6,7 +6,7 @@ namespace VSDocumentReopen.Test.Domain.Documents
 	public class NullDocumentTest
 	{
 		[Fact]
-		public void AllPublicProperties_ShouldNotBeSettable()
+		public void NullDocument_AllPublicProperties_ShouldNotBeSettable()
 		{
 			var doc = NullDocument.Instance;
 
@@ -16,7 +16,15 @@ namespace VSDocumentReopen.Test.Domain.Documents
 		}
 
 		[Fact]
-		public void ItShouldBe_Singleton()
+		public void NullDocument_AlwaysInvalid()
+		{
+			var doc = NullDocument.Instance;
+
+			Assert.False(doc.IsValid());
+		}
+
+		[Fact]
+		public void NullDocument_Singleton()
 		{
 			var doc = NullDocument.Instance;
 			var doc2 = NullDocument.Instance;
@@ -25,11 +33,13 @@ namespace VSDocumentReopen.Test.Domain.Documents
 		}
 
 		[Fact]
-		public void ItShouldBe_AlwaysInvalid()
+		public void NullDocument_PropertiesValues_NotNull()
 		{
 			var doc = NullDocument.Instance;
 
-			Assert.False(doc.IsValid());
+			var props = doc.GetType().GetProperties();
+
+			Assert.All(props, (p) => Assert.True(p.GetValue(doc) != null));
 		}
 	}
 }

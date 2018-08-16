@@ -57,6 +57,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Domain\Configuration.cs" />
+    <Compile Include="Domain\Documents\ClosedDocumentComparer.cs" />
     <Compile Include="Domain\IConfiguration.cs" />
     <Compile Include="Domain\SolutionInfo.cs" />
     <Compile Include="Infrastructure\DefaultConfigurationManager.cs" />

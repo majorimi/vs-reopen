@@ -9,12 +9,14 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 	{
 		public event EventHandler HistoryChanged;
 
+		private readonly ClosedDocumentComparer _closedDocumentComparer;
 		private readonly LinkedList<IClosedDocument> ClosedDocuments;
 
 		public int Count => ClosedDocuments.Count;
 
 		public DocumentHistoryManager()
 		{
+			_closedDocumentComparer = new ClosedDocumentComparer();
 			ClosedDocuments = new LinkedList<IClosedDocument>();
 		}
 
@@ -29,6 +31,13 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 			if(document == null)
 			{
 				return;
+			}
+			
+			//Remove duplications
+			var docs = ClosedDocuments.Where(x => _closedDocumentComparer.Equals(x, document)).ToArray();
+			foreach (var doc in docs)
+			{
+				ClosedDocuments.Remove(doc);
 			}
 
 			ClosedDocuments.AddFirst(document);
@@ -90,7 +99,10 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 				return;
 			}
 
-			closedDocuments = closedDocuments.OrderBy(x => x.ClosedAt);
+			//Remove duplications
+			closedDocuments = closedDocuments.OrderByDescending(x => x.ClosedAt)
+				.Distinct(_closedDocumentComparer)
+				.Reverse();
 
 			foreach (var document in closedDocuments)
 			{

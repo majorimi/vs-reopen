@@ -28,6 +28,7 @@ namespace VSDocumentReopen
 	[Guid(PackageGuidString)]
 	[ProvideAutoLoad(UIContextGuids.NoSolution)]
 	[ProvideToolWindow(typeof(ClosedDocumentsHistory))]
+	[ExcludeFromCodeCoverage]
 	public sealed class ReopenPackage : AsyncPackage
 	{
 		/// <summary>
