@@ -45,7 +45,7 @@ namespace VSDocumentReopen.Test.VS.Commands
 		[Fact]
 		public void CommandId_ShouldBe()
 		{
-			Assert.Equal(0x0103, DocumentsHistoryCommand.CommandId);
+			Assert.Equal(0x0200, DocumentsHistoryCommand.CommandId);
 		}
 
 		[Fact]

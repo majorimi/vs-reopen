@@ -99,7 +99,7 @@
       <!-- Warning!!: Keep the values in sync with the code! -->
       <IDSymbol name="ReopenId" value="0x0101" />
       <IDSymbol name="ClearId" value="0x0104" />
-      <IDSymbol name="HistoryId" value="0x0103" />
+      <IDSymbol name="HistoryId" value="0x0200" />
       <IDSymbol name="ShowMoreId" value="0x0110" />
       <IDSymbol name="RemoveId" value="0x0102" />
     </GuidSymbol>

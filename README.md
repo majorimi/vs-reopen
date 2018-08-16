@@ -1,5 +1,5 @@
 # Visual Studio Document Reopen
-Visual Studio Extension to reopen the last closed document(s) with (CTRL + SHIFT + T) shortcut.
+Visual Studio Extension to reopen last closed document(s) with (CTRL + SHIFT + T) shortcut.
 
 Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=major.VSDocumentReopen).
 For version history see [release notes](https://github.com/majorimi/vs-reopen/blob/master/ReleaseNotes.md).
@@ -14,6 +14,8 @@ For version history see [release notes](https://github.com/majorimi/vs-reopen/bl
 - Clear document history
 
 #### History menu:
+:warning: **Before version 1.4.0 command menus can be found under "Tools" menu!**
+
 ![Menu](https://raw.githubusercontent.com/majorimi/vs-reopen/master/VSDocumentReopen/VSDocumentReopen/Resources/VsToolsMenu.png "Document history menu")
 
 #### History Tool Windwow:
