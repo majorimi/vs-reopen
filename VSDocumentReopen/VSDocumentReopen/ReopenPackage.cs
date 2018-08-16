@@ -41,7 +41,8 @@ namespace VSDocumentReopen
 		private readonly IDocumentHistoryCommands _documentHistoryCommands;
 		private readonly IDocumentHistoryQueries _documentHistoryQueries;
 
-		private readonly IHistoryCommand _reopenLastClosdCommand;
+		private readonly IHistoryCommand _reopenLastClosedCommand;
+		private readonly IHistoryCommand _removeLastClosedCommand;
 		private readonly IHistoryCommandFactory _reopenSomeDocumentsCommandFactory;
 		private readonly IHistoryCommandFactory _removeSomeDocumentsCommandFactory;
 		private readonly IHistoryCommand _clearHistoryCommand;
@@ -57,9 +58,12 @@ namespace VSDocumentReopen
 			IDocumentHistoryManager documentHistory = new DocumentHistoryManager();
 			_documentHistoryCommands = documentHistory;
 			_documentHistoryQueries = documentHistory;
+
 			//Commands
-			_reopenLastClosdCommand = new RemoveLastCommand(_documentHistoryCommands,
+			_reopenLastClosedCommand = new RemoveLastCommand(_documentHistoryCommands,
 				new ReopenDocumentCommandFactory(_dte));
+			_removeLastClosedCommand = new RemoveLastCommand(_documentHistoryCommands,
+				new DoNothingDocumentCommandFactory());
 			_reopenSomeDocumentsCommandFactory = new HistoryCommandFactory<RemoveSomeCommand>(_documentHistoryCommands,
 				new ReopenDocumentCommandFactory(_dte));
 			_removeSomeDocumentsCommandFactory = new HistoryCommandFactory<RemoveSomeCommand>(_documentHistoryCommands,
@@ -76,7 +80,8 @@ namespace VSDocumentReopen
 			await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
 			//Init Commands with DI
-			await ReopenClosedDocumentsCommand.InitializeAsync(this, _reopenLastClosdCommand);
+			await ReopenClosedDocumentsCommand.InitializeAsync(this, _reopenLastClosedCommand);
+			await RemoveClosedDocumentsCommand.InitializeAsync(this, _removeLastClosedCommand);
 			await ClearDocumentsHistoryCommand.InitializeAsync(this, _clearHistoryCommand);
 			await DocumentsHistoryCommand.InitializeAsync(this, _documentHistoryQueries, _reopenSomeDocumentsCommandFactory);
 
@@ -85,7 +90,7 @@ namespace VSDocumentReopen
 			//Init ToolWindow Commands with DI
 			await ShowDocumentsHIstoryCommand.InitializeAsync(this);
 			await ClosedDocumentsHistory.InitializeAsync(_documentHistoryQueries,
-				_reopenLastClosdCommand,
+				_reopenLastClosedCommand,
 				_reopenSomeDocumentsCommandFactory,
 				_removeSomeDocumentsCommandFactory,
 				_clearHistoryCommand,
@@ -104,6 +109,7 @@ namespace VSDocumentReopen
 
 			var commandsGuid = ReopenClosedDocumentsCommand.CommandSet.ToString("B").ToUpper();
 			var reopenCommandBinding = ConfigurationManager.Current.Config.ReopenCommandBinding;
+			var removeCommandBinding = ConfigurationManager.Current.Config.RemoveCommandBinding;
 			var showMoreCommandBinding = ConfigurationManager.Current.Config.ShowMoreCommandBinding;
 
 			var myCommands = new List<Command>();
@@ -125,6 +131,7 @@ namespace VSDocumentReopen
 			}
 
 			Bind(ReopenClosedDocumentsCommand.CommandId, reopenCommandBinding);
+			Bind(RemoveClosedDocumentsCommand.CommandId, removeCommandBinding);
 			Bind(ShowDocumentsHIstoryCommand.CommandId, showMoreCommandBinding);
 
 			void Bind(int commandId, string keyBinding)

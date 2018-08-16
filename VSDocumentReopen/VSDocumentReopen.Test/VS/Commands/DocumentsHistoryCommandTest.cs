@@ -43,6 +43,12 @@ namespace VSDocumentReopen.Test.VS.Commands
 		}
 
 		[Fact]
+		public void CommandId_ShouldBe()
+		{
+			Assert.Equal(0x0103, DocumentsHistoryCommand.CommandId);
+		}
+
+		[Fact]
 		public async Task ItShould_Handle_Null_AsyncPackageAsync()
 		{
 			await Assert.ThrowsAsync<ArgumentNullException>(() =>

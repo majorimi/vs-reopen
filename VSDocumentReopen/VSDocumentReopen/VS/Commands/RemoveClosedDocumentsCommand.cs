@@ -6,12 +6,12 @@ using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.VS.Commands
 {
-	public sealed class ClearDocumentsHistoryCommand
+	public sealed class RemoveClosedDocumentsCommand
 	{
 		/// <summary>
 		/// Command ID.
 		/// </summary>
-		public const int CommandId = 0x0104;
+		public const int CommandId = 0x0102;
 
 		/// <summary>
 		/// Command menu group (command set GUID).
@@ -19,36 +19,36 @@ namespace VSDocumentReopen.VS.Commands
 		public static readonly Guid CommandSet = new Guid("d968b4de-3a69-4eb1-b676-942055da9dfd");
 
 		private readonly AsyncPackage _package;
-		private readonly IHistoryCommand _clearHistoryCommand;
+		private readonly IHistoryCommand _historyCommand;
 
-		private ClearDocumentsHistoryCommand(AsyncPackage package, OleMenuCommandService commandService, IHistoryCommand clearHistoryCommand)
+		private RemoveClosedDocumentsCommand(AsyncPackage package, OleMenuCommandService commandService, IHistoryCommand historyCommand)
 		{
 			_package = package ?? throw new ArgumentNullException(nameof(package));
-			_clearHistoryCommand = clearHistoryCommand ?? throw new ArgumentNullException(nameof(clearHistoryCommand));
 			commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+			_historyCommand = historyCommand ?? throw new ArgumentNullException(nameof(historyCommand));
 
 			var menuCommandId = new CommandID(CommandSet, CommandId);
 			var menuItem = new MenuCommand(Execute, menuCommandId);
 			commandService.AddCommand(menuItem);
 		}
 
-		public static ClearDocumentsHistoryCommand Instance
+		public static RemoveClosedDocumentsCommand Instance
 		{
 			get;
 			private set;
 		}
 
-		public static async Task InitializeAsync(AsyncPackage package, IHistoryCommand clearHistoryCommand)
+		public static async Task InitializeAsync(AsyncPackage package, IHistoryCommand historyCommand)
 		{
 			var commandService = package == null
 				? null
 				: await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
-			Instance = new ClearDocumentsHistoryCommand(package, commandService, clearHistoryCommand);
+			Instance = new RemoveClosedDocumentsCommand(package, commandService, historyCommand);
 		}
 
 		private void Execute(object sender, EventArgs e)
 		{
-			_clearHistoryCommand.Execute();
+			_historyCommand.Execute();
 		}
 	}
 }

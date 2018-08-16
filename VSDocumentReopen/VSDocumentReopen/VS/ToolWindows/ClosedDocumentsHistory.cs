@@ -21,6 +21,8 @@ namespace VSDocumentReopen.VS.ToolWindows
 	[Guid("203513ef-1922-433a-ba3e-1801fb4e9894")]
 	public class ClosedDocumentsHistory : ToolWindowPane
 	{
+		public static ClosedDocumentsHistoryControl ContentWindow { get; private set; }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ClosedDocumentsHistory"/> class.
 		/// </summary>
@@ -35,9 +37,6 @@ namespace VSDocumentReopen.VS.ToolWindows
 
 			Content = ContentWindow;
 		}
-
-
-		private static ClosedDocumentsHistoryControl ContentWindow;
 
 		public static async Task InitializeAsync(IDocumentHistoryQueries documentHistoryQueries,
 			IHistoryCommand reopenLastClosdCommand,

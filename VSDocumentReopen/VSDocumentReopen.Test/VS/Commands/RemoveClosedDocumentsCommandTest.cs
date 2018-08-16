@@ -7,27 +7,27 @@ using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.Test.VS.Commands
 {
-	public class ReopenClosedDocumentsCommandTest : VisualStudioCommandTestBase<ReopenClosedDocumentsCommand>
+	public class RemoveClosedDocumentsCommandTest : VisualStudioCommandTestBase<RemoveClosedDocumentsCommand>
 	{
 		private readonly Mock<IHistoryCommand> _historyCommandMock;
 
-		private readonly ReopenClosedDocumentsCommand _reopenClosedDocumentsCommand;
+		private readonly RemoveClosedDocumentsCommand _removeClosedDocumentsCommand;
 
-		public ReopenClosedDocumentsCommandTest()
+		public RemoveClosedDocumentsCommandTest()
 		{
 			_historyCommandMock = new Mock<IHistoryCommand>();
 			_historyCommandMock.Setup(s => s.Execute());
 
-			Task.Run(() => ReopenClosedDocumentsCommand.InitializeAsync(_asyncPackageMock.Object,
+			Task.Run(() => RemoveClosedDocumentsCommand.InitializeAsync(_asyncPackageMock.Object,
 				_historyCommandMock.Object)).Wait();
 
-			_reopenClosedDocumentsCommand = ReopenClosedDocumentsCommand.Instance;
+			_removeClosedDocumentsCommand = RemoveClosedDocumentsCommand.Instance;
 		}
 
 		[Fact]
 		public void CommandId_ShouldBe()
 		{
-			Assert.Equal(0x0101, ReopenClosedDocumentsCommand.CommandId);
+			Assert.Equal(0x0102, RemoveClosedDocumentsCommand.CommandId);
 		}
 
 		[Fact]
@@ -35,7 +35,7 @@ namespace VSDocumentReopen.Test.VS.Commands
 		{
 			await Assert.ThrowsAsync<ArgumentNullException>(() =>
 			{
-				return Task.Run(() => ReopenClosedDocumentsCommand.InitializeAsync(null, _historyCommandMock.Object));
+				return Task.Run(() => RemoveClosedDocumentsCommand.InitializeAsync(null, _historyCommandMock.Object));
 			});
 		}
 
@@ -44,14 +44,14 @@ namespace VSDocumentReopen.Test.VS.Commands
 		{
 			await Assert.ThrowsAsync<ArgumentNullException>(() =>
 			{
-				return Task.Run(() => ReopenClosedDocumentsCommand.InitializeAsync(_asyncPackageMock.Object, null));
+				return Task.Run(() => RemoveClosedDocumentsCommand.InitializeAsync(_asyncPackageMock.Object, null));
 			});
 		}
 
 		[Fact]
 		public void ItShould_Execute_Command()
 		{
-			InvokeCommand(_reopenClosedDocumentsCommand);
+			InvokeCommand(_removeClosedDocumentsCommand);
 
 			_historyCommandMock.Verify(v => v.Execute(), Times.Once);
 		}

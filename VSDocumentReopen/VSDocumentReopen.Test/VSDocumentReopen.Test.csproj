@@ -172,9 +172,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VS\Commands\ClearDocumentsHistoryCommandTest.cs" />
     <Compile Include="VS\Commands\DocumentsHistoryCommandTest.cs" />
+    <Compile Include="VS\Commands\RemoveClosedDocumentsCommandTest.cs" />
     <Compile Include="VS\Commands\ReopenClosedDocumentsCommandTest.cs" />
     <Compile Include="VS\Commands\ShowDocumentsHIstoryCommandTest.cs" />
     <Compile Include="VS\Commands\VisualStudioCommandTestBase.cs" />
+    <Compile Include="VS\ToolWindows\ClosedDocumentsHistoryTest.cs" />
     <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ButtonDisabledStateTest.cs" />
     <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ButtonEnabledStateTest.cs" />
     <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ImageButtonStateTest.cs" />
