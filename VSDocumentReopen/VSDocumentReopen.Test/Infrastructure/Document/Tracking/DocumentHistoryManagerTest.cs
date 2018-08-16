@@ -132,7 +132,7 @@ namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
 			_documentHistoryManager.Add(NullDocument.Instance);
 			_documentHistoryManager.Add(new ClosedDocument() { FullName = "c:\\test.cs" });
 			_documentHistoryManager.Add(NullDocument.Instance);
-			_documentHistoryManager.Add(new ClosedDocument() { FullName = "c:\\test.cs" });
+			_documentHistoryManager.Add(new ClosedDocument() { FullName = "c:\\test2.cs" });
 
 			IClosedDocument doc = _documentHistoryManager.Get(1).First();
 			_documentHistoryManager.Remove(doc);
@@ -153,7 +153,7 @@ namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
 			_documentHistoryManager.Add(NullDocument.Instance);
 			_documentHistoryManager.Add(new ClosedDocument() { FullName = "c:\\test.cs" });
 			_documentHistoryManager.Add(NullDocument.Instance);
-			_documentHistoryManager.Add(new ClosedDocument() { FullName = "c:\\test.cs" });
+			_documentHistoryManager.Add(new ClosedDocument() { FullName = "c:\\test2.cs" });
 
 			var docs = _documentHistoryManager.Get(2);
 			_documentHistoryManager.Remove(docs);

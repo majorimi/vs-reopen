@@ -9,18 +9,18 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 	{
 		public event EventHandler HistoryChanged;
 
-		private readonly Stack<IClosedDocument> CloseDocuments;
+		private readonly List<IClosedDocument> ClosedDocuments;
 
-		public int Count => CloseDocuments.Count;
+		public int Count => ClosedDocuments.Count;
 
 		public DocumentHistoryManager()
 		{
-			CloseDocuments = new Stack<IClosedDocument>();
+			ClosedDocuments = new List<IClosedDocument>();
 		}
 
 		public void Clear()
 		{
-			CloseDocuments.Clear();
+			ClosedDocuments.Clear();
 			OnHistoryChanged();
 		}
 
@@ -31,15 +31,16 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 				return;
 			}
 
-			CloseDocuments.Push(document);
+			ClosedDocuments.Insert(0, document);
 			OnHistoryChanged();
 		}
 
 		public IClosedDocument RemoveLast()
 		{
-			if (CloseDocuments.Count > 0)
+			if (ClosedDocuments.Count > 0)
 			{
-				var ret = CloseDocuments.Pop();
+				var ret = ClosedDocuments[0];
+				ClosedDocuments.RemoveAt(0);
 				OnHistoryChanged();
 
 				return ret;
@@ -48,30 +49,27 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 			return NullDocument.Instance;
 		}
 
-		public IEnumerable<IClosedDocument> Get(int number) => CloseDocuments.ToList().Take(number);
+		public IEnumerable<IClosedDocument> Get(int number) => ClosedDocuments.Take(number).ToArray();
 
 		public IEnumerable<IClosedDocument> GetAll()
 		{
-			return CloseDocuments.ToArray();
+			return ClosedDocuments.ToArray();
 		}
 
 		public void Remove(IClosedDocument closedDocument)
 		{
-			var items = GetAll().ToList();
-			if (items.Remove(closedDocument))
+			if (ClosedDocuments.Remove(closedDocument))
 			{
-				Initialize(items);
+				OnHistoryChanged();
 			}
 		}
 
 		public void Remove(IEnumerable<IClosedDocument> closedDocuments)
 		{
-			var items = GetAll().ToList();
-
 			bool removed = false;
 			foreach (var item in closedDocuments)
 			{
-				if (items.Remove(item))
+				if (ClosedDocuments.Remove(item))
 				{
 					removed = true;
 				}
@@ -79,7 +77,7 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 
 			if(removed)
 			{
-				Initialize(items);
+				OnHistoryChanged();
 			}
 		}
 
@@ -96,7 +94,7 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 
 			foreach (var document in closedDocuments)
 			{
-				CloseDocuments.Push(document);
+				ClosedDocuments.Insert(0, document);
 			}
 
 			OnHistoryChanged();
