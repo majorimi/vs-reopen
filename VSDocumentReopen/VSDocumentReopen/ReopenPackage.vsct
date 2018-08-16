@@ -6,8 +6,8 @@
 
   <Commands package="guidReopenPackage">
     <Groups>
-      <Group guid="guidReopenPackageCmdSet" id="MyGroupForSubmenu" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
+      <Group guid="guidReopenPackageCmdSet" id="MyGroupForSubmenu" priority="0x200">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_FILE" />
       </Group>
       <Group guid="guidReopenPackageCmdSet" id="MyGroupForReopen" priority="0x0100">
         <Parent guid="guidReopenPackageCmdSet" id="MySubmenu" />
