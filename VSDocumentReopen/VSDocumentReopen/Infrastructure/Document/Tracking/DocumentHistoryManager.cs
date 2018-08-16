@@ -9,13 +9,13 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 	{
 		public event EventHandler HistoryChanged;
 
-		private readonly List<IClosedDocument> ClosedDocuments;
+		private readonly LinkedList<IClosedDocument> ClosedDocuments;
 
 		public int Count => ClosedDocuments.Count;
 
 		public DocumentHistoryManager()
 		{
-			ClosedDocuments = new List<IClosedDocument>();
+			ClosedDocuments = new LinkedList<IClosedDocument>();
 		}
 
 		public void Clear()
@@ -31,7 +31,7 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 				return;
 			}
 
-			ClosedDocuments.Insert(0, document);
+			ClosedDocuments.AddFirst(document);
 			OnHistoryChanged();
 		}
 
@@ -39,8 +39,8 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 		{
 			if (ClosedDocuments.Count > 0)
 			{
-				var ret = ClosedDocuments[0];
-				ClosedDocuments.RemoveAt(0);
+				var ret = ClosedDocuments.First.Value;
+				ClosedDocuments.RemoveFirst();
 				OnHistoryChanged();
 
 				return ret;
@@ -94,7 +94,7 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 
 			foreach (var document in closedDocuments)
 			{
-				ClosedDocuments.Insert(0, document);
+				ClosedDocuments.AddFirst(document);
 			}
 
 			OnHistoryChanged();
