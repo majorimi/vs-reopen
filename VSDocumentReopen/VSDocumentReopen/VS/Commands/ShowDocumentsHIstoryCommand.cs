@@ -2,6 +2,7 @@
 using System.ComponentModel.Design;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using VSDocumentReopen.Infrastructure.Logging;
 using VSDocumentReopen.VS.ToolWindows;
 using Task = System.Threading.Tasks.Task;
 
@@ -50,11 +51,14 @@ namespace VSDocumentReopen.VS.Commands
 			ToolWindowPane window = _package.FindToolWindow(typeof(ClosedDocumentsHistory), 0, true);
 			if ((null == window) || (null == window.Frame))
 			{
+				LoggerContext.Current.Logger.Error($"Command failed: {nameof(ShowDocumentsHIstoryCommand)} Cannot create tool window");
 				throw new NotSupportedException("Cannot create tool window");
 			}
 
 			IVsWindowFrame windowFrame = (IVsWindowFrame)window.Frame;
 			Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(windowFrame.Show());
+
+			LoggerContext.Current.Logger.Info($"VS Command: {nameof(ShowDocumentsHIstoryCommand)} was executed");
 		}
 	}
 }

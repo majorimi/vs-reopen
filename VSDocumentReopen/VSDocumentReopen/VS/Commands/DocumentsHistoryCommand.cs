@@ -7,6 +7,7 @@ using VSDocumentReopen.Domain.Documents;
 using VSDocumentReopen.Infrastructure.Document.Tracking;
 using VSDocumentReopen.Infrastructure.Helpers;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
+using VSDocumentReopen.Infrastructure.Logging;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.VS.Commands
@@ -92,6 +93,8 @@ namespace VSDocumentReopen.VS.Commands
 			var document = (cmd.Properties[HistoryItemKey] as IClosedDocument) ?? NullDocument.Instance;
 			var command = _reopenSomeDocumentsCommandFactory.CreateCommand(document);
 			command.Execute();
+
+			LoggerContext.Current.Logger.Info($"VS Command: {nameof(DocumentsHistoryCommand)} was executed with {command.GetType()}");
 		}
 
 		public static DocumentsHistoryCommand Instance

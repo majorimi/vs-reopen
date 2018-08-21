@@ -2,6 +2,7 @@
 using System.ComponentModel.Design;
 using Microsoft.VisualStudio.Shell;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
+using VSDocumentReopen.Infrastructure.Logging;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.VS.Commands
@@ -49,6 +50,7 @@ namespace VSDocumentReopen.VS.Commands
 		private void Execute(object sender, EventArgs e)
 		{
 			_historyCommand.Execute();
+			LoggerContext.Current.Logger.Info($"VS Command: {nameof(RemoveClosedDocumentsCommand)} was executed with {_historyCommand.GetType()}");
 		}
 	}
 }
