@@ -57,8 +57,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Domain\Configuration.cs" />
+    <Compile Include="Domain\Documents\ClosedDocumentComparer.cs" />
     <Compile Include="Domain\IConfiguration.cs" />
     <Compile Include="Domain\SolutionInfo.cs" />
+    <Compile Include="Infrastructure\DefaultConfigurationManager.cs" />
     <Compile Include="Infrastructure\Document\Commands\DoNothingCommand.cs" />
     <Compile Include="Infrastructure\Document\Factories\DoNothingDocumentCommandFactory.cs" />
     <Compile Include="Infrastructure\Document\Commands\IDocumentCommand.cs" />
@@ -69,6 +71,7 @@
     <Compile Include="Infrastructure\Document\Tracking\IDocumentHistoryCommands.cs" />
     <Compile Include="Infrastructure\Document\Tracking\IDocumentHistoryManager.cs" />
     <Compile Include="Infrastructure\Document\Tracking\IDocumentHistoryQueries.cs" />
+    <Compile Include="Infrastructure\Document\Tracking\SolutionStates.cs" />
     <Compile Include="Infrastructure\FileIcons\CachedFileExtensionIconResolver.cs" />
     <Compile Include="Infrastructure\FileIcons\IFileExtensionIconResolver.cs" />
     <Compile Include="Infrastructure\FileIcons\VisualStudioFileExtensionIconResolver.cs" />
@@ -80,11 +83,20 @@
     <Compile Include="Infrastructure\HistoryCommands\IHistoryCommandFactory.cs" />
     <Compile Include="Infrastructure\HistoryCommands\RemoveLastCommand.cs" />
     <Compile Include="Infrastructure\HistoryCommands\RemoveSomeCommand.cs" />
+    <Compile Include="Infrastructure\Logging\DefaultLoggerContext.cs" />
+    <Compile Include="Infrastructure\Logging\ILogger.cs" />
+    <Compile Include="Infrastructure\Logging\Logentries\LogentriesSerilogLogger.cs" />
+    <Compile Include="Infrastructure\Logging\Logentries\LogentriesSerilogLoggerContext.cs" />
+    <Compile Include="Infrastructure\Logging\LoggerContext.cs" />
+    <Compile Include="Infrastructure\Logging\NullLogger.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="VS\Commands\RemoveClosedDocumentsCommand.cs" />
+    <Compile Include="VS\MessageBox\IMessageBox.cs" />
+    <Compile Include="VS\MessageBox\VSMessageBox.cs" />
     <Compile Include="VS\ToolWindows\ClosedDocumentsHistoryControl_Types.cs" />
     <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ButtonDisabledState.cs" />
     <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ButtonEnabledState.cs" />
@@ -240,6 +252,15 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.2.7.1\lib\net46\Serilog.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.Sinks.Logentries, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Sinks.Logentries.3.0.26\lib\net45\Serilog.Sinks.Logentries.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.Sinks.PeriodicBatching, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Sinks.PeriodicBatching.2.1.1\lib\net45\Serilog.Sinks.PeriodicBatching.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Text, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Text.5.1.0\lib\net45\ServiceStack.Text.dll</HintPath>
     </Reference>
@@ -272,9 +293,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Infrastructure\Log\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.VisualStudio.Threading.Analyzers.15.8.122\analyzers\cs\Microsoft.VisualStudio.Threading.Analyzers.dll" />
   </ItemGroup>

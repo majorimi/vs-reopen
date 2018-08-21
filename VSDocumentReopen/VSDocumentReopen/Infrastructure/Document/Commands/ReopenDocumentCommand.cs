@@ -1,5 +1,4 @@
 ﻿using EnvDTE;
-using Microsoft.VisualStudio.Shell;
 using VSDocumentReopen.Domain.Documents;
 
 namespace VSDocumentReopen.Infrastructure.Document.Commands
@@ -17,11 +16,9 @@ namespace VSDocumentReopen.Infrastructure.Document.Commands
 
 		public void Execute()
 		{
-			ThreadHelper.ThrowIfNotOnUIThread();
-
 			if (_closedDocument.IsValid())
 			{
-				_dte.ItemOperations.OpenFile(_closedDocument.FullName, _closedDocument.Kind);
+				_dte?.ItemOperations?.OpenFile(_closedDocument.FullName, _closedDocument.Kind);
 			}
 		}
 	}

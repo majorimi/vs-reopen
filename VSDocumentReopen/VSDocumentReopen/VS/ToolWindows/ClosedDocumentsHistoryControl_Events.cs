@@ -7,6 +7,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using VSDocumentReopen.Domain.Documents;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
+using VSDocumentReopen.Infrastructure.Logging;
 using VSDocumentReopen.VS.ToolWindows.IconHandling.ButtonStates;
 
 namespace VSDocumentReopen.VS.ToolWindows
@@ -26,6 +27,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 		private void _clearAll_Click(object sender, RoutedEventArgs e)
 		{
 			_clearHistoryCommand.Execute();
+			LoggerContext.Current.Logger.Info($"Command: from ToolWindow was executed {_clearHistoryCommand.GetType()}");
 		}
 
 
@@ -41,6 +43,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 			{
 				var command = _reopenSomeDocumentsCommandFactory.CreateCommand(item.ClosedDocument);
 				command.Execute();
+				LoggerContext.Current.Logger.Info($"Command: from ToolWindow was executed {command.GetType()}");
 			}
 		}
 
@@ -122,6 +125,8 @@ namespace VSDocumentReopen.VS.ToolWindows
 
 			var command = historyCommandFactory.CreateCommand(selectedItems.ToArray());
 			command.Execute();
+
+			LoggerContext.Current.Logger.Info($"Command: from ToolWindow was executed {command.GetType()}");
 		}
 
 		private void HandleSearch()

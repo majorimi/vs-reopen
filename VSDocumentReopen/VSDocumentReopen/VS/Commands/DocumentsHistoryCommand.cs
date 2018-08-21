@@ -7,16 +7,17 @@ using VSDocumentReopen.Domain.Documents;
 using VSDocumentReopen.Infrastructure.Document.Tracking;
 using VSDocumentReopen.Infrastructure.Helpers;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
+using VSDocumentReopen.Infrastructure.Logging;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.VS.Commands
 {
-	internal sealed class DocumentsHistoryCommand
+	public sealed class DocumentsHistoryCommand
 	{
 		/// <summary>
 		/// Command ID.
 		/// </summary>
-		public const int CommandId = 0x0103;
+		public const int CommandId = 0x0200;
 
 		/// <summary>
 		/// Command menu group (command set GUID).
@@ -53,8 +54,8 @@ namespace VSDocumentReopen.VS.Commands
 
 		private void DynamicStartBeforeQueryStatus(object sender, EventArgs e)
 		{
-			var currentCommand = sender as OleMenuCommand ?? throw new InvalidCastException($"Unable to cast {nameof(sender)} to {typeof(OleMenuCommand)}");
-			var mcs = ServiceProvider.GetServiceAsync(typeof(IMenuCommandService)).GetAwaiter().GetResult() as OleMenuCommandService
+			var currentCommand = (sender as OleMenuCommand) ?? throw new InvalidCastException($"Unable to cast {nameof(sender)} to {typeof(OleMenuCommand)}");
+			var mcs = _package.GetServiceAsync(typeof(IMenuCommandService)).GetAwaiter().GetResult() as OleMenuCommandService
 			          ?? throw new InvalidCastException($"Unable to cast {nameof(IMenuCommandService)} to {typeof(OleMenuCommandService)}");
 
 			foreach (var cmd in Commands)
@@ -62,7 +63,7 @@ namespace VSDocumentReopen.VS.Commands
 				mcs.RemoveCommand(cmd);
 			}
 
-			var history = _documentHistoryQueries.Get(Infrastructure.ConfigurationManager.Config.MaxNumberOfHistoryItemsOnMenu);
+			var history = _documentHistoryQueries.Get(Infrastructure.ConfigurationManager.Current.Config.MaxNumberOfHistoryItemsOnMenu);
 
 			currentCommand.Visible = true;
 			currentCommand.Text = history.Any() ? "<History>" : "<No History>";
@@ -87,12 +88,13 @@ namespace VSDocumentReopen.VS.Commands
 
 		private void DynamicCommandCallback(object sender, EventArgs e)
 		{
-			ThreadHelper.ThrowIfNotOnUIThread();
 			var cmd = (OleMenuCommand)sender ?? throw new InvalidCastException($"Unable to cast {nameof(sender)} to {typeof(OleMenuCommand)}");
 
 			var document = (cmd.Properties[HistoryItemKey] as IClosedDocument) ?? NullDocument.Instance;
 			var command = _reopenSomeDocumentsCommandFactory.CreateCommand(document);
 			command.Execute();
+
+			LoggerContext.Current.Logger.Info($"VS Command: {nameof(DocumentsHistoryCommand)} was executed with {command.GetType()}");
 		}
 
 		public static DocumentsHistoryCommand Instance
@@ -101,13 +103,11 @@ namespace VSDocumentReopen.VS.Commands
 			private set;
 		}
 
-		private IAsyncServiceProvider ServiceProvider => _package;
-
 		public static async Task InitializeAsync(AsyncPackage package, IDocumentHistoryQueries documentHistoryQueries, IHistoryCommandFactory reopenSomeDocumentsCommandFactory)
 		{
-			ThreadHelper.ThrowIfNotOnUIThread();
-
-			OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
+			var commandService = package == null
+				? null
+				: await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
 			Instance = new DocumentsHistoryCommand(package, commandService, documentHistoryQueries, reopenSomeDocumentsCommandFactory);
 		}
 

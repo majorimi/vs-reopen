@@ -1,13 +1,10 @@
 ﻿using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using VSDocumentReopen.Infrastructure.FileIcons;
 using Moq;
 using Microsoft.VisualStudio.Shell.Interop;
 using VSDocumentReopen.Domain.Documents;
 using Xunit;
 using Microsoft.Internal.VisualStudio.PlatformUI;
-using VSDocumentReopen.Infrastructure.Helpers;
 
 namespace VSDocumentReopen.Test.Infrastructure.FileIcons
 {

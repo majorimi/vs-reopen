@@ -17,10 +17,10 @@ namespace VSDocumentReopen.Infrastructure.HistoryCommands
 
 		public void Execute()
 		{
-			var document = _documentHistoryCommands.RemoveLast();
+			var document = _documentHistoryCommands?.RemoveLast();
 
-			var command = _documentCommandFactory.CreateCommand(document);
-			command.Execute();
+			var command = _documentCommandFactory?.CreateCommand(document);
+			command?.Execute();
 		}
 	}
 }

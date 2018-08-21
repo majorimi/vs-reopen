@@ -23,9 +23,9 @@ namespace VSDocumentReopen.Infrastructure
 			}
 
 			var historyFile = Path.Combine(solutionInfo.FullPath,
-				ConfigurationManager.Config.VSTempFolderName,
-				ConfigurationManager.Config.PackageWorkingDirName,
-				ConfigurationManager.Config.HistoryFileName);
+				ConfigurationManager.Current.Config.VSTempFolderName,
+				ConfigurationManager.Current.Config.PackageWorkingDirName,
+				ConfigurationManager.Current.Config.HistoryFileName);
 
 			return new JsonHistoryRepository(_jsonSerializer, historyFile);
 		}

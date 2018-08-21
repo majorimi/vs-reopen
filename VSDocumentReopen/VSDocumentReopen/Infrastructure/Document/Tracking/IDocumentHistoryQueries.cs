@@ -8,6 +8,8 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 	{
 		event EventHandler HistoryChanged;
 
+		int Count { get; }
+
 		IEnumerable<IClosedDocument> Get(int number);
 
 		IEnumerable<IClosedDocument> GetAll();

@@ -2,16 +2,17 @@
 using System.ComponentModel.Design;
 using Microsoft.VisualStudio.Shell;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
+using VSDocumentReopen.Infrastructure.Logging;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.VS.Commands
 {
-	internal sealed class ClearDocumentsHistoryCommand
+	public sealed class ClearDocumentsHistoryCommand
 	{
 		/// <summary>
 		/// Command ID.
 		/// </summary>
-		public const int CommandId = 0x0102;
+		public const int CommandId = 0x0104;
 
 		/// <summary>
 		/// Command menu group (command set GUID).
@@ -38,19 +39,18 @@ namespace VSDocumentReopen.VS.Commands
 			private set;
 		}
 
-		private IAsyncServiceProvider ServiceProvider => _package;
-
 		public static async Task InitializeAsync(AsyncPackage package, IHistoryCommand clearHistoryCommand)
 		{
-			ThreadHelper.ThrowIfNotOnUIThread();
-
-			OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
+			var commandService = package == null
+				? null
+				: await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
 			Instance = new ClearDocumentsHistoryCommand(package, commandService, clearHistoryCommand);
 		}
 
 		private void Execute(object sender, EventArgs e)
 		{
 			_clearHistoryCommand.Execute();
+			LoggerContext.Current.Logger.Info($"VS Command: {nameof(ClearDocumentsHistoryCommand)} was executed with {_clearHistoryCommand.GetType()}");
 		}
 	}
 }

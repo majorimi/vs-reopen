@@ -3,7 +3,8 @@
   "PackageWorkingDirName": "VSDocumentReopen",
   "HistoryFileName": "history.json",
   "MaxNumberOfHistoryItemsOnMenu": 5,
-  "MaxAllowedHistoryItems": 1000,
+  "MaxAllowedHistoryItems": 500,
   "ReopenCommandBinding": "Global::Ctrl+Shift+T",
-  "ShowMoreCommandBinding": "Global::Ctrl+Shift+R"
+  "ShowMoreCommandBinding": "Global::Ctrl+Shift+R",
+  "RemoveCommandBinding": "Global::Ctrl+Shift+D"
 }

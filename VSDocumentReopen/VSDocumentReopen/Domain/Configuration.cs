@@ -14,6 +14,8 @@
 
 		public string ReopenCommandBinding { get; set; }
 
+		public string RemoveCommandBinding { get; set; }
+
 		public string ShowMoreCommandBinding { get; set; }
 	}
 }

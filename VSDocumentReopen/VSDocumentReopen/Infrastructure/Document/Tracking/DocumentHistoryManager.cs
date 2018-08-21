@@ -9,35 +9,47 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 	{
 		public event EventHandler HistoryChanged;
 
-		private readonly Stack<IClosedDocument> CloseDocuments;
+		private readonly ClosedDocumentComparer _closedDocumentComparer;
+		private readonly LinkedList<IClosedDocument> ClosedDocuments;
+
+		public int Count => ClosedDocuments.Count;
 
 		public DocumentHistoryManager()
 		{
-			CloseDocuments = new Stack<IClosedDocument>();
+			_closedDocumentComparer = new ClosedDocumentComparer();
+			ClosedDocuments = new LinkedList<IClosedDocument>();
 		}
 
 		public void Clear()
 		{
-			CloseDocuments.Clear();
+			ClosedDocuments.Clear();
 			OnHistoryChanged();
 		}
 
-		public void Add(ClosedDocument document)
+		public void Add(IClosedDocument document)
 		{
 			if(document == null)
 			{
 				return;
 			}
+			
+			//Remove duplications
+			var docs = ClosedDocuments.Where(x => _closedDocumentComparer.Equals(x, document)).ToArray();
+			foreach (var doc in docs)
+			{
+				ClosedDocuments.Remove(doc);
+			}
 
-			CloseDocuments.Push(document);
+			ClosedDocuments.AddFirst(document);
 			OnHistoryChanged();
 		}
 
 		public IClosedDocument RemoveLast()
 		{
-			if (CloseDocuments.Count > 0)
+			if (ClosedDocuments.Count > 0)
 			{
-				var ret = CloseDocuments.Pop();
+				var ret = ClosedDocuments.First.Value;
+				ClosedDocuments.RemoveFirst();
 				OnHistoryChanged();
 
 				return ret;
@@ -46,30 +58,27 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 			return NullDocument.Instance;
 		}
 
-		public IEnumerable<IClosedDocument> Get(int number) => CloseDocuments.ToList().Take(number);
+		public IEnumerable<IClosedDocument> Get(int number) => ClosedDocuments.Take(number).ToArray();
 
 		public IEnumerable<IClosedDocument> GetAll()
 		{
-			return CloseDocuments.ToArray();
+			return ClosedDocuments.ToArray();
 		}
 
 		public void Remove(IClosedDocument closedDocument)
 		{
-			var items = GetAll().ToList();
-			if (items.Remove(closedDocument))
+			if (ClosedDocuments.Remove(closedDocument))
 			{
-				Initialize(items);
+				OnHistoryChanged();
 			}
 		}
 
 		public void Remove(IEnumerable<IClosedDocument> closedDocuments)
 		{
-			var items = GetAll().ToList();
-
 			bool removed = false;
 			foreach (var item in closedDocuments)
 			{
-				if (items.Remove(item))
+				if (ClosedDocuments.Remove(item))
 				{
 					removed = true;
 				}
@@ -77,7 +86,7 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 
 			if(removed)
 			{
-				Initialize(items);
+				OnHistoryChanged();
 			}
 		}
 
@@ -85,11 +94,19 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 		{
 			Clear();
 
-			closedDocuments = closedDocuments.OrderBy(x => x.ClosedAt);
+			if (closedDocuments is null)
+			{
+				return;
+			}
+
+			//Remove duplications
+			closedDocuments = closedDocuments.OrderByDescending(x => x.ClosedAt)
+				.Distinct(_closedDocumentComparer)
+				.Reverse();
 
 			foreach (var document in closedDocuments)
 			{
-				CloseDocuments.Push(document);
+				ClosedDocuments.AddFirst(document);
 			}
 
 			OnHistoryChanged();

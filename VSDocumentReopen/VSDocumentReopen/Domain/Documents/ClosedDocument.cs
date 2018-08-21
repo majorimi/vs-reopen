@@ -22,7 +22,7 @@ namespace VSDocumentReopen.Domain.Documents
 
 		public override string ToString()
 		{
-			return $"FullName: {FullName}, ClosedAt: {ClosedAt}";
+			return $"ClosedDocument FullName: {FullName}, ClosedAt: {ClosedAt}";
 		}
 	}
 }

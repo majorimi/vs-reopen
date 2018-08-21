@@ -7,7 +7,7 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 	{
 		void Clear();
 
-		void Add(ClosedDocument document);
+		void Add(IClosedDocument document);
 
 		IClosedDocument RemoveLast();
 

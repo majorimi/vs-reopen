@@ -1,31 +1,19 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using VSDocumentReopen.Domain;
-using VSDocumentReopen.Infrastructure.Helpers;
+﻿using VSDocumentReopen.Domain;
 
 namespace VSDocumentReopen.Infrastructure
 {
-	public static class ConfigurationManager
+	public abstract class ConfigurationManager
 	{
-		private const string ConfigFileName = "appConfig.json";
+		private static readonly ConfigurationManager Default = new DefaultConfigurationManager();
 
-		private static Lazy<IConfiguration> _loadConfig;
+		private static ConfigurationManager _current;
 
-		static ConfigurationManager()
+		public static ConfigurationManager Current
 		{
-			_loadConfig = new Lazy<IConfiguration>(LoadConfig);
+			get => _current ?? (_current = Default);
+			set => _current = value ?? Default;
 		}
 
-		public static IConfiguration Config => _loadConfig.Value;
-
-		private static IConfiguration LoadConfig()
-		{
-			var workingDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-			var config = Path.Combine(workingDir, ConfigFileName);
-
-			var json = File.ReadAllText(config);
-			return new ServiceStackJsonSerializer().Deserialize<Configuration>(json);
-		}
+		public abstract IConfiguration Config { get; }
 	}
 }

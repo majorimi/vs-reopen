@@ -6,8 +6,8 @@
 
   <Commands package="guidReopenPackage">
     <Groups>
-      <Group guid="guidReopenPackageCmdSet" id="MyGroupForSubmenu" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
+      <Group guid="guidReopenPackageCmdSet" id="MyGroupForSubmenu" priority="0x200">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_FILE" />
       </Group>
       <Group guid="guidReopenPackageCmdSet" id="MyGroupForReopen" priority="0x0100">
         <Parent guid="guidReopenPackageCmdSet" id="MySubmenu" />
@@ -28,6 +28,7 @@
         <Parent guid="guidReopenPackageCmdSet" id="MyGroupForSubmenu" />
         <Strings>
           <ButtonText>Reopen recent document(s)</ButtonText>
+          <ToolTipText>Reopen and manage recently closed documents history</ToolTipText>
         </Strings>
       </Menu>
     </Menus>
@@ -37,6 +38,7 @@
         <Parent guid="guidReopenPackageCmdSet" id="MyGroupForReopen" />
         <Strings>
           <ButtonText>Reopen closed document(s)</ButtonText>
+          <ToolTipText>Reopen last closed document</ToolTipText>
         </Strings>
       </Button>
 
@@ -55,13 +57,22 @@
         <Parent guid="guidReopenPackageCmdSet" id="MyGroupForShowMore" />
         <Strings>
           <ButtonText>Show more...</ButtonText>
+          <ToolTipText>Show Document History tool window</ToolTipText>
         </Strings>
       </Button>
-      
-      <Button guid="guidReopenPackageCmdSet" id="ClearId" priority="0x0102" type="Button">
+
+      <Button guid="guidReopenPackageCmdSet" id="RemoveId" priority="0x0102" type="Button">
+        <Parent guid="guidReopenPackageCmdSet" id="MyGroupForClear" />
+        <Strings>
+          <ButtonText>Remove last document</ButtonText>
+          <ToolTipText>Remove last closed document from history without opening it</ToolTipText>
+        </Strings>
+      </Button>
+      <Button guid="guidReopenPackageCmdSet" id="ClearId" priority="0x0104" type="Button">
         <Parent guid="guidReopenPackageCmdSet" id="MyGroupForClear" />
         <Strings>
           <ButtonText>Clear history</ButtonText>
+          <ToolTipText>Clear closed documents history</ToolTipText>
         </Strings>
       </Button>
     </Buttons>
@@ -87,9 +98,10 @@
 
       <!-- Warning!!: Keep the values in sync with the code! -->
       <IDSymbol name="ReopenId" value="0x0101" />
-      <IDSymbol name="ClearId" value="0x0102" />
-      <IDSymbol name="HistoryId" value="0x0103" />
+      <IDSymbol name="ClearId" value="0x0104" />
+      <IDSymbol name="HistoryId" value="0x0200" />
       <IDSymbol name="ShowMoreId" value="0x0110" />
+      <IDSymbol name="RemoveId" value="0x0102" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>

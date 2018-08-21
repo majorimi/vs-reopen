@@ -5,6 +5,13 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 
 ## Version history
 
+#### v. 1.4.0
+- **Move menu commands from "Tools" to "File" menu!**
+- New menu command: Remove last closed document from history without open it (CTRL + SHIFT + D)
+- Remove history duplications
+- Add logging and diagnostics
+- Code enhancements
+
 ##### v. 1.3.1
 - Order history data by clicking on column headers in History Tool Window
 - Code enhancements, small issue fixes
@@ -32,13 +39,13 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 #### v. 1.1.0
 - Reorganized menu command: under the Tools menu child menu
 - Track the last 5 closed document in child menu
-- Show all history in a new Tool Window
+- New menu command: Show all history in a new Tool Window (CTRL + SHIFT + R)
 - Persist and load closed documents history (per solution)
 - Clear history functionality
-- New Previw image
+- New Preview image
 
 ##### v. 1.0.1
-- Bugfix: exception when file was deleted
+- Bug fix: exception when file was deleted
 - New Icon and Preview images
 
 #### v. 1.0.0

@@ -2,11 +2,12 @@
 using System.ComponentModel.Design;
 using Microsoft.VisualStudio.Shell;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
+using VSDocumentReopen.Infrastructure.Logging;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.VS.Commands
 {
-	internal sealed class ReopenClosedDocumentsCommand
+	public sealed class ReopenClosedDocumentsCommand
 	{
 		/// <summary>
 		/// Command ID.
@@ -38,21 +39,18 @@ namespace VSDocumentReopen.VS.Commands
 			private set;
 		}
 
-		private IAsyncServiceProvider ServiceProvider => _package;
-
 		public static async Task InitializeAsync(AsyncPackage package, IHistoryCommand historyCommand)
 		{
-			ThreadHelper.ThrowIfNotOnUIThread();
-
-			OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
+			var commandService = package == null
+				? null
+				: await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
 			Instance = new ReopenClosedDocumentsCommand(package, commandService, historyCommand);
 		}
 
 		private void Execute(object sender, EventArgs e)
 		{
-			ThreadHelper.ThrowIfNotOnUIThread();
-
 			_historyCommand.Execute();
+			LoggerContext.Current.Logger.Info($"VS Command: {nameof(ReopenClosedDocumentsCommand)} was executed with {_historyCommand.GetType()}");
 		}
 	}
 }

@@ -7,6 +7,7 @@
 		int MaxNumberOfHistoryItemsOnMenu { get; }
 		string PackageWorkingDirName { get; }
 		string ReopenCommandBinding { get; }
+		string RemoveCommandBinding { get; }
 		string ShowMoreCommandBinding { get; }
 		string VSTempFolderName { get; }
 	}
