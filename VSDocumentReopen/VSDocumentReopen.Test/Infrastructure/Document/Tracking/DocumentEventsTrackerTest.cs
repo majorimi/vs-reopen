@@ -8,6 +8,7 @@ using VSDocumentReopen.Domain.Documents;
 using VSDocumentReopen.Infrastructure;
 using VSDocumentReopen.Infrastructure.Document.Tracking;
 using VSDocumentReopen.Infrastructure.Repositories;
+using VSDocumentReopen.VS.MessageBox;
 using Xunit;
 
 namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
@@ -23,6 +24,7 @@ namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
 		private readonly Mock<IDocumentHistoryManager> _documentHistoryManagerMock;
 		private readonly Mock<IHistoryRepositoryFactory> _historyRepositoryFactoryMock;
 		private readonly Mock<IHistoryRepository> _historyRepositoryMock;
+		private readonly Mock<IMessageBox> _messageBoxMock;
 
 		private readonly DocumentEventsTracker _documentEventsTracker;
 
@@ -53,17 +55,22 @@ namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
 
 			_historyRepositoryMock = new Mock<IHistoryRepository>();
 
+			_messageBoxMock = new Mock<IMessageBox>();
+			_messageBoxMock.Setup(s => s.ShowError(It.IsAny<string>(), It.IsAny<string>()));
+
 			_documentEventsTracker = new DocumentEventsTracker(_dteMock.Object,
 				_documentHistoryManagerMock.Object,
-				_historyRepositoryFactoryMock.Object);
+				_historyRepositoryFactoryMock.Object,
+				_messageBoxMock.Object);
 		}
 
 		[Fact]
 		public void ItShould_Throw_Whne_Constructor_Params_Null()
 		{
-			Assert.Throws<ArgumentNullException>("dte", () => new DocumentEventsTracker(null, null, null));
-			Assert.Throws<ArgumentNullException>("documentHistoryManager", () => new DocumentEventsTracker(_dteMock.Object, null, null));
-			Assert.Throws<ArgumentNullException>("historyRepositoryFactory", () => new DocumentEventsTracker(_dteMock.Object, _documentHistoryManagerMock.Object, null));
+			Assert.Throws<ArgumentNullException>("dte", () => new DocumentEventsTracker(null, null, null, null));
+			Assert.Throws<ArgumentNullException>("documentHistoryManager", () => new DocumentEventsTracker(_dteMock.Object, null, null, null));
+			Assert.Throws<ArgumentNullException>("historyRepositoryFactory", () => new DocumentEventsTracker(_dteMock.Object, _documentHistoryManagerMock.Object, null, null));
+			Assert.Throws<ArgumentNullException>("messageBox", () => new DocumentEventsTracker(_dteMock.Object, _documentHistoryManagerMock.Object, _historyRepositoryFactoryMock.Object, null));
 		}
 
 		[Fact]
@@ -128,7 +135,7 @@ namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
 		{
 			_historyRepositoryFactoryMock.Setup(s => s.CreateHistoryRepository(It.IsAny<SolutionInfo>()))
 				.Returns(_historyRepositoryMock.Object);
-			_historyRepositoryMock.Setup(s => s.SaveHistory(It.IsAny<IEnumerable<IClosedDocument>>()));
+			_historyRepositoryMock.Setup(s => s.SaveHistory(It.IsAny<IEnumerable<IClosedDocument>>())).Returns(true);
 			_documentHistoryManagerMock.Setup(s => s.GetAll())
 				.Returns(new List<IClosedDocument>());
 
@@ -140,6 +147,21 @@ namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
 			_documentHistoryManagerMock.Verify(v => v.GetAll(), Times.Once);
 			_documentHistoryManagerMock.Verify(v => v.Clear(), Times.Once);
 			Assert.Equal(SolutionStates.None, _documentEventsTracker.SolutionState);
+		}
+
+		[Fact]
+		public void ItShould_Notify_User_SolutionAfterClosing_Event_When_History_Was_Not_Saved()
+		{
+			_historyRepositoryFactoryMock.Setup(s => s.CreateHistoryRepository(It.IsAny<SolutionInfo>()))
+				.Returns(_historyRepositoryMock.Object);
+			_historyRepositoryMock.Setup(s => s.SaveHistory(It.IsAny<IEnumerable<IClosedDocument>>())).Returns(false);
+			_documentHistoryManagerMock.Setup(s => s.GetAll())
+				.Returns(new List<IClosedDocument>());
+
+			_solutionEventsMock.AfterClosing += Raise.Event<_dispSolutionEvents_AfterClosingEventHandler>();
+
+			_historyRepositoryMock.Verify(v => v.SaveHistory(It.IsAny<IEnumerable<IClosedDocument>>()), Times.Once);
+			_messageBoxMock.Verify(v => v.ShowError(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
 		}
 
 		[Fact]

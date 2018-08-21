@@ -14,7 +14,10 @@ using VSDocumentReopen.Infrastructure.Document.Tracking;
 using VSDocumentReopen.Infrastructure.FileIcons;
 using VSDocumentReopen.Infrastructure.Helpers;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
+using VSDocumentReopen.Infrastructure.Logging;
+using VSDocumentReopen.Infrastructure.Logging.Logentries;
 using VSDocumentReopen.VS.Commands;
+using VSDocumentReopen.VS.MessageBox;
 using VSDocumentReopen.VS.ToolWindows;
 using ConfigurationManager = VSDocumentReopen.Infrastructure.ConfigurationManager;
 using Task = System.Threading.Tasks.Task;
@@ -52,9 +55,12 @@ namespace VSDocumentReopen
 		/// </summary>
 		public ReopenPackage()
 		{
-			//DI
+			LoggerContext.Current = new LogentriesSerilogLoggerContext();
+			LoggerContext.Current.Logger.Info($"{nameof(ReopenPackage)} started to load. Initializing dependencies...");
+
 			_dte = GetGlobalService(typeof(DTE)) as DTE2 ?? throw new NullReferenceException($"Unable to get service {nameof(DTE2)}");
 
+			//DI
 			IDocumentHistoryManager documentHistory = new DocumentHistoryManager();
 			_documentHistoryCommands = documentHistory;
 			_documentHistoryQueries = documentHistory;
@@ -72,32 +78,44 @@ namespace VSDocumentReopen
 
 			_documentTracker = new DocumentEventsTracker(_dte,
 				documentHistory,
-				new JsonHistoryRepositoryFactory(new ServiceStackJsonSerializer()));
+				new JsonHistoryRepositoryFactory(new ServiceStackJsonSerializer()),
+				new VSMessageBox(this));
 		}
 
 		protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
 		{
-			await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+			try
+			{
+				LoggerContext.Current.Logger.Info($"{nameof(ReopenPackage)} initializing VS commands...");
 
-			//Init Commands with DI
-			await ReopenClosedDocumentsCommand.InitializeAsync(this, _reopenLastClosedCommand);
-			await RemoveClosedDocumentsCommand.InitializeAsync(this, _removeLastClosedCommand);
-			await ClearDocumentsHistoryCommand.InitializeAsync(this, _clearHistoryCommand);
-			await DocumentsHistoryCommand.InitializeAsync(this, _documentHistoryQueries, _reopenSomeDocumentsCommandFactory);
+				await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
-			var imageService = (IVsImageService2)Package.GetGlobalService(typeof(SVsImageService));
+				//Init Commands with DI
+				await ReopenClosedDocumentsCommand.InitializeAsync(this, _reopenLastClosedCommand);
+				await RemoveClosedDocumentsCommand.InitializeAsync(this, _removeLastClosedCommand);
+				await ClearDocumentsHistoryCommand.InitializeAsync(this, _clearHistoryCommand);
+				await DocumentsHistoryCommand.InitializeAsync(this, _documentHistoryQueries, _reopenSomeDocumentsCommandFactory);
 
-			//Init ToolWindow Commands with DI
-			await ShowDocumentsHIstoryCommand.InitializeAsync(this);
-			await ClosedDocumentsHistory.InitializeAsync(_documentHistoryQueries,
-				_reopenLastClosedCommand,
-				_reopenSomeDocumentsCommandFactory,
-				_removeSomeDocumentsCommandFactory,
-				_clearHistoryCommand,
-				new CachedFileExtensionIconResolver(
-					new VisualStudioFileExtensionIconResolver(imageService)));
+				var imageService = (IVsImageService2)Package.GetGlobalService(typeof(SVsImageService));
 
-			EnforceKeyBinding();
+				//Init ToolWindow Commands with DI
+				await ShowDocumentsHIstoryCommand.InitializeAsync(this);
+				await ClosedDocumentsHistory.InitializeAsync(_documentHistoryQueries,
+					_reopenLastClosedCommand,
+					_reopenSomeDocumentsCommandFactory,
+					_removeSomeDocumentsCommandFactory,
+					_clearHistoryCommand,
+					new CachedFileExtensionIconResolver(
+						new VisualStudioFileExtensionIconResolver(imageService)));
+
+				EnforceKeyBinding();
+
+				LoggerContext.Current.Logger.Info($"{nameof(ReopenPackage)} VS commands initialization was successfully finished...");
+			}
+			catch (Exception ex)
+			{
+				LoggerContext.Current.Logger.Error($"Failed to Initialize {nameof(ReopenPackage)} VS Extension", ex);
+			}
 		}
 
 		/// <summary>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using VSDocumentReopen.Domain.Documents;
 using VSDocumentReopen.Infrastructure.Helpers;
+using VSDocumentReopen.Infrastructure.Logging;
 
 namespace VSDocumentReopen.Infrastructure.Repositories
 {
@@ -35,9 +36,9 @@ namespace VSDocumentReopen.Infrastructure.Repositories
 				var json = _serializer.Serialize<IEnumerable<IClosedDocument>>(closedDocumentHistories);
 				File.WriteAllText(_historyFile, json);
 			}
-			catch (Exception e)
+			catch (Exception ex)
 			{
-				//TODO: log and notify user...
+				LoggerContext.Current.Logger.Error($"{nameof(JsonHistoryRepository)} was not able to save!", ex);
 				return false;
 			}
 

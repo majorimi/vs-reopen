@@ -10,7 +10,7 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 - New menu command: Remove last closed document from history without open it (CTRL + SHIFT + D)
 - Remove history duplications
 - Add logging and diagnostics
-- Code enhancements, small issue fixes
+- Code enhancements
 
 ##### v. 1.3.1
 - Order history data by clicking on column headers in History Tool Window
