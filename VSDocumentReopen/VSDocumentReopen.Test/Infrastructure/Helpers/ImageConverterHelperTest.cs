@@ -28,7 +28,7 @@ namespace VSDocumentReopen.Test.Infrastructure.Helpers
 			var ret = ImageConverterHelper.BitmapToByteArray(Resources.ClearWindowContent_16x_Gray, ImageFormat.Png);
 
 			Assert.NotNull(ret);
-			Assert.Equal(176, ret.Length);
+			Assert.Equal(210, ret.Length);
 		}
 
 		[Fact]
