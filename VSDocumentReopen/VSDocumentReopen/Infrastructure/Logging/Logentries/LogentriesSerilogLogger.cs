@@ -1,6 +1,8 @@
 ﻿using System;
 using Serilog;
 using Serilog.Core;
+using Serilog.Exceptions;
+using Serilog.Formatting.Json;
 
 namespace VSDocumentReopen.Infrastructure.Logging.Logentries
 {
@@ -9,7 +11,10 @@ namespace VSDocumentReopen.Infrastructure.Logging.Logentries
 		private Logger _log = new LoggerConfiguration()
 			.MinimumLevel.Information()
 			.Enrich.FromLogContext()
-			.WriteTo.Logentries("")
+			.Enrich.WithMachineName()
+			.Enrich.WithEnvironmentUserName()
+			.Enrich.WithExceptionDetails()
+			.WriteTo.Logentries("", new JsonFormatter(renderMessage: true))
 			.CreateLogger();
 
 		public void Trace(string message)
