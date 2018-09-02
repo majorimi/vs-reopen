@@ -30,12 +30,10 @@ namespace VSDocumentReopen.VS.ToolWindows
 			LoggerContext.Current.Logger.Info($"Command: from ToolWindow was executed {_clearHistoryCommand.GetType()}");
 		}
 
-
-		private void _search_TextChanged(object sender, TextChangedEventArgs e)
+		private void _search_OnSearch(object sender, RoutedEventArgs e)
 		{
 			HandleSearch();
 		}
-
 
 		private void _listView_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{

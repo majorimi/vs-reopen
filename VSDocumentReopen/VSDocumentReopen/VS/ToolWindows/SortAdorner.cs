@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 
 namespace VSDocumentReopen.VS.ToolWindows
 {
+	[ExcludeFromCodeCoverage]
 	public class SortAdorner : Adorner
 	{
 		private static Geometry ascGeometry =

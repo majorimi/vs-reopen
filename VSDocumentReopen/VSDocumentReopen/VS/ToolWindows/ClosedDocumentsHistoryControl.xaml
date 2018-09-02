@@ -8,6 +8,7 @@
              Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
              FontFamily="{DynamicResource VsFont.EnvironmentFontFamily}"
              FontSize="{DynamicResource VsFont.EnvironmentFontSize}"
+             xmlns:sb="clr-namespace:UIControls;assembly=SearchTextBox"
              mc:Ignorable="d"
              d:DesignHeight="250" d:DesignWidth="960"
              Name="DocumentHistoryWindow">
@@ -66,32 +67,10 @@
             <Label Content="Number of items in History:"></Label>
             <Label Name="_numberOfItems" FontWeight="Bold" Content="0"></Label>
             <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-            
-            <TextBox Name="_search" TextChanged="_search_TextChanged" ToolTip="Search in File path or File name"
-                     Width="200" Margin="2" Height="20" VerticalContentAlignment="Center">
-                <TextBox.Style>
-                    <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-                        <Style.Resources>
-                            <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None" >
-                                <VisualBrush.Visual>
-                                    <Label Content="Search..." Foreground="LightGray" Width="150" />
-                                </VisualBrush.Visual>
-                            </VisualBrush>
-                        </Style.Resources>
-                        <Style.Triggers>
-                            <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
-                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                            </Trigger>
-                            <Trigger Property="Text" Value="{x:Null}">
-                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                            </Trigger>
-                            <Trigger Property="IsKeyboardFocused" Value="True">
-                                <Setter Property="Background" Value="White" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>
-            </TextBox>
+
+            <sb:SearchTextBox Name="_search" SectionsStyle="NormalStyle" OnSearch="_search_OnSearch" ShowSectionButton="False" ToolTip="Search in File path or File name"
+                     Width="200" Height="20" Margin="2" VerticalContentAlignment="Center"
+                     Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"/>
             <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
             <Button Name="_openSelected" Click="_openSelected_Click" ToolTip="Reopen all selected Document(s)" Style="{StaticResource MenuButton}">
