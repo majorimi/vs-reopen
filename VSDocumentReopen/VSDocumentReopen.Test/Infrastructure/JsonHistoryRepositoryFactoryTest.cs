@@ -34,9 +34,9 @@ namespace VSDocumentReopen.Test.Infrastructure
 		[Fact]
 		public void ItShould_Handle_ValidObject()
 		{
-			_configurationMock.SetupGet(g => g.VSTempFolderName).Returns("");
-			_configurationMock.SetupGet(g => g.PackageWorkingDirName).Returns("");
-			_configurationMock.SetupGet(g => g.HistoryFileName).Returns("");
+			_configurationMock.SetupGet(g => g.VSTempFolderName).Returns("VSTempFolderName");
+			_configurationMock.SetupGet(g => g.PackageWorkingDirName).Returns("PackageWorkingDirName");
+			_configurationMock.SetupGet(g => g.HistoryFileName).Returns("HistoryFileName");
 
 			var ret = _jsonHistoryRepositoryFactory.CreateHistoryRepository(new SolutionInfo("c:\\", "test"));
 

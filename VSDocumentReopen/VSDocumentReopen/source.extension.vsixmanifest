@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="VSDocumentReopen.d1377e39-78d6-4895-abdf-af7f6df3bb2b" Version="1.4.0" Language="en-US" Publisher="Imre Toth" />
+        <Identity Id="VSDocumentReopen.d1377e39-78d6-4895-abdf-af7f6df3bb2b" Version="1.4.1" Language="en-US" Publisher="Imre Toth" />
         <DisplayName>Visual Studio Document Reopen</DisplayName>
         <Description xml:space="preserve">Visual Studio Extension to reopen the last closed documents with (CTRL + SHIFT + T)</Description>
         <MoreInfo>https://github.com/majorimi/vs-reopen</MoreInfo>
