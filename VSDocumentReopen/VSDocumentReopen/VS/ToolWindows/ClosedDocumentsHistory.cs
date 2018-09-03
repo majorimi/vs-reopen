@@ -1,8 +1,10 @@
 ﻿using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
+using VSDocumentReopen.Infrastructure;
 using VSDocumentReopen.Infrastructure.Document.Tracking;
 using VSDocumentReopen.Infrastructure.FileIcons;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
+using VSDocumentReopen.Infrastructure.Repositories;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.VS.ToolWindows
@@ -43,14 +45,16 @@ namespace VSDocumentReopen.VS.ToolWindows
 			IHistoryCommandFactory reopenSomeDocumentsCommandFactory,
 			IHistoryCommandFactory removeSomeDocumentsCommandFactory,
 			IHistoryCommand clearHistoryCommand,
-			IFileExtensionIconResolver fileExtensionIconResolver)
+			IFileExtensionIconResolver fileExtensionIconResolver,
+			IHistoryToolWindowRepositoryFactory historyToolWindowRepositoryFactory)
 		{
 			ContentWindow = new ClosedDocumentsHistoryControl(documentHistoryQueries,
 				reopenLastClosdCommand,
 				reopenSomeDocumentsCommandFactory,
 				removeSomeDocumentsCommandFactory,
 				clearHistoryCommand,
-				fileExtensionIconResolver);
+				fileExtensionIconResolver,
+				historyToolWindowRepositoryFactory);
 
 			await Task.CompletedTask;
 		}

@@ -3,6 +3,7 @@
 	public interface IConfiguration
 	{
 		string HistoryFileName { get; }
+		string ToolWindowSettingsFileName { get; }
 		int MaxAllowedHistoryItems { get; }
 		int MaxNumberOfHistoryItemsOnMenu { get; }
 		string PackageWorkingDirName { get; }

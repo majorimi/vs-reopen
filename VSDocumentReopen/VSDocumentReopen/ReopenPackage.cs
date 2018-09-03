@@ -106,7 +106,8 @@ namespace VSDocumentReopen
 					_removeSomeDocumentsCommandFactory,
 					_clearHistoryCommand,
 					new CachedFileExtensionIconResolver(
-						new VisualStudioFileExtensionIconResolver(imageService)));
+						new VisualStudioFileExtensionIconResolver(imageService)),
+					new JsonIHistoryToolWindowRepositoryFactory(new ServiceStackJsonSerializer()));
 
 				EnforceKeyBinding();
 

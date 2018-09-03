@@ -8,7 +8,7 @@ namespace VSDocumentReopen.Infrastructure
 {
 	public class DefaultConfigurationManager : ConfigurationManager
 	{
-		private const string ConfigFileName = "appConfig.json";
+		private const string ConfigFileName = "AppConfig.json";
 
 		private Lazy<IConfiguration> _loadConfig;
 

@@ -1,59 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using VSDocumentReopen.Domain.Documents;
 using VSDocumentReopen.Infrastructure.Helpers;
-using VSDocumentReopen.Infrastructure.Logging;
 
 namespace VSDocumentReopen.Infrastructure.Repositories
 {
-	public sealed class JsonHistoryRepository : IHistoryRepository
+	public sealed class JsonHistoryRepository : JsonHistoryRepositoryBase<IEnumerable<IClosedDocument>>, IHistoryRepository
 	{
-		private readonly IJsonSerializer _serializer;
-		private readonly string _historyFile;
-
 		public JsonHistoryRepository(IJsonSerializer serializer, string storageFile)
-		{
-			_serializer = serializer;
-			_historyFile = storageFile;
-		}
+			: base(serializer, storageFile)
+		{}
 
 		public bool SaveHistory(IEnumerable<IClosedDocument> closedDocumentHistories)
 		{
-			try
-			{
-				if (File.Exists(_historyFile))
-				{
-					File.Delete(_historyFile);
-				}
-
-				var dir = Path.GetDirectoryName(_historyFile);
-				if (!Directory.Exists(dir))
-				{
-					Directory.CreateDirectory(dir);
-				}
-
-				var json = _serializer.Serialize<IEnumerable<IClosedDocument>>(closedDocumentHistories);
-				File.WriteAllText(_historyFile, json);
-			}
-			catch (Exception ex)
-			{
-				LoggerContext.Current.Logger.Error($"{nameof(JsonHistoryRepository)} was not able to save!", ex);
-				return false;
-			}
-
-			return true;
+			return Save(closedDocumentHistories);
 		}
 
 		public IEnumerable<IClosedDocument> GetHistory()
 		{
-			if (!File.Exists(_historyFile))
-			{
-				return new List<IClosedDocument>();
-			}
-
-			var history = File.ReadAllText(_historyFile);
-			return _serializer.Deserialize<IEnumerable<IClosedDocument>>(history);
+			return Load();
 		}
 	}
 }
