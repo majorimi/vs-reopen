@@ -90,10 +90,15 @@
     <Compile Include="Infrastructure\Logging\ILogger.cs" />
     <Compile Include="Infrastructure\Logging\Logentries\LogentriesSerilogLogger.cs" />
     <Compile Include="Infrastructure\Logging\Logentries\LogentriesSerilogLoggerContext.cs" />
+    <Compile Include="Infrastructure\Logging\Logentries\VisualStudioVersionEnricher.cs" />
     <Compile Include="Infrastructure\Logging\LoggerContext.cs" />
     <Compile Include="Infrastructure\Logging\NullLogger.cs" />
     <Compile Include="Infrastructure\Repositories\JsonHistoryRepositoryBase.cs" />
     <Compile Include="Infrastructure\Repositories\JsonHistoryToolWindowRepository.cs" />
+    <Compile Include="Infrastructure\Version\DteVsVersionContext.cs" />
+    <Compile Include="Infrastructure\Version\IVsVersionProvider.cs" />
+    <Compile Include="Infrastructure\Version\VsVersionContext.cs" />
+    <Compile Include="Infrastructure\Version\VsDteVersionProvider.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

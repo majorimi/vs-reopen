@@ -16,6 +16,7 @@ using VSDocumentReopen.Infrastructure.Helpers;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
 using VSDocumentReopen.Infrastructure.Logging;
 using VSDocumentReopen.Infrastructure.Logging.Logentries;
+using VSDocumentReopen.Infrastructure.Version;
 using VSDocumentReopen.VS.Commands;
 using VSDocumentReopen.VS.MessageBox;
 using VSDocumentReopen.VS.ToolWindows;
@@ -55,10 +56,13 @@ namespace VSDocumentReopen
 		/// </summary>
 		public ReopenPackage()
 		{
-			LoggerContext.Current = new LogentriesSerilogLoggerContext();
-			LoggerContext.Current.Logger.Info($"{nameof(ReopenPackage)} started to load. Initializing dependencies...");
-
 			_dte = GetGlobalService(typeof(DTE)) as DTE2 ?? throw new NullReferenceException($"Unable to get service {nameof(DTE2)}");
+
+			//Log context and Serilog enricher
+			VsVersionContext.Current = new DteVsVersionContext(_dte);
+			LoggerContext.Current = new LogentriesSerilogLoggerContext();
+
+			LoggerContext.Current.Logger.Info($"{nameof(ReopenPackage)} started to load. Initializing dependencies...");
 
 			//DI
 			IDocumentHistoryManager documentHistory = new DocumentHistoryManager();

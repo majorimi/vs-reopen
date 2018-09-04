@@ -169,6 +169,7 @@
     <Compile Include="Infrastructure\HistoryCommands\RemoveLastCommandTest.cs" />
     <Compile Include="Infrastructure\HistoryCommands\RemoveSomeCommandTest.cs" />
     <Compile Include="Infrastructure\JsonHistoryRepositoryFactoryTest.cs" />
+    <Compile Include="Infrastructure\JsonIHistoryToolWindowRepositoryFactoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VS\Commands\ClearDocumentsHistoryCommandTest.cs" />
     <Compile Include="VS\Commands\DocumentsHistoryCommandTest.cs" />
