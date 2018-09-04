@@ -1,34 +1,27 @@
 ﻿using Microsoft.VisualStudio.Shell;
 using Moq;
 using System;
-using VSDocumentReopen.Domain;
 using VSDocumentReopen.Domain.Documents;
-using VSDocumentReopen.Infrastructure;
 using VSDocumentReopen.Infrastructure.Document.Tracking;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
+using VSDocumentReopen.Test.AssemblyFictures;
 using VSDocumentReopen.VS.Commands;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSDocumentReopen.Test.VS.Commands
 {
-	public class DocumentsHistoryCommandTest : VisualStudioCommandTestBase<DocumentsHistoryCommand>
+	public class DocumentsHistoryCommandTest : VisualStudioCommandTestBase<DocumentsHistoryCommand>, IAssemblyFixture<ConfigContext>
 	{
 		private readonly Mock<IDocumentHistoryQueries> _documentHistoryQueriesMock;
-		private readonly Mock<IConfiguration> _configurationMock;
 		private readonly Mock<IHistoryCommand> _historyCommandMock;
 		private readonly Mock<IHistoryCommandFactory> _historyCommandFactoryMock;
-		private readonly Mock<ConfigurationManager> _configurationManagerMock;
 
 		private readonly DocumentsHistoryCommand _documentsHistoryCommand;
+		private readonly ConfigContext _configContext;
 
-		public DocumentsHistoryCommandTest()
+		public DocumentsHistoryCommandTest(ConfigContext configContext)
 		{
-			_configurationMock = new Mock<IConfiguration>();
-			_configurationManagerMock = new Mock<ConfigurationManager>();
-			_configurationManagerMock.SetupGet(g => g.Config).Returns(_configurationMock.Object);
-			ConfigurationManager.Current = _configurationManagerMock.Object;
-
 			_documentHistoryQueriesMock = new Mock<IDocumentHistoryQueries>();
 
 			_historyCommandMock = new Mock<IHistoryCommand>();
@@ -40,6 +33,7 @@ namespace VSDocumentReopen.Test.VS.Commands
 				_documentHistoryQueriesMock.Object,
 				_historyCommandFactoryMock.Object)).Wait();
 			_documentsHistoryCommand = DocumentsHistoryCommand.Instance;
+			_configContext = configContext;
 		}
 
 		[Fact]
@@ -90,11 +84,11 @@ namespace VSDocumentReopen.Test.VS.Commands
 		{
 			var cmd = new OleMenuCommand(null, null);
 			_documentHistoryQueriesMock.Setup(s => s.Get(It.Is<int>(p => p == 5))).Returns(new IClosedDocument[0]);
-			_configurationMock.SetupGet(s => s.MaxNumberOfHistoryItemsOnMenu).Returns(5);
+			_configContext.Configuration.SetupGet(s => s.MaxNumberOfHistoryItemsOnMenu).Returns(5);
 
 			InvokeCommand(_documentsHistoryCommand, "DynamicStartBeforeQueryStatus", cmd);
 
-			_configurationMock.VerifyGet(v => v.MaxNumberOfHistoryItemsOnMenu, Times.Once);
+			_configContext.Configuration.VerifyGet(v => v.MaxNumberOfHistoryItemsOnMenu, Times.Once);
 			_documentHistoryQueriesMock.Verify(v => v.Get(It.Is<int>(p => p == 5)), Times.Once);
 			_historyCommandFactoryMock.Verify(v => v.CreateCommand(It.IsAny<IClosedDocument[]>()), Times.Never);
 			Assert.True(cmd.Visible);
@@ -105,14 +99,14 @@ namespace VSDocumentReopen.Test.VS.Commands
 		public void ItShould_Show_Document_Hisotry()
 		{
 			var cmd = new OleMenuCommand(null, null);
-			_documentHistoryQueriesMock.Setup(s => s.Get(It.Is<int>(p => p == 5))).Returns(new IClosedDocument[]
+			_documentHistoryQueriesMock.Setup(s => s.Get(It.Is<int>(p => p == 3))).Returns(new IClosedDocument[]
 				{ NullDocument.Instance, NullDocument.Instance });
-			_configurationMock.SetupGet(s => s.MaxNumberOfHistoryItemsOnMenu).Returns(5);
+			_configContext.Configuration.SetupGet(s => s.MaxNumberOfHistoryItemsOnMenu).Returns(3);
 
 			InvokeCommand(_documentsHistoryCommand, "DynamicStartBeforeQueryStatus", cmd);
 
-			_configurationMock.VerifyGet(v => v.MaxNumberOfHistoryItemsOnMenu, Times.Once);
-			_documentHistoryQueriesMock.Verify(v => v.Get(It.Is<int>(p => p == 5)), Times.Once);
+			_configContext.Configuration.VerifyGet(v => v.MaxNumberOfHistoryItemsOnMenu, Times.AtLeastOnce);
+			_documentHistoryQueriesMock.Verify(v => v.Get(It.Is<int>(p => p == 3)), Times.Once);
 			_historyCommandFactoryMock.Verify(v => v.CreateCommand(It.IsAny<IClosedDocument[]>()), Times.Never);
 			Assert.True(cmd.Visible);
 			Assert.Equal("<History>", cmd.Text);

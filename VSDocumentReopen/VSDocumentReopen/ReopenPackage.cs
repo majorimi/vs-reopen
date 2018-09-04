@@ -59,7 +59,7 @@ namespace VSDocumentReopen
 			_dte = GetGlobalService(typeof(DTE)) as DTE2 ?? throw new NullReferenceException($"Unable to get service {nameof(DTE2)}");
 
 			//Log context and Serilog enricher
-			VsVersionContext.Current = new DteVsVersionContext(_dte);
+			VsVersionContext.Current = new VsDteVersionContext(_dte);
 			LoggerContext.Current = new LogentriesSerilogLoggerContext();
 
 			LoggerContext.Current.Logger.Info($"{nameof(ReopenPackage)} started to load. Initializing dependencies...");
@@ -159,10 +159,17 @@ namespace VSDocumentReopen
 
 			void Bind(int commandId, string keyBinding)
 			{
-				var command = myCommands.SingleOrDefault(x => x.ID == commandId);
-				if (command != null)
+				try
 				{
-					command.Bindings = keyBinding;
+					var command = myCommands.SingleOrDefault(x => x.ID == commandId);
+					if (command != null)
+					{
+						command.Bindings = new object[] { keyBinding };
+					}
+				}
+				catch (Exception ex)
+				{
+					LoggerContext.Current.Logger.Error($"Error occurred during Key biding CommandId: {commandId}, HotKey: {keyBinding}.", ex);
 				}
 			}
 		}

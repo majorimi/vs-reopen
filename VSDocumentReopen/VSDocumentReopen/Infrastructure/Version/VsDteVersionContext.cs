@@ -2,18 +2,15 @@
 
 namespace VSDocumentReopen.Infrastructure.Version
 {
-	public sealed class DteVsVersionContext : VsVersionContext
+	public sealed class VsDteVersionContext : VsVersionContext
 	{
 		private readonly IVsVersionProvider _dteVsVersionProvider;
 
-		public DteVsVersionContext(_DTE dte)
+		public VsDteVersionContext(_DTE dte)
 		{
 			_dteVsVersionProvider = new VsDteVersionProvider(dte);
 		}
 
-		public override IVsVersionProvider VersionProvider
-		{
-			get => _dteVsVersionProvider;
-		}
+		public override IVsVersionProvider VersionProvider => _dteVsVersionProvider;
 	}
 }

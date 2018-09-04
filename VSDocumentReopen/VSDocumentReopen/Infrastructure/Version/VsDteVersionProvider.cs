@@ -4,16 +4,16 @@ namespace VSDocumentReopen.Infrastructure.Version
 {
 	public class VsDteVersionProvider : IVsVersionProvider
 	{
-		private readonly _DTE _dTE;
+		private readonly _DTE _dte;
 
-		public VsDteVersionProvider(_DTE dTE)
+		public VsDteVersionProvider(_DTE dte)
 		{
-			_dTE = dTE;
+			_dte = dte;
 		}
 
 		public string GetVersion()
 		{
-			return _dTE?.Version;
+			return _dte?.Version;
 		}
 	}
 }

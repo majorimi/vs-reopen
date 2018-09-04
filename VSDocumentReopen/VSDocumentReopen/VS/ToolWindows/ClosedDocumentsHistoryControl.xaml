@@ -69,7 +69,7 @@
             <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
             <sb:SearchTextBox Name="_search" SectionsStyle="NormalStyle" OnSearch="_search_OnSearch" ShowSectionButton="False" ToolTip="Search in File path or File name"
-                     Width="200" Height="20" Margin="2" VerticalContentAlignment="Center"
+                     Width="200" Height="22" Margin="2" VerticalContentAlignment="Center"
                      Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"/>
             <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 

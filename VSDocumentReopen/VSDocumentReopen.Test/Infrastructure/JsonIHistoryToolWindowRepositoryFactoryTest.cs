@@ -1,33 +1,26 @@
-﻿using Moq;
-using VSDocumentReopen.Domain;
-using VSDocumentReopen.Infrastructure;
+﻿using VSDocumentReopen.Infrastructure;
 using VSDocumentReopen.Infrastructure.Repositories;
+using VSDocumentReopen.Test.AssemblyFictures;
 using Xunit;
 
 namespace VSDocumentReopen.Test.Infrastructure
 {
-	public class JsonIHistoryToolWindowRepositoryFactoryTest
+	public class JsonIHistoryToolWindowRepositoryFactoryTest : IAssemblyFixture<ConfigContext>
 	{
-		private readonly Mock<IConfiguration> _configurationMock;
 		private readonly JsonIHistoryToolWindowRepositoryFactory _jsonHistoryRepositoryFactory;
-		private readonly Mock<ConfigurationManager> _configurationManagerMock;
+		private readonly ConfigContext _configContext;
 
-		public JsonIHistoryToolWindowRepositoryFactoryTest()
+		public JsonIHistoryToolWindowRepositoryFactoryTest(ConfigContext configContext)
 		{
-			_configurationMock = new Mock<IConfiguration>();
-			_configurationManagerMock = new Mock<ConfigurationManager>();
-			_configurationManagerMock.SetupGet(g => g.Config).Returns(_configurationMock.Object);
-
-			ConfigurationManager.Current = _configurationManagerMock.Object;
-
 			_jsonHistoryRepositoryFactory = new JsonIHistoryToolWindowRepositoryFactory(null);
+			_configContext = configContext;
 		}
 
 		[Fact]
 		public void ItShould_Handle_ValidObject()
 		{
-			_configurationMock.SetupGet(g => g.PackageWorkingDirName).Returns("PackageWorkingDirName");
-			_configurationMock.SetupGet(g => g.ToolWindowSettingsFileName).Returns("ToolWindowSettingsFileName");
+			_configContext.Configuration.SetupGet(g => g.PackageWorkingDirName).Returns("PackageWorkingDirName");
+			_configContext.Configuration.SetupGet(g => g.ToolWindowSettingsFileName).Returns("ToolWindowSettingsFileName");
 
 			var ret = _jsonHistoryRepositoryFactory.Create();
 

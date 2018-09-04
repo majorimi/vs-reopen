@@ -95,7 +95,7 @@
     <Compile Include="Infrastructure\Logging\NullLogger.cs" />
     <Compile Include="Infrastructure\Repositories\JsonHistoryRepositoryBase.cs" />
     <Compile Include="Infrastructure\Repositories\JsonHistoryToolWindowRepository.cs" />
-    <Compile Include="Infrastructure\Version\DteVsVersionContext.cs" />
+    <Compile Include="Infrastructure\Version\VsDteVersionContext.cs" />
     <Compile Include="Infrastructure\Version\IVsVersionProvider.cs" />
     <Compile Include="Infrastructure\Version\VsVersionContext.cs" />
     <Compile Include="Infrastructure\Version\VsDteVersionProvider.cs" />
