@@ -5,6 +5,11 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 
 ## Version history
 
+##### v. 1.4.1
+- History Tool Window supports Visual Studio color theme
+- Store search history
+- Code enhancements and more detailed diagnostics
+
 #### v. 1.4.0
 - **Move menu commands from "Tools" to "File" menu!**
 - New menu command: Remove last closed document from history without open it (CTRL + SHIFT + D)

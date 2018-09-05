@@ -27,15 +27,13 @@ namespace VSDocumentReopen.VS.ToolWindows
 		private void _clearAll_Click(object sender, RoutedEventArgs e)
 		{
 			_clearHistoryCommand.Execute();
-			LoggerContext.Current.Logger.Info($"Command: from ToolWindow was executed {_clearHistoryCommand.GetType()}");
+			LoggerContext.Current.Logger.Info($"Command: {_clearHistoryCommand.GetType()} from ToolWindow was executed");
 		}
 
-
-		private void _search_TextChanged(object sender, TextChangedEventArgs e)
+		private void _search_OnSearch(object sender, RoutedEventArgs e)
 		{
 			HandleSearch();
 		}
-
 
 		private void _listView_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
@@ -43,7 +41,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 			{
 				var command = _reopenSomeDocumentsCommandFactory.CreateCommand(item.ClosedDocument);
 				command.Execute();
-				LoggerContext.Current.Logger.Info($"Command: from ToolWindow was executed {command.GetType()}");
+				LoggerContext.Current.Logger.Info($"Command: {command.GetType()} from ToolWindow was executed");
 			}
 		}
 
@@ -126,7 +124,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 			var command = historyCommandFactory.CreateCommand(selectedItems.ToArray());
 			command.Execute();
 
-			LoggerContext.Current.Logger.Info($"Command: from ToolWindow was executed {command.GetType()}");
+			LoggerContext.Current.Logger.Info($"Command: {command.GetType()} from ToolWindow was executed");
 		}
 
 		private void HandleSearch()

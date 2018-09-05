@@ -16,6 +16,7 @@ using VSDocumentReopen.Infrastructure.Helpers;
 using VSDocumentReopen.Infrastructure.HistoryCommands;
 using VSDocumentReopen.Infrastructure.Logging;
 using VSDocumentReopen.Infrastructure.Logging.Logentries;
+using VSDocumentReopen.Infrastructure.Version;
 using VSDocumentReopen.VS.Commands;
 using VSDocumentReopen.VS.MessageBox;
 using VSDocumentReopen.VS.ToolWindows;
@@ -55,10 +56,13 @@ namespace VSDocumentReopen
 		/// </summary>
 		public ReopenPackage()
 		{
-			LoggerContext.Current = new LogentriesSerilogLoggerContext();
-			LoggerContext.Current.Logger.Info($"{nameof(ReopenPackage)} started to load. Initializing dependencies...");
-
 			_dte = GetGlobalService(typeof(DTE)) as DTE2 ?? throw new NullReferenceException($"Unable to get service {nameof(DTE2)}");
+
+			//Log context and Serilog enricher
+			VsVersionContext.Current = new VsDteVersionContext(_dte);
+			LoggerContext.Current = new LogentriesSerilogLoggerContext();
+
+			LoggerContext.Current.Logger.Info($"{nameof(ReopenPackage)} started to load. Initializing dependencies...");
 
 			//DI
 			IDocumentHistoryManager documentHistory = new DocumentHistoryManager();
@@ -106,7 +110,8 @@ namespace VSDocumentReopen
 					_removeSomeDocumentsCommandFactory,
 					_clearHistoryCommand,
 					new CachedFileExtensionIconResolver(
-						new VisualStudioFileExtensionIconResolver(imageService)));
+						new VisualStudioFileExtensionIconResolver(imageService)),
+					new JsonIHistoryToolWindowRepositoryFactory(new ServiceStackJsonSerializer()));
 
 				EnforceKeyBinding();
 
@@ -154,10 +159,17 @@ namespace VSDocumentReopen
 
 			void Bind(int commandId, string keyBinding)
 			{
-				var command = myCommands.SingleOrDefault(x => x.ID == commandId);
-				if (command != null)
+				try
 				{
-					command.Bindings = keyBinding;
+					var command = myCommands.SingleOrDefault(x => x.ID == commandId);
+					if (command != null)
+					{
+						command.Bindings = new object[] { keyBinding };
+					}
+				}
+				catch (Exception ex)
+				{
+					LoggerContext.Current.Logger.Error($"Error occurred during Key biding CommandId: {commandId}, HotKey: {keyBinding}.", ex);
 				}
 			}
 		}

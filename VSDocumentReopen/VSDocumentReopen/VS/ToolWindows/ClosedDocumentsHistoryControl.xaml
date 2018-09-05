@@ -3,27 +3,57 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.14.0"
+             Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
+             Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
+             FontFamily="{DynamicResource VsFont.EnvironmentFontFamily}"
+             FontSize="{DynamicResource VsFont.EnvironmentFontSize}"
+             xmlns:sb="clr-namespace:UIControls;assembly=SearchTextBox"
              mc:Ignorable="d"
              d:DesignHeight="250" d:DesignWidth="960"
              Name="DocumentHistoryWindow">
 
     <UserControl.Resources>
-        <Style x:Key="MenuButton">
-            <Setter Property="Control.Background" Value="{x:Null}" />
+        <Style TargetType="Button" x:Key="MenuButton">
             <Setter Property="Control.BorderBrush" Value="{x:Null}" />
             <Setter Property="Control.BorderThickness" Value="0" />
             <Setter Property="Control.Margin" Value="4" />
             <Setter Property="Control.Width" Value="18" />
             <Setter Property="Control.Height" Value="18" />
             <Setter Property="Control.IsEnabled" Value="False" />
-            <!--<Style.Triggers>
-                <Trigger Property="Control.IsEnabled" Value="False">
-                    <Setter Property="Control.Opacity" Value="1.0"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid Background="{TemplateBinding Background}">
+                            <ContentPresenter x:Name="MyContentPresenter" 
+                                Content="{TemplateBinding Content}"
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Control.Background" Value="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}" />
+                    <Setter Property="Control.Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}" />
                 </Trigger>
-            </Style.Triggers>-->
+                <Trigger Property="IsEnabled" Value="True">
+                    <Setter Property="Control.Background" Value="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}" />
+                    <Setter Property="Control.Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}" />
+                </Trigger>
+            </Style.Triggers>
+
+        </Style>
+
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="TextBlock.FontFamily" Value="{DynamicResource VsFont.EnvironmentFontFamily}" />
+            <Setter Property="TextBlock.FontSize" Value="{DynamicResource VsFont.EnvironmentFontSize}" />
+            <Setter Property="Background" Value="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}" />
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}" />
         </Style>
     </UserControl.Resources>
-
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -33,40 +63,18 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Background="#EEEDF2">
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Label Content="Number of items in History:"></Label>
             <Label Name="_numberOfItems" FontWeight="Bold" Content="0"></Label>
             <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-            
-            <TextBox Name="_search" TextChanged="_search_TextChanged" ToolTip="Search in File path or File name"
-                     Width="150" Margin="2" Height="20" VerticalContentAlignment="Center">
-                <TextBox.Style>
-                    <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-                        <Style.Resources>
-                            <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None" >
-                                <VisualBrush.Visual>
-                                    <Label Content="Search..." Foreground="LightGray" Width="150" Background="#EFEFEF" />
-                                </VisualBrush.Visual>
-                            </VisualBrush>
-                        </Style.Resources>
-                        <Style.Triggers>
-                            <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
-                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                            </Trigger>
-                            <Trigger Property="Text" Value="{x:Null}">
-                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                            </Trigger>
-                            <Trigger Property="IsKeyboardFocused" Value="True">
-                                <Setter Property="Background" Value="White" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>
-            </TextBox>
+
+            <sb:SearchTextBox Name="_search" SectionsStyle="NormalStyle" OnSearch="_search_OnSearch" ShowSectionButton="False" ToolTip="Search in File path or File name"
+                     Width="200" Height="22" Margin="2" VerticalContentAlignment="Center"
+                     Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"/>
             <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
             <Button Name="_openSelected" Click="_openSelected_Click" ToolTip="Reopen all selected Document(s)" Style="{StaticResource MenuButton}">
-                <Image Name="_openSelectedImg" Source="/Resources/OpenFile_16x_Gray.png" />
+                <Image Name="_openSelectedImg" Source="/Resources/OpenFile_16x_Gray.png"/>
             </Button>
             <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
@@ -95,6 +103,8 @@
             </ListView.Resources>
             <ListView.Style>
                 <Style TargetType="{x:Type ListView}">
+                    <Setter Property="Background" Value="{DynamicResource VsBrush.EnvironmentBackgroundGradient}" />
+                    <Setter Property="Foreground" Value="{DynamicResource VsBrush.WindowTextKey}" />
                     <Setter Property="ContextMenu" Value="{StaticResource ListViewContextMenu}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ContextMenuVisible}" Value="False">

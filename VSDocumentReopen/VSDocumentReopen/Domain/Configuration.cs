@@ -17,5 +17,7 @@
 		public string RemoveCommandBinding { get; set; }
 
 		public string ShowMoreCommandBinding { get; set; }
+
+		public string ToolWindowSettingsFileName { get; set; }
 	}
 }

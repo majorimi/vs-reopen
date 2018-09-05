@@ -13,10 +13,22 @@ For version history see [release notes](https://github.com/majorimi/vs-reopen/bl
 - Remove any document(s) from history without reopening
 - Clear document history
 
-#### History menu:
+#### Reopen recent document(s) menu features:
 :warning: **Before version 1.4.0 command menus can be found under "Tools" menu!**
+
+- Reopen closed Document(s)
+- Show last 5 closed documents
+- Open History Tool Window
+- Remove last Document(s) from history
+- Clear history
 
 ![Menu](https://raw.githubusercontent.com/majorimi/vs-reopen/master/VSDocumentReopen/VSDocumentReopen/Resources/VsToolsMenu.png "Document history menu")
 
-#### History Tool Windwow:
+#### History Tool Window features:
+
+- Order document history by any column
+- Search in document path and name
+- Reopen any selected document(s)
+- Remove any selected document(s) form history
+- Clear history
 ![Window](https://raw.githubusercontent.com/majorimi/vs-reopen/master/VSDocumentReopen/VSDocumentReopen/Resources/VsToolsWindow.png "Document history Tool Window")

@@ -1,9 +1,11 @@
 ﻿using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace VSDocumentReopen.VS.MessageBox
 {
+	[ExcludeFromCodeCoverage]
 	public sealed class VSMessageBox : IMessageBox
 	{
 		private readonly IServiceProvider _serviceProvider;

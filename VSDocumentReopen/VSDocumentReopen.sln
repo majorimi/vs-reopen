@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSDocumentReopen", "VSDocum
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSDocumentReopen.Test", "VSDocumentReopen.Test\VSDocumentReopen.Test.csproj", "{A828CF9B-34DF-497F-85AC-A3D3E3F18B78}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3rd Party", "3rd Party", "{5A1E6234-E717-4984-97BB-E27DA25704C7}"
+	ProjectSection(SolutionItems) = preProject
+		3rd Party\SearchTextBox.dll = 3rd Party\SearchTextBox.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
