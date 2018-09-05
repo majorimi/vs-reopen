@@ -177,6 +177,9 @@
     <Compile Include="Infrastructure\HistoryCommands\RemoveSomeCommandTest.cs" />
     <Compile Include="Infrastructure\JsonHistoryRepositoryFactoryTest.cs" />
     <Compile Include="Infrastructure\JsonIHistoryToolWindowRepositoryFactoryTest.cs" />
+    <Compile Include="Infrastructure\Logging\DefaultLoggerContextTest.cs" />
+    <Compile Include="Infrastructure\Logging\LoggerContextTest.cs" />
+    <Compile Include="Infrastructure\Logging\NullLoggerTest.cs" />
     <Compile Include="Infrastructure\Version\VsDteVersionContextTest.cs" />
     <Compile Include="Infrastructure\Version\VsDteVersionProviderTest.cs" />
     <Compile Include="Infrastructure\Version\VsVersionContextTest.cs" />
