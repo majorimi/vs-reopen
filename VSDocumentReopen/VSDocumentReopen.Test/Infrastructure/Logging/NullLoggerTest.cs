@@ -27,6 +27,7 @@ namespace VSDocumentReopen.Test.Infrastructure.Logging
 			Assert.Same(logger1, logger2);
 		}
 
+#if DEBUG
 		[Fact]
 		public void ItShould_Call_Debug_WriteLine()
 		{
@@ -68,5 +69,6 @@ namespace VSDocumentReopen.Test.Infrastructure.Logging
 				Assert.Equal(1, listener.WriteLineCount);
 			}
 		}
+#endif
 	}
 }
