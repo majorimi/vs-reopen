@@ -5,6 +5,10 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 
 ## Version history
 
+##### v. 1.4.2
+- Bug fix: History Tool Window search box does not raise search event for Backspace
+- Bud fix: set key bindings throws ArgumentException for localized Visual Studio instances 
+
 ##### v. 1.4.1
 - History Tool Window supports Visual Studio color theme
 - Store search history
