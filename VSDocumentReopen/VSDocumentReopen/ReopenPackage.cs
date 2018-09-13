@@ -182,20 +182,35 @@ namespace VSDocumentReopen
 		/// </summary>
 		private string GetLocalizedGlobalKeyBindings()
 		{
-			var shell = (IVsShell)GetGlobalService(typeof(SVsShell));
+			const string defaultGlobalKey = "Global";
 
-			var rootKey = VSRegistry.RegistryRoot(__VsLocalRegistryType.RegType_Configuration, writable: false);
-			var keyBindingsKey = rootKey.OpenSubKey("KeyBindingTables");
-			var subKey = keyBindingsKey.OpenSubKey("{5efc7975-14bc-11cf-9b2b-00aa00573819}", writable: false);
-			var package = Guid.Parse((string)subKey.GetValue("Package"));
+			try
+			{
+				var shell = GetGlobalService(typeof(SVsShell)) as IVsShell ?? throw new NullReferenceException($"Unable to get service {nameof(SVsShell)}");
 
-			uint globalKeybindingScopeNameId = 13018;
-			string globalKeybindingScopeName;
-			int res = shell.LoadPackageString(ref package, globalKeybindingScopeNameId, out globalKeybindingScopeName);
+				using (var rootKey = VSRegistry.RegistryRoot(__VsLocalRegistryType.RegType_Configuration, writable: false))
+				{
+					using (var keyBindingsKey = rootKey.OpenSubKey("KeyBindingTables"))
+					{
+						using (var subKey = keyBindingsKey.OpenSubKey("{5efc7975-14bc-11cf-9b2b-00aa00573819}", writable: false))
+						{
+							var package = Guid.Parse((string)subKey.GetValue("Package"));
 
-			LoggerContext.Current.Logger.Info($"{nameof(GetLocalizedGlobalKeyBindings)} was executed Global key binding value: {globalKeybindingScopeName}");
+							uint globalKeybindingScopeNameId = 13018;
+							string globalKeybindingScopeName;
+							int res = shell.LoadPackageString(ref package, globalKeybindingScopeNameId, out globalKeybindingScopeName);
 
-			return globalKeybindingScopeName ?? "Global";
+							LoggerContext.Current.Logger.Info($"{nameof(GetLocalizedGlobalKeyBindings)}() was executed Global key binding value: {globalKeybindingScopeName}");
+							return globalKeybindingScopeName ?? defaultGlobalKey;
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				LoggerContext.Current.Logger.Error($"Unexpected error while try to get Global Key binding.", ex);
+				return defaultGlobalKey;
+			}
 		}
 
 		protected override void Dispose(bool disposing)
