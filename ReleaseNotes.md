@@ -5,6 +5,9 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 
 ## Version history
 
+##### v. 1.4.3
+- Emergency update due to key binding issues, add more diagnostics.
+
 ##### v. 1.4.2
 - Bug fix: History Tool Window search box does not raise search event for Backspace
 - Bud fix: set key bindings throws ArgumentException for localized Visual Studio instances 

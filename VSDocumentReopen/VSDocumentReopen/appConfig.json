@@ -5,7 +5,7 @@
   "ToolWindowSettingsFileName": "ToolWindowSettings.json",
   "MaxNumberOfHistoryItemsOnMenu": 5,
   "MaxAllowedHistoryItems": 500,
-  "ReopenCommandBinding": "::Ctrl+Shift+T", //Global scope was removed due to localization issues
+  "ReopenCommandBinding": "::Ctrl+Shift+T",
   "ShowMoreCommandBinding": "::Ctrl+Shift+R",
   "RemoveCommandBinding": "::Ctrl+Shift+D"
 }
