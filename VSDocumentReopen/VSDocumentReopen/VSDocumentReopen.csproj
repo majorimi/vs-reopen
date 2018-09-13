@@ -88,6 +88,7 @@
     <Compile Include="Infrastructure\JsonIHistoryToolWindowRepositoryFactory.cs" />
     <Compile Include="Infrastructure\Logging\DefaultLoggerContext.cs" />
     <Compile Include="Infrastructure\Logging\ILogger.cs" />
+    <Compile Include="Infrastructure\Logging\Logentries\ExtensionVersionEnricher.cs" />
     <Compile Include="Infrastructure\Logging\Logentries\LogentriesSerilogLogger.cs" />
     <Compile Include="Infrastructure\Logging\Logentries\LogentriesSerilogLoggerContext.cs" />
     <Compile Include="Infrastructure\Logging\Logentries\VisualStudioVersionEnricher.cs" />
