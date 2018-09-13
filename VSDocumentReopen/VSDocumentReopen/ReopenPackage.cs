@@ -124,16 +124,18 @@ namespace VSDocumentReopen
 		}
 
 		/// <summary>
-		/// Enforcing the Ctrl+Shift+T because if it was assigned to another command then the default does not work.
+		/// Enforcing all shortcut key bindings because if it was assigned to another command then the default does not work.
 		/// </summary>
 		private void EnforceKeyBinding()
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
 
+			var globalKeyBindingValue = GetLocalizedGlobalKeyBindings();
+
 			var commandsGuid = ReopenClosedDocumentsCommand.CommandSet.ToString("B").ToUpper();
-			var reopenCommandBinding = ConfigurationManager.Current.Config.ReopenCommandBinding;
-			var removeCommandBinding = ConfigurationManager.Current.Config.RemoveCommandBinding;
-			var showMoreCommandBinding = ConfigurationManager.Current.Config.ShowMoreCommandBinding;
+			var reopenCommandBinding = globalKeyBindingValue + ConfigurationManager.Current.Config.ReopenCommandBinding;
+			var removeCommandBinding = globalKeyBindingValue + ConfigurationManager.Current.Config.RemoveCommandBinding;
+			var showMoreCommandBinding = globalKeyBindingValue + ConfigurationManager.Current.Config.ShowMoreCommandBinding;
 
 			var myCommands = new List<Command>();
 			foreach (Command command in _dte.Commands)
@@ -172,6 +174,28 @@ namespace VSDocumentReopen
 					LoggerContext.Current.Logger.Error($"Error occurred during Key biding CommandId: {commandId}, HotKey: {keyBinding}.", ex);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Read localized "Global" keyword
+		/// https://github.com/jaredpar/VsVim/blob/master/Src/VsVimShared/Implementation/Misc/ScopeData.cs
+		/// </summary>
+		private string GetLocalizedGlobalKeyBindings()
+		{
+			var shell = (IVsShell)GetGlobalService(typeof(SVsShell));
+
+			var rootKey = VSRegistry.RegistryRoot(__VsLocalRegistryType.RegType_Configuration, writable: false);
+			var keyBindingsKey = rootKey.OpenSubKey("KeyBindingTables");
+			var subKey = keyBindingsKey.OpenSubKey("{5efc7975-14bc-11cf-9b2b-00aa00573819}", writable: false);
+			var package = Guid.Parse((string)subKey.GetValue("Package"));
+
+			uint globalKeybindingScopeNameId = 13018;
+			string globalKeybindingScopeName;
+			int res = shell.LoadPackageString(ref package, globalKeybindingScopeNameId, out globalKeybindingScopeName);
+
+			LoggerContext.Current.Logger.Info($"{nameof(GetLocalizedGlobalKeyBindings)} was executed Global key binding value: {globalKeybindingScopeName}");
+
+			return globalKeybindingScopeName ?? "Global";
 		}
 
 		protected override void Dispose(bool disposing)
