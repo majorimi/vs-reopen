@@ -31,4 +31,5 @@ For version history see [release notes](https://github.com/majorimi/vs-reopen/bl
 - Reopen any selected document(s)
 - Remove any selected document(s) form history
 - Clear history
+
 ![Window](https://raw.githubusercontent.com/majorimi/vs-reopen/master/VSDocumentReopen/VSDocumentReopen/Resources/VsToolsWindow.png "Document history Tool Window")
