@@ -88,17 +88,24 @@
         </StackPanel>
 
         <ListView Margin="3" Name="_listView" Grid.Row="1"
-                VerticalAlignment="Stretch" 
+                VerticalAlignment="Stretch"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                ScrollViewer.CanContentScroll="True" 
+                ScrollViewer.CanContentScroll="True"
                 SelectionMode="Extended"
                 MouseDoubleClick="_listView_OnMouseDoubleClick"
                 SelectionChanged="_listView_SelectionChanged"
                 KeyUp="_listView_OnKeyUp">
             <ListView.Resources>
-                <!--<BooleanToVisibilityConverter x:Key="BoolToVisConverter" />-->
                 <ContextMenu x:Key="ListViewContextMenu" >
                     <MenuItem Header="Remove sorting" Click="_listViewRemoveSort_Click" />
+                    <MenuItem Name="_showHideColumnsMenu" ItemsSource="{Binding Path=_columnMenuItems}" Header="Show/Hide columns" Click="_listViewShowColumns_Click">
+                        <!--<MenuItem x:Uid="1" IsCheckable="True" IsChecked="True" Header="Index"/>
+                        <MenuItem x:Uid="2" IsCheckable="True" IsChecked="True" Header="Full path"/>
+                        <MenuItem x:Uid="3" IsCheckable="True" IsChecked="True" Header="File name"/>
+                        <MenuItem x:Uid="4" IsCheckable="True" IsChecked="True" Header="Type"/>
+                        <MenuItem x:Uid="5" IsCheckable="True" IsChecked="True" Header="Closed at"/>
+                        <MenuItem x:Uid="6" IsCheckable="True" IsChecked="True" Header="Exists"/>-->
+                    </MenuItem>
                 </ContextMenu>
             </ListView.Resources>
             <ListView.Style>
@@ -109,39 +116,34 @@
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ContextMenuVisible}" Value="False">
                             <Setter Property="ContextMenu" Value="{x:Null}" />
-                            <!--<Setter Property="Visibility" Value="Hidden"/>-->
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </ListView.Style>
             <ListView.View>
-                <GridView AllowsColumnReorder="False">
+                <GridView AllowsColumnReorder="True">
                     <GridViewColumn Width="35" DisplayMemberBinding="{Binding Index}">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader HorizontalContentAlignment="Left" Tag="Index" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged">
-                                <TextBlock Text=" #" MinWidth="35"/>
-                            </GridViewColumnHeader>
+                            <GridViewColumnHeader Content=" #" MinWidth="35" HorizontalContentAlignment="Left" 
+                                                  Tag="Index" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged" />
                         </GridViewColumn.Header>
                     </GridViewColumn>
                     <GridViewColumn Width="400" DisplayMemberBinding="{Binding Path=ClosedDocument.FullName}">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader HorizontalContentAlignment="Left" Tag="ClosedDocument.FullName" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged">
-                                <TextBlock Text=" File path" MinWidth="200" />
-                            </GridViewColumnHeader>
+                            <GridViewColumnHeader Content=" File path" MinWidth="200" HorizontalContentAlignment="Left"
+                                                  Tag="ClosedDocument.FullName" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged" />
                         </GridViewColumn.Header>
                     </GridViewColumn>
                     <GridViewColumn Width="200" DisplayMemberBinding="{Binding Path=ClosedDocument.Name}">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader HorizontalContentAlignment="Left" Tag="ClosedDocument.Name" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged">
-                                <TextBlock Text=" File name" MinWidth="100"/>
-                            </GridViewColumnHeader>
+                            <GridViewColumnHeader Content=" File name" MinWidth="100" HorizontalContentAlignment="Left" 
+                                                  Tag="ClosedDocument.Name" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged" />
                         </GridViewColumn.Header>
                     </GridViewColumn>
                     <GridViewColumn Width="55">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader HorizontalContentAlignment="Left" Tag="ClosedDocument.Language" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged">
-                                <TextBlock Text=" Type" MinWidth="50" />
-                            </GridViewColumnHeader>
+                            <GridViewColumnHeader Content=" Type" MinWidth="50" HorizontalContentAlignment="Left" 
+                                                  Tag="ClosedDocument.Language" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged" />
                         </GridViewColumn.Header>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -153,16 +155,14 @@
                     </GridViewColumn>
                     <GridViewColumn Width="160" DisplayMemberBinding="{Binding Path=ClosedDocument.ClosedAt}">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader HorizontalContentAlignment="Left" Tag="ClosedDocument.ClosedAt" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged">
-                                <TextBlock Text=" Closed at" MinWidth="100" />
-                            </GridViewColumnHeader>
+                            <GridViewColumnHeader Content=" Closed at" MinWidth="100" HorizontalContentAlignment="Left" 
+                                                  Tag="ClosedDocument.ClosedAt" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged" />
                         </GridViewColumn.Header>
                     </GridViewColumn>
                     <GridViewColumn Width="60">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader HorizontalContentAlignment="Left" Tag="IsExistsTooltip" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged">
-                                <TextBlock Text=" Exists" MinWidth="55" />
-                            </GridViewColumnHeader>
+                            <GridViewColumnHeader Content=" Exists" MinWidth="55" HorizontalContentAlignment="Left" 
+                                                  Tag="IsExistsTooltip" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged" />
                         </GridViewColumn.Header>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>

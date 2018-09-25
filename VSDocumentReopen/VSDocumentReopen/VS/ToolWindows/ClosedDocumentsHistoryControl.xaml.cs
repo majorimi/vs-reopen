@@ -20,6 +20,16 @@ namespace VSDocumentReopen.VS.ToolWindows
 	/// </summary>
 	public partial class ClosedDocumentsHistoryControl : UserControl, IDisposable
 	{
+		private static readonly IEnumerable<string> _columnMenuItems = new List<string>()
+		{
+			"Index",
+			"Full path",
+			"File name",
+			"Type",
+			"Closed at",
+			"Exists",
+		};
+
 		private static readonly Dictionary<string, BitmapSource> _fileTypeImages = new Dictionary<string, BitmapSource>();
 
 		private readonly Func<IClosedDocument, bool> GetFullHistory = _ => true;
@@ -77,6 +87,12 @@ namespace VSDocumentReopen.VS.ToolWindows
 
 			_listView.Focus();
 			LoadSettings();
+		}
+
+		private void AddContextMenu()
+		{
+			
+			//_showHideColumnsMenu.Clear();
 		}
 
 		private void DocumentHistoryChanged(object sender, EventArgs e)

@@ -115,6 +115,17 @@ namespace VSDocumentReopen.VS.ToolWindows
 			}
 		}
 
+		private void _listViewShowColumns_Click(object sender, RoutedEventArgs e)
+		{
+			var menu = e?.OriginalSource as MenuItem;
+			if (menu is null)
+			{
+				return;
+			}
+
+
+		}
+
 
 		private void HandleOperatons(IHistoryCommandFactory historyCommandFactory)
 		{
