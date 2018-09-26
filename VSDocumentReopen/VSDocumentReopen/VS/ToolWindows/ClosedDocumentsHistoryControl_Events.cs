@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -115,6 +116,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 			}
 		}
 
+		private IList<GridViewColumn> _hiddenHeaders = new List<GridViewColumn>();
 		private void _listViewShowColumns_Click(object sender, RoutedEventArgs e)
 		{
 			var menu = e?.OriginalSource as MenuItem;
@@ -123,7 +125,26 @@ namespace VSDocumentReopen.VS.ToolWindows
 				return;
 			}
 
-
+			if (!menu.IsChecked) //remove
+			{
+				var column = _listViewContect.Columns.SingleOrDefault(x => (x.Header as GridViewColumnHeader)?.Content?.ToString().Trim() == menu.Header.ToString());
+				if (column is null)
+				{
+					return;
+				}
+				_listViewContect.Columns.Remove(column);
+				_hiddenHeaders.Add(column);
+			}
+			else //add
+			{
+				var column = _hiddenHeaders.SingleOrDefault(x => (x.Header as GridViewColumnHeader)?.Content?.ToString().Trim() == menu.Header.ToString());
+				if (column is null)
+				{
+					return;
+				}
+				_listViewContect.Columns.Insert(int.Parse(menu.Uid), column);
+				_hiddenHeaders.Remove(column);
+			}
 		}
 
 

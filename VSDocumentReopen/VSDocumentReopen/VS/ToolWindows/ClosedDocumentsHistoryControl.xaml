@@ -96,32 +96,32 @@
                 SelectionChanged="_listView_SelectionChanged"
                 KeyUp="_listView_OnKeyUp">
             <ListView.Resources>
-                <ContextMenu x:Key="ListViewContextMenu" >
+                <!--<ContextMenu x:Key="ListViewContextMenu" >
                     <MenuItem Header="Remove sorting" Click="_listViewRemoveSort_Click" />
                     <MenuItem Name="_showHideColumnsMenu" ItemsSource="{Binding Path=_columnMenuItems}" Header="Show/Hide columns" Click="_listViewShowColumns_Click">
-                        <!--<MenuItem x:Uid="1" IsCheckable="True" IsChecked="True" Header="Index"/>
+                        --><!--<MenuItem x:Uid="1" IsCheckable="True" IsChecked="True" Header="Index"/>
                         <MenuItem x:Uid="2" IsCheckable="True" IsChecked="True" Header="Full path"/>
                         <MenuItem x:Uid="3" IsCheckable="True" IsChecked="True" Header="File name"/>
                         <MenuItem x:Uid="4" IsCheckable="True" IsChecked="True" Header="Type"/>
                         <MenuItem x:Uid="5" IsCheckable="True" IsChecked="True" Header="Closed at"/>
-                        <MenuItem x:Uid="6" IsCheckable="True" IsChecked="True" Header="Exists"/>-->
+                        <MenuItem x:Uid="6" IsCheckable="True" IsChecked="True" Header="Exists"/>--><!--
                     </MenuItem>
-                </ContextMenu>
+                </ContextMenu>-->
             </ListView.Resources>
             <ListView.Style>
                 <Style TargetType="{x:Type ListView}">
                     <Setter Property="Background" Value="{DynamicResource VsBrush.EnvironmentBackgroundGradient}" />
                     <Setter Property="Foreground" Value="{DynamicResource VsBrush.WindowTextKey}" />
-                    <Setter Property="ContextMenu" Value="{StaticResource ListViewContextMenu}" />
+                    <!--<Setter Property="ContextMenu" Value="{StaticResource ListViewContextMenu}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ContextMenuVisible}" Value="False">
                             <Setter Property="ContextMenu" Value="{x:Null}" />
                         </DataTrigger>
-                    </Style.Triggers>
+                    </Style.Triggers>-->
                 </Style>
             </ListView.Style>
             <ListView.View>
-                <GridView AllowsColumnReorder="True">
+                <GridView x:Name="_listViewContect" AllowsColumnReorder="True">
                     <GridViewColumn Width="35" DisplayMemberBinding="{Binding Index}">
                         <GridViewColumn.Header>
                             <GridViewColumnHeader Content=" #" MinWidth="35" HorizontalContentAlignment="Left" 

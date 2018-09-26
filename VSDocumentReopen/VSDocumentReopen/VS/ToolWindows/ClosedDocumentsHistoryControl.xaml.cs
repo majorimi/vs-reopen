@@ -20,16 +20,6 @@ namespace VSDocumentReopen.VS.ToolWindows
 	/// </summary>
 	public partial class ClosedDocumentsHistoryControl : UserControl, IDisposable
 	{
-		private static readonly IEnumerable<string> _columnMenuItems = new List<string>()
-		{
-			"Index",
-			"Full path",
-			"File name",
-			"Type",
-			"Closed at",
-			"Exists",
-		};
-
 		private static readonly Dictionary<string, BitmapSource> _fileTypeImages = new Dictionary<string, BitmapSource>();
 
 		private readonly Func<IClosedDocument, bool> GetFullHistory = _ => true;
@@ -87,12 +77,49 @@ namespace VSDocumentReopen.VS.ToolWindows
 
 			_listView.Focus();
 			LoadSettings();
+
+			AddContextMenu();
 		}
 
 		private void AddContextMenu()
 		{
+			var contextMenu = new ContextMenu();
+
+			var removeSortingMenu = new MenuItem()
+			{
+				Uid = "_removeSortingMenu",
+				Header = "Remove sorting",
+				IsCheckable = false,
+			};
+			removeSortingMenu.Click += _listViewRemoveSort_Click;
+
+			var hideShowColumnMenu = new MenuItem()
+			{
+				Uid = "_showHideColumnsMenu",
+				Header = "Show/Hide columns",
+				IsCheckable = false,
+			};
+			hideShowColumnMenu.Click += _listViewShowColumns_Click;
+
 			
-			//_showHideColumnsMenu.Clear();
+			int index = 0;
+			foreach (var item in _listViewContect.Columns)
+			{
+				var menu = new MenuItem()
+				{
+					Uid = index++.ToString(),
+					Header = (item.Header as GridViewColumnHeader)?.Content?.ToString().Trim(),
+					IsCheckable = true,
+					IsChecked = true //TODO: from settings
+				};
+				hideShowColumnMenu.Items.Add(menu);
+			}
+
+
+			contextMenu.Items.Add(removeSortingMenu);
+			contextMenu.Items.Add(hideShowColumnMenu);
+
+			_listView.ContextMenu = contextMenu;
 		}
 
 		private void DocumentHistoryChanged(object sender, EventArgs e)
