@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Domain\Configuration.cs" />
     <Compile Include="Domain\Documents\ClosedDocumentComparer.cs" />
+    <Compile Include="Domain\HistoryControl\ColumnInfo.cs" />
     <Compile Include="Domain\HistoryControl\HistoryControlData.cs" />
     <Compile Include="Domain\IConfiguration.cs" />
     <Compile Include="Domain\SolutionInfo.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="VS\MessageBox\IMessageBox.cs" />
     <Compile Include="VS\MessageBox\VSMessageBox.cs" />
     <Compile Include="VS\ToolWindows\ClosedDocumentsHistoryControl_Types.cs" />
+    <Compile Include="VS\ToolWindows\GridViewExtensions.cs" />
     <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ButtonDisabledState.cs" />
     <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ButtonEnabledState.cs" />
     <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ImageButtonState.cs" />
