@@ -23,7 +23,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 		private static readonly Dictionary<string, BitmapSource> _fileTypeImages = new Dictionary<string, BitmapSource>();
 
 		private readonly IDictionary<int, string> _columnHeaders;
-		private readonly IList<GridViewColumn> _hiddenHeaders = new List<GridViewColumn>();
+		private readonly IList<GridViewColumn> _hiddenColumns = new List<GridViewColumn>();
 		private readonly Func<IClosedDocument, bool> GetFullHistory = _ => true;
 
 		private readonly IDocumentHistoryQueries _documentHistoryQueries;
@@ -146,8 +146,17 @@ namespace VSDocumentReopen.VS.ToolWindows
 				hideShowColumnMenu.Items.Add(menu);
 			}
 
+			var resetShowColumnMenu = new MenuItem()
+			{
+				Uid = "_resetShowColumnMenu",
+				Header = "Reset column customization",
+				IsCheckable = false,
+			};
+			resetShowColumnMenu.Click += _resetShowColumnMenu_Click;
+
 			contextMenu.Items.Add(removeSortingMenu);
 			contextMenu.Items.Add(hideShowColumnMenu);
+			contextMenu.Items.Add(resetShowColumnMenu);
 
 			_listView.ContextMenu = contextMenu;
 		}
@@ -182,7 +191,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 			return settings;
 		}
 
-		public void Dispose()
+		private void SaveCustomization()
 		{
 			var settingsRepository = _historyToolWindowRepositoryFactory.Create();
 
@@ -206,6 +215,11 @@ namespace VSDocumentReopen.VS.ToolWindows
 			};
 
 			settingsRepository?.SaveSettings(settings);
+		}
+
+		public void Dispose()
+		{
+			SaveCustomization();
 		}
 	}
 }
