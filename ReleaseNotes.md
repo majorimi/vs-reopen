@@ -5,6 +5,16 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 
 ## Version history
 
+##### v. 1.4.4
+- Tool Window issue fixes:
+    - #11: Tool bar icons vanish if the tool window gets too narrow
+    - Column reorder does not work
+- Tool Window columns:
+  - Can be show/hide form context menu
+  - Order and size customizations saved and restored
+  - Reset customization from context menu
+- Memory usage diagnostics 
+
 ##### v. 1.4.3
 - Emergency update due to key binding issues, add more diagnostics.
 
