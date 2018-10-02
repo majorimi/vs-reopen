@@ -105,7 +105,7 @@
                 <GridView x:Name="_listViewContect" AllowsColumnReorder="True">
                     <GridViewColumn Width="35" DisplayMemberBinding="{Binding Index}">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader Content=" #" MinWidth="35" HorizontalContentAlignment="Left" 
+                            <GridViewColumnHeader Content=" #" MinWidth="35" HorizontalContentAlignment="Left"
                                                   Tag="Index" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged" />
                         </GridViewColumn.Header>
                     </GridViewColumn>

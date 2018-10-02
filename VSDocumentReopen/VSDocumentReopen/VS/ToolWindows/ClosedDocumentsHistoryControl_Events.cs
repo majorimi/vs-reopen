@@ -159,7 +159,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 
 			if (width <= 0)
 			{
-				width = column.Width;
+				width = (column.Header as GridViewColumnHeader).MinWidth;
 			}
 
 			_listViewContect.Columns.Remove(column);

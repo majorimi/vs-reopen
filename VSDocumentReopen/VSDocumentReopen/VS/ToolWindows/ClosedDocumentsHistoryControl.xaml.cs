@@ -78,13 +78,13 @@ namespace VSDocumentReopen.VS.ToolWindows
 			UpdateHistoryView(GetFullHistory);
 
 			_listView.Focus();
-			var settings = LoadSettings();
+			var customizationSettings = LoadCustomizationSettings();
 
 			_columnHeaders = Enumerable.Range(0, _listViewContect.Columns.Count).ToDictionary(i => i++,
 				i => _listViewContect.Columns[i].GetGridViewHeaderText());
 
-			AddContextMenu(settings);
-			HandleColumnsStatus(settings);
+			AddContextMenu(customizationSettings);
+			HandleColumnsStatus(customizationSettings);
 		}
 
 		private void HandleColumnsStatus(HistoryControlData historyControlData)
@@ -181,7 +181,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 			return _fileTypeImages[extension];
 		}
 
-		private HistoryControlData LoadSettings()
+		private HistoryControlData LoadCustomizationSettings()
 		{
 			var settingsRepository = _historyToolWindowRepositoryFactory.Create();
 			var settings = settingsRepository?.GetSettings();
@@ -191,7 +191,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 			return settings;
 		}
 
-		private void SaveCustomization()
+		private void SaveCustomizationSettings()
 		{
 			var settingsRepository = _historyToolWindowRepositoryFactory.Create();
 
@@ -219,7 +219,7 @@ namespace VSDocumentReopen.VS.ToolWindows
 
 		public void Dispose()
 		{
-			SaveCustomization();
+			SaveCustomizationSettings();
 		}
 	}
 }
