@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Domain\Configuration.cs" />
     <Compile Include="Domain\Documents\ClosedDocumentComparer.cs" />
+    <Compile Include="Domain\HistoryControl\ColumnInfo.cs" />
     <Compile Include="Domain\HistoryControl\HistoryControlData.cs" />
     <Compile Include="Domain\IConfiguration.cs" />
     <Compile Include="Domain\SolutionInfo.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Infrastructure\Logging\Logentries\ExtensionVersionEnricher.cs" />
     <Compile Include="Infrastructure\Logging\Logentries\LogentriesSerilogLogger.cs" />
     <Compile Include="Infrastructure\Logging\Logentries\LogentriesSerilogLoggerContext.cs" />
+    <Compile Include="Infrastructure\Logging\Logentries\MemoryInfoEnricher.cs" />
     <Compile Include="Infrastructure\Logging\Logentries\VisualStudioVersionEnricher.cs" />
     <Compile Include="Infrastructure\Logging\LoggerContext.cs" />
     <Compile Include="Infrastructure\Logging\NullLogger.cs" />
@@ -109,6 +111,7 @@
     <Compile Include="VS\MessageBox\IMessageBox.cs" />
     <Compile Include="VS\MessageBox\VSMessageBox.cs" />
     <Compile Include="VS\ToolWindows\ClosedDocumentsHistoryControl_Types.cs" />
+    <Compile Include="VS\ToolWindows\GridViewExtensions.cs" />
     <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ButtonDisabledState.cs" />
     <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ButtonEnabledState.cs" />
     <Compile Include="VS\ToolWindows\IconHandling\ButtonStates\ImageButtonState.cs" />

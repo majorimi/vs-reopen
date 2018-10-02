@@ -115,6 +115,72 @@ namespace VSDocumentReopen.VS.ToolWindows
 			}
 		}
 
+		private void _listViewShowColumns_Click(object sender, RoutedEventArgs e)
+		{
+			var menu = e?.OriginalSource as MenuItem;
+			if (menu is null)
+			{
+				return;
+			}
+
+			if (!menu.IsChecked) //remove
+			{
+				HideColumn(menu.Header.ToString());
+			}
+			else //add
+			{
+				var column = _hiddenColumns.SingleOrDefault(x => x.GetGridViewHeaderText() == menu.Header.ToString());
+				if (column is null)
+				{
+					return;
+				}
+				_listViewContect.Columns.Insert(int.Parse(menu.Uid), column);
+				_hiddenColumns.Remove(column);
+			}
+		}
+		private void HideColumn(string header)
+		{
+			var column = _listViewContect.Columns.SingleOrDefault(x => x.GetGridViewHeaderText() == header);
+			if (column is null)
+			{
+				return;
+			}
+
+			_listViewContect.Columns.Remove(column);
+			_hiddenColumns.Add(column);
+		}
+		private void SetColumnData(string header, int index, double width = 0)
+		{
+			var column = _listViewContect.Columns.SingleOrDefault(x => x.GetGridViewHeaderText() == header);
+			if (column is null)
+			{
+				return;
+			}
+
+			if (width <= 0)
+			{
+				width = (column.Header as GridViewColumnHeader).MinWidth;
+			}
+
+			_listViewContect.Columns.Remove(column);
+			_listViewContect.Columns.Insert(index, column);
+
+			column.Width = width <= 35 ? 35 : width;
+		}
+
+		private void _resetShowColumnMenu_Click(object sender, RoutedEventArgs e)
+		{
+			foreach (var item in _hiddenColumns)
+			{
+				_listViewContect.Columns.Add(item);
+			}
+			_hiddenColumns.Clear();
+
+			foreach (var item in _columnHeaders)
+			{
+				SetColumnData(item.Value, item.Key);
+			}
+		}
 
 		private void HandleOperatons(IHistoryCommandFactory historyCommandFactory)
 		{

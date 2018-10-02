@@ -16,6 +16,8 @@ namespace VSDocumentReopen.Infrastructure.Logging.Logentries
 			.Enrich.WithExceptionDetails()
 			.Enrich.With<VisualStudioVersionEnricher>()
 			.Enrich.With<ExtensionVersionEnricher>()
+			.Enrich.With<MemoryInfoEnricher>()
+			.WriteTo.Logentries("", new JsonFormatter(renderMessage: true))
 			.CreateLogger();
 
 		public void Trace(string message)

@@ -63,85 +63,69 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <Label Content="Number of items in History:"></Label>
-            <Label Name="_numberOfItems" FontWeight="Bold" Content="0"></Label>
-            <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+        <ToolBar Grid.Row="0" Height="32" Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}">
+            <ToolBar.Items>
+                <Label Content="Number of items in History:"></Label>
+                <Label Name="_numberOfItems" FontWeight="Bold" Width="40" Content="0"></Label>
+                <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
-            <sb:SearchTextBox Name="_search" SectionsStyle="NormalStyle" OnSearch="_search_OnSearch" ShowSectionButton="False" ToolTip="Search in File path or File name"
-                     Width="200" Height="22" Margin="2" VerticalContentAlignment="Center"
+                <sb:SearchTextBox Name="_search" SectionsStyle="NormalStyle" OnSearch="_search_OnSearch" ShowSectionButton="False" ToolTip="Search in File path or File name"
+                     Width="200" Height="21" Margin="2,0" VerticalContentAlignment="Center"
                      Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"/>
-            <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
-            <Button Name="_openSelected" Click="_openSelected_Click" ToolTip="Reopen all selected Document(s)" Style="{StaticResource MenuButton}">
-                <Image Name="_openSelectedImg" Source="/Resources/OpenFile_16x_Gray.png"/>
-            </Button>
-            <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                <Button Name="_openSelected" Click="_openSelected_Click" ToolTip="Reopen all selected Document(s)" Style="{StaticResource MenuButton}">
+                    <Image Name="_openSelectedImg" Source="/Resources/OpenFile_16x_Gray.png"/>
+                </Button>
+                <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
-            <Button Name="_removeSelected" Click="_removeSelected_Click" ToolTip="Remove selected Document(s) from History" Style="{StaticResource MenuButton}">
-                <Image Name="_removeSelectedImg" Source="/Resources/RemoveGuide_16x_Gray.png" />
-            </Button>
-            <Button Name="_clearAll" Click="_clearAll_Click" ToolTip="Clear History" Style="{StaticResource MenuButton}">
-                <Image Name="_clearAllImg" Source="/Resources/ClearWindowContent_16x_Gray.png" />
-            </Button>
-
-        </StackPanel>
+                <Button Name="_removeSelected" Click="_removeSelected_Click" ToolTip="Remove selected Document(s) from History" Style="{StaticResource MenuButton}">
+                    <Image Name="_removeSelectedImg" Source="/Resources/RemoveGuide_16x_Gray.png" />
+                </Button>
+                <Button Name="_clearAll" Click="_clearAll_Click" ToolTip="Clear History" Style="{StaticResource MenuButton}">
+                    <Image Name="_clearAllImg" Source="/Resources/ClearWindowContent_16x_Gray.png" />
+                </Button>
+            </ToolBar.Items>
+        </ToolBar>
 
         <ListView Margin="3" Name="_listView" Grid.Row="1"
-                VerticalAlignment="Stretch" 
+                VerticalAlignment="Stretch"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                ScrollViewer.CanContentScroll="True" 
+                ScrollViewer.CanContentScroll="True"
                 SelectionMode="Extended"
                 MouseDoubleClick="_listView_OnMouseDoubleClick"
                 SelectionChanged="_listView_SelectionChanged"
                 KeyUp="_listView_OnKeyUp">
-            <ListView.Resources>
-                <!--<BooleanToVisibilityConverter x:Key="BoolToVisConverter" />-->
-                <ContextMenu x:Key="ListViewContextMenu" >
-                    <MenuItem Header="Remove sorting" Click="_listViewRemoveSort_Click" />
-                </ContextMenu>
-            </ListView.Resources>
             <ListView.Style>
                 <Style TargetType="{x:Type ListView}">
                     <Setter Property="Background" Value="{DynamicResource VsBrush.EnvironmentBackgroundGradient}" />
                     <Setter Property="Foreground" Value="{DynamicResource VsBrush.WindowTextKey}" />
-                    <Setter Property="ContextMenu" Value="{StaticResource ListViewContextMenu}" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ContextMenuVisible}" Value="False">
-                            <Setter Property="ContextMenu" Value="{x:Null}" />
-                            <!--<Setter Property="Visibility" Value="Hidden"/>-->
-                        </DataTrigger>
-                    </Style.Triggers>
                 </Style>
             </ListView.Style>
             <ListView.View>
-                <GridView AllowsColumnReorder="False">
+                <GridView x:Name="_listViewContect" AllowsColumnReorder="True">
                     <GridViewColumn Width="35" DisplayMemberBinding="{Binding Index}">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader HorizontalContentAlignment="Left" Tag="Index" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged">
-                                <TextBlock Text=" #" MinWidth="35"/>
-                            </GridViewColumnHeader>
+                            <GridViewColumnHeader Content=" #" MinWidth="35" HorizontalContentAlignment="Left"
+                                                  Tag="Index" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged" />
                         </GridViewColumn.Header>
                     </GridViewColumn>
                     <GridViewColumn Width="400" DisplayMemberBinding="{Binding Path=ClosedDocument.FullName}">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader HorizontalContentAlignment="Left" Tag="ClosedDocument.FullName" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged">
-                                <TextBlock Text=" File path" MinWidth="200" />
-                            </GridViewColumnHeader>
+                            <GridViewColumnHeader Content=" File path" MinWidth="200" HorizontalContentAlignment="Left"
+                                                  Tag="ClosedDocument.FullName" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged" />
                         </GridViewColumn.Header>
                     </GridViewColumn>
                     <GridViewColumn Width="200" DisplayMemberBinding="{Binding Path=ClosedDocument.Name}">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader HorizontalContentAlignment="Left" Tag="ClosedDocument.Name" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged">
-                                <TextBlock Text=" File name" MinWidth="100"/>
-                            </GridViewColumnHeader>
+                            <GridViewColumnHeader Content=" File name" MinWidth="100" HorizontalContentAlignment="Left" 
+                                                  Tag="ClosedDocument.Name" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged" />
                         </GridViewColumn.Header>
                     </GridViewColumn>
                     <GridViewColumn Width="55">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader HorizontalContentAlignment="Left" Tag="ClosedDocument.Language" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged">
-                                <TextBlock Text=" Type" MinWidth="50" />
-                            </GridViewColumnHeader>
+                            <GridViewColumnHeader Content=" Type" MinWidth="50" HorizontalContentAlignment="Left" 
+                                                  Tag="ClosedDocument.Language" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged" />
                         </GridViewColumn.Header>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -153,16 +137,14 @@
                     </GridViewColumn>
                     <GridViewColumn Width="160" DisplayMemberBinding="{Binding Path=ClosedDocument.ClosedAt}">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader HorizontalContentAlignment="Left" Tag="ClosedDocument.ClosedAt" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged">
-                                <TextBlock Text=" Closed at" MinWidth="100" />
-                            </GridViewColumnHeader>
+                            <GridViewColumnHeader Content=" Closed at" MinWidth="100" HorizontalContentAlignment="Left" 
+                                                  Tag="ClosedDocument.ClosedAt" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged" />
                         </GridViewColumn.Header>
                     </GridViewColumn>
                     <GridViewColumn Width="60">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader HorizontalContentAlignment="Left" Tag="IsExistsTooltip" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged">
-                                <TextBlock Text=" Exists" MinWidth="55" />
-                            </GridViewColumnHeader>
+                            <GridViewColumnHeader Content=" Exists" MinWidth="55" HorizontalContentAlignment="Left" 
+                                                  Tag="IsExistsTooltip" Click="_listViewColumnHeader_Click" SizeChanged="_listViewColumnHeader_SizeChanged" />
                         </GridViewColumn.Header>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>

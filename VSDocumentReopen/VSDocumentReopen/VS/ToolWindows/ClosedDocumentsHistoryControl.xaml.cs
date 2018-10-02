@@ -22,6 +22,8 @@ namespace VSDocumentReopen.VS.ToolWindows
 	{
 		private static readonly Dictionary<string, BitmapSource> _fileTypeImages = new Dictionary<string, BitmapSource>();
 
+		private readonly IDictionary<int, string> _columnHeaders;
+		private readonly IList<GridViewColumn> _hiddenColumns = new List<GridViewColumn>();
 		private readonly Func<IClosedDocument, bool> GetFullHistory = _ => true;
 
 		private readonly IDocumentHistoryQueries _documentHistoryQueries;
@@ -76,7 +78,87 @@ namespace VSDocumentReopen.VS.ToolWindows
 			UpdateHistoryView(GetFullHistory);
 
 			_listView.Focus();
-			LoadSettings();
+			var customizationSettings = LoadCustomizationSettings();
+
+			_columnHeaders = Enumerable.Range(0, _listViewContect.Columns.Count).ToDictionary(i => i++,
+				i => _listViewContect.Columns[i].GetGridViewHeaderText());
+
+			AddContextMenu(customizationSettings);
+			HandleColumnsStatus(customizationSettings);
+		}
+
+		private void HandleColumnsStatus(HistoryControlData historyControlData)
+		{
+			if(historyControlData?.ColumnsInfo?.Any() ?? false)
+			{
+				var hiddenColumns = historyControlData.ColumnsInfo.Where(x => !x.Visible);
+				foreach (var item in hiddenColumns)
+				{
+					if (_columnHeaders.ContainsKey(item.Id))
+					{
+						HideColumn(_columnHeaders[item.Id]);
+					}
+				}
+
+				var visibleColumns = historyControlData.ColumnsInfo.Except(hiddenColumns).OrderBy(o => o.Position);
+				foreach (var item in visibleColumns)
+				{
+					if (_columnHeaders.ContainsKey(item.Id))
+					{
+						SetColumnData(_columnHeaders[item.Id], item.Position, item.Width);
+					}
+				}
+			}
+		}
+
+		private void AddContextMenu(HistoryControlData historyControlData)
+		{
+			var contextMenu = new ContextMenu();
+
+			var removeSortingMenu = new MenuItem()
+			{
+				Uid = "_removeSortingMenu",
+				Header = "Remove sorting",
+				IsCheckable = false,
+			};
+			removeSortingMenu.Click += _listViewRemoveSort_Click;
+
+			var hideShowColumnMenu = new MenuItem()
+			{
+				Uid = "_showHideColumnsMenu",
+				Header = "Show/Hide columns",
+				IsCheckable = false,
+			};
+			hideShowColumnMenu.Click += _listViewShowColumns_Click;
+
+			int index = 0;
+			foreach (var item in _listViewContect.Columns)
+			{
+				var setting = historyControlData?.ColumnsInfo?.SingleOrDefault(x => x.Id == index);
+
+				var menu = new MenuItem()
+				{
+					Uid = index++.ToString(),
+					Header = item.GetGridViewHeaderText(),
+					IsCheckable = true,
+					IsChecked = setting?.Visible ?? true
+				};
+				hideShowColumnMenu.Items.Add(menu);
+			}
+
+			var resetShowColumnMenu = new MenuItem()
+			{
+				Uid = "_resetShowColumnMenu",
+				Header = "Reset column customization",
+				IsCheckable = false,
+			};
+			resetShowColumnMenu.Click += _resetShowColumnMenu_Click;
+
+			contextMenu.Items.Add(removeSortingMenu);
+			contextMenu.Items.Add(hideShowColumnMenu);
+			contextMenu.Items.Add(resetShowColumnMenu);
+
+			_listView.ContextMenu = contextMenu;
 		}
 
 		private void DocumentHistoryChanged(object sender, EventArgs e)
@@ -99,24 +181,45 @@ namespace VSDocumentReopen.VS.ToolWindows
 			return _fileTypeImages[extension];
 		}
 
-		private void LoadSettings()
+		private HistoryControlData LoadCustomizationSettings()
 		{
 			var settingsRepository = _historyToolWindowRepositoryFactory.Create();
 			var settings = settingsRepository?.GetSettings();
 
 			_search.HistoryList = settings?.SearchHistory?.ToList() ?? new List<string>();
+
+			return settings;
 		}
 
-		public void Dispose()
+		private void SaveCustomizationSettings()
 		{
 			var settingsRepository = _historyToolWindowRepositoryFactory.Create();
+
+			var columnsInfo = new List<ColumnInfo>();
+			foreach (var item in _columnHeaders)
+			{
+				var column = _listViewContect.Columns.SingleOrDefault(x => x.GetGridViewHeaderText() == item.Value);
+				columnsInfo.Add(new ColumnInfo()
+				{
+					Id = item.Key,
+					Position = column != null ? _listViewContect.Columns.IndexOf(column) : -1,
+					Visible = column != null,
+					Width = column?.Width ?? 0
+				});
+			}
 
 			var settings = new HistoryControlData()
 			{
 				SearchHistory = _search.HistoryList.Take(10),
+				ColumnsInfo = columnsInfo
 			};
 
 			settingsRepository?.SaveSettings(settings);
+		}
+
+		public void Dispose()
+		{
+			SaveCustomizationSettings();
 		}
 	}
 }
