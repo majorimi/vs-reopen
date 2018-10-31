@@ -66,7 +66,7 @@
         <ToolBar Grid.Row="0" Height="32" Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}">
             <ToolBar.Items>
                 <Label Content="Number of items in History:"></Label>
-                <Label Name="_numberOfItems" FontWeight="Bold" Width="40" Content="0"></Label>
+                <Label Name="_numberOfItems" FontWeight="Bold" MinWidth="45" Content="0"></Label>
                 <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
                 <sb:SearchTextBox Name="_search" SectionsStyle="NormalStyle" OnSearch="_search_OnSearch" ShowSectionButton="False" ToolTip="Search in File path or File name"
