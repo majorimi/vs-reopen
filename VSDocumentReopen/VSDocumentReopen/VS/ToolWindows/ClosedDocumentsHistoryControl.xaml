@@ -99,7 +99,7 @@
             <ListView.Style>
                 <Style TargetType="{x:Type ListView}">
                     <Setter Property="Background" Value="{DynamicResource VsBrush.EnvironmentBackgroundGradient}" />
-                    <Setter Property="Foreground" Value="{DynamicResource VsBrush.WindowTextKey}" />
+                    <Setter Property="Foreground" Value="Gray" />
                 </Style>
             </ListView.Style>
             <ListView.View>
