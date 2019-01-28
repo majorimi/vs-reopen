@@ -5,6 +5,12 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 
 ## Version history
 
+##### v. 1.4.5
+- Tool Window issue fixes:
+	- Search result label length issue
+	- Dark theme support
+- Visual Studio 2019 upgrade
+
 ##### v. 1.4.4
 - Tool Window issue fixes:
     - #11: Tool bar icons vanish if the tool window gets too narrow
