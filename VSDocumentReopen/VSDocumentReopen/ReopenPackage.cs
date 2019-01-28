@@ -30,9 +30,9 @@ namespace VSDocumentReopen
 	[ProvideMenuResource("Menus.ctmenu", 1)]
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
 	[Guid(PackageGuidString)]
-	[ProvideAutoLoad(UIContextGuids.NoSolution)]
+    [ProvideAutoLoad(UIContextGuids.NoSolution, PackageAutoLoadFlags.BackgroundLoad)]
 	[ProvideToolWindow(typeof(ClosedDocumentsHistory))]
-	[ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage]
 	public sealed class ReopenPackage : AsyncPackage
 	{
 		/// <summary>
@@ -40,57 +40,24 @@ namespace VSDocumentReopen
 		/// </summary>
 		public const string PackageGuidString = "b30147a1-6fbc-4b94-bf01-123d837c4fe2";
 
-		private readonly _DTE _dte;
-		private readonly DocumentEventsTracker _documentTracker;
-		private readonly IDocumentHistoryCommands _documentHistoryCommands;
-		private readonly IDocumentHistoryQueries _documentHistoryQueries;
+		private _DTE _dte;
+		private DocumentEventsTracker _documentTracker;
+		private IDocumentHistoryCommands _documentHistoryCommands;
+		private IDocumentHistoryQueries _documentHistoryQueries;
 
-		private readonly IHistoryCommand _reopenLastClosedCommand;
-		private readonly IHistoryCommand _removeLastClosedCommand;
-		private readonly IHistoryCommandFactory _reopenSomeDocumentsCommandFactory;
-		private readonly IHistoryCommandFactory _removeSomeDocumentsCommandFactory;
-		private readonly IHistoryCommand _clearHistoryCommand;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ReopenClosedDocumentsCommand"/> class.
-		/// </summary>
-		public ReopenPackage()
-		{
-			_dte = GetGlobalService(typeof(DTE)) as DTE2 ?? throw new NullReferenceException($"Unable to get service {nameof(DTE2)}");
-
-			//Log context and Serilog enricher
-			VsVersionContext.Current = new VsDteVersionContext(_dte);
-			LoggerContext.Current = new LogentriesSerilogLoggerContext();
-
-			LoggerContext.Current.Logger.Info($"{nameof(ReopenPackage)} started to load. Initializing dependencies...");
-
-			//DI
-			IDocumentHistoryManager documentHistory = new DocumentHistoryManager();
-			_documentHistoryCommands = documentHistory;
-			_documentHistoryQueries = documentHistory;
-
-			//Commands
-			_reopenLastClosedCommand = new RemoveLastCommand(_documentHistoryCommands,
-				new ReopenDocumentCommandFactory(_dte));
-			_removeLastClosedCommand = new RemoveLastCommand(_documentHistoryCommands,
-				new DoNothingDocumentCommandFactory());
-			_reopenSomeDocumentsCommandFactory = new HistoryCommandFactory<RemoveSomeCommand>(_documentHistoryCommands,
-				new ReopenDocumentCommandFactory(_dte));
-			_removeSomeDocumentsCommandFactory = new HistoryCommandFactory<RemoveSomeCommand>(_documentHistoryCommands,
-				new DoNothingDocumentCommandFactory());
-			_clearHistoryCommand = new ClearHistoryCommand(_documentHistoryCommands);
-
-			_documentTracker = new DocumentEventsTracker(_dte,
-				documentHistory,
-				new JsonHistoryRepositoryFactory(new ServiceStackJsonSerializer()),
-				new VSMessageBox(this));
-		}
+		private IHistoryCommand _reopenLastClosedCommand;
+		private IHistoryCommand _removeLastClosedCommand;
+		private IHistoryCommandFactory _reopenSomeDocumentsCommandFactory;
+		private IHistoryCommandFactory _removeSomeDocumentsCommandFactory;
+		private IHistoryCommand _clearHistoryCommand;
 
 		protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
 		{
 			try
 			{
-				LoggerContext.Current.Logger.Info($"{nameof(ReopenPackage)} initializing VS commands...");
+                Init();
+
+                LoggerContext.Current.Logger.Info($"{nameof(ReopenPackage)} initializing VS commands...");
 
 				await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
@@ -122,6 +89,38 @@ namespace VSDocumentReopen
 				LoggerContext.Current.Logger.Error($"Failed to Initialize {nameof(ReopenPackage)} VS Extension", ex);
 			}
 		}
+
+        private void Init()
+        {
+            _dte = GetGlobalService(typeof(DTE)) as DTE2 ?? throw new NullReferenceException($"Unable to get service {nameof(DTE2)}");
+
+            //Log context and Serilog enricher
+            VsVersionContext.Current = new VsDteVersionContext(_dte);
+            LoggerContext.Current = new LogentriesSerilogLoggerContext();
+
+            LoggerContext.Current.Logger.Info($"{nameof(ReopenPackage)} started to load. Initializing dependencies...");
+
+            //DI
+            IDocumentHistoryManager documentHistory = new DocumentHistoryManager();
+            _documentHistoryCommands = documentHistory;
+            _documentHistoryQueries = documentHistory;
+
+            //Commands
+            _reopenLastClosedCommand = new RemoveLastCommand(_documentHistoryCommands,
+                new ReopenDocumentCommandFactory(_dte));
+            _removeLastClosedCommand = new RemoveLastCommand(_documentHistoryCommands,
+                new DoNothingDocumentCommandFactory());
+            _reopenSomeDocumentsCommandFactory = new HistoryCommandFactory<RemoveSomeCommand>(_documentHistoryCommands,
+                new ReopenDocumentCommandFactory(_dte));
+            _removeSomeDocumentsCommandFactory = new HistoryCommandFactory<RemoveSomeCommand>(_documentHistoryCommands,
+                new DoNothingDocumentCommandFactory());
+            _clearHistoryCommand = new ClearHistoryCommand(_documentHistoryCommands);
+
+            _documentTracker = new DocumentEventsTracker(_dte,
+                documentHistory,
+                new JsonHistoryRepositoryFactory(new ServiceStackJsonSerializer()),
+                new VSMessageBox(this));
+        }
 
 		/// <summary>
 		/// Enforcing all shortcut key bindings because if it was assigned to another command then the default does not work.
