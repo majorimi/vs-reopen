@@ -5,6 +5,13 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 
 ## Version history
 
+##### v. 1.4.6
+- Code improvements: 
+	- Nuget package updates,
+    - Async package loading
+- Enhance History Tool Window:
+    - Remove non existing items from history toolbar menu button
+
 ##### v. 1.4.5
 - Tool Window issue fixes:
 	- Search result label length issue

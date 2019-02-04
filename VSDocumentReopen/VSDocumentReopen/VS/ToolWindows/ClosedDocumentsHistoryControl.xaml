@@ -82,6 +82,11 @@
                 <Button Name="_removeSelected" Click="_removeSelected_Click" ToolTip="Remove selected Document(s) from History" Style="{StaticResource MenuButton}">
                     <Image Name="_removeSelectedImg" Source="/Resources/RemoveGuide_16x_Gray.png" />
                 </Button>
+                <Button Name="_removeNonExisting" Click="_removeNonExisting_Click" ToolTip="Remove non existing Document(s) from History" Style="{StaticResource MenuButton}">
+                    <Image Name="_removeNonExistingImg" Source="/Resources/RemoveNonExisting_16x_Gray.png" />
+                </Button>
+                
+                <Separator Margin="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                 <Button Name="_clearAll" Click="_clearAll_Click" ToolTip="Clear History" Style="{StaticResource MenuButton}">
                     <Image Name="_clearAllImg" Source="/Resources/ClearWindowContent_16x_Gray.png" />
                 </Button>
