@@ -69,6 +69,11 @@ namespace VSDocumentReopen.VS.ToolWindows
 				new Image() { Source = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.RemoveGuide_16x_Gray) });
 			removeState.Disable();
 
+			var removeNonExistingState = new ButtonDisabledState(_removeNonExisting,
+				new Image() { Source = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.RemoveNonExisting_16x) },
+				new Image() { Source = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.RemoveNonExisting_16x_Gray) });
+			removeNonExistingState.Disable();
+
 			var clearState = new ButtonDisabledState(_clearAll,
 				new Image() { Source = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.ClearWindowContent_16x) },
 				new Image() { Source = WpfImageSourceConverter.CreateBitmapSource(VSDocumentReopen.Resources.ClearWindowContent_16x_Gray) });

@@ -161,6 +161,8 @@
     <None Include="Resources\RemoveGuide_16x.png" />
     <Content Include="Resources\OpenFile_16x_Gray.png" />
     <Content Include="Resources\RemoveGuide_16x_Gray.png" />
+    <Content Include="Resources\RemoveNonExisting_16x.png" />
+    <Content Include="Resources\RemoveNonExisting_16x_Gray.png" />
     <Content Include="Resources\VsToolsMenu.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>

@@ -24,10 +24,18 @@ namespace VSDocumentReopen.VS.ToolWindows
 			HandleOperatons(_removeSomeDocumentsCommandFactory);
 		}
 
+		private void _removeNonExisting_Click(object sender, RoutedEventArgs e)
+		{
+			var removeNonExistingCommand = _removeSomeDocumentsCommandFactory.CreateCommand(_documentHistoryQueries.GetAll()
+				.Where(x => !x.IsValid()).ToArray());
+			removeNonExistingCommand.Execute();
+			LoggerContext.Current.Logger.Info($"Command: {removeNonExistingCommand.GetType()} from ToolWindow (Remove Non existing) was executed");
+		}
+
 		private void _clearAll_Click(object sender, RoutedEventArgs e)
 		{
 			_clearHistoryCommand.Execute();
-			LoggerContext.Current.Logger.Info($"Command: {_clearHistoryCommand.GetType()} from ToolWindow was executed");
+			LoggerContext.Current.Logger.Info($"Command: {_clearHistoryCommand.GetType()} from ToolWindow (Clear all) was executed");
 		}
 
 		private void _search_OnSearch(object sender, RoutedEventArgs e)
@@ -233,6 +241,16 @@ namespace VSDocumentReopen.VS.ToolWindows
 			else
 			{
 				_clearAll.GetImageButtonState().Disable();
+			}
+
+			var nonExisting = _documentHistoryQueries.GetAll().Where(x => !x.IsValid());
+			if (nonExisting.Any())
+			{
+				_removeNonExisting.GetImageButtonState().Enable();
+			}
+			else
+			{
+				_removeNonExisting.GetImageButtonState().Disable();
 			}
 
 			_numberOfItems.Content = string.IsNullOrWhiteSpace(_search.Text)
