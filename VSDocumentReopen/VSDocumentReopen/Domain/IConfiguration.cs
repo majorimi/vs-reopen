@@ -5,7 +5,8 @@
 		string HistoryFileName { get; }
 		string ToolWindowSettingsFileName { get; }
 		int MaxAllowedHistoryItems { get; }
-		int MaxNumberOfHistoryItemsOnMenu { get; }
+        int MaxAllowedHistoryItemAgeInDays { get; }
+        int MaxNumberOfHistoryItemsOnMenu { get; }
 		string PackageWorkingDirName { get; }
 		string ReopenCommandBinding { get; }
 		string RemoveCommandBinding { get; }

@@ -34,12 +34,15 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 			}
 			
 			//Remove duplications
-			var docs = ClosedDocuments.Where(x => _closedDocumentComparer.Equals(x, document)).ToArray();
+			var docs = ClosedDocuments
+                .Where(x => _closedDocumentComparer.Equals(x, document))
+                .ToArray();
+            //TODO: use intersect
 			foreach (var doc in docs)
 			{
 				ClosedDocuments.Remove(doc);
 			}
-
+            //TODO: filter history by MaxAllowed Number and Days...
 			ClosedDocuments.AddFirst(document);
 			OnHistoryChanged();
 		}
@@ -108,8 +111,8 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 			{
 				ClosedDocuments.AddFirst(document);
 			}
-
-			OnHistoryChanged();
+            //TODO: filter history by MaxAllowed Number and Days...
+            OnHistoryChanged();
 		}
 
 		private void OnHistoryChanged()

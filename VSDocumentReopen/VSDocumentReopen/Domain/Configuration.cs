@@ -12,12 +12,14 @@
 
 		public int MaxAllowedHistoryItems { get; set; }
 
-		public string ReopenCommandBinding { get; set; }
+        public int MaxAllowedHistoryItemAgeInDays { get; set; }
+
+        public string ReopenCommandBinding { get; set; }
 
 		public string RemoveCommandBinding { get; set; }
 
 		public string ShowMoreCommandBinding { get; set; }
 
 		public string ToolWindowSettingsFileName { get; set; }
-	}
+    }
 }
