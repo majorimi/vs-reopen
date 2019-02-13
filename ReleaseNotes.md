@@ -5,6 +5,9 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 
 ## Version history
 
+##### v. 1.4.7
+- Bug fix: Async package loading issue. Extension does not work if VS was started by double clicking on a .sln file.
+
 ##### v. 1.4.6
 - Code improvements: 
 	- Nuget package updates,
