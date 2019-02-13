@@ -7,7 +7,6 @@ using VSDocumentReopen.VS.MessageBox;
 
 namespace VSDocumentReopen.Infrastructure.Document.Tracking
 {
-
 	public sealed class DocumentEventsTracker : IDisposable
 	{
 		private readonly _DTE _dte;
@@ -39,14 +38,19 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 
 		private void Initialize()
 		{
-			SolutionState = SolutionStates.None;
+            SolutionState = SolutionStates.None;
 
-			_solutionEvents.Opened += OnSolutionEventsOnOpened;
+            _solutionEvents.Opened += OnSolutionEventsOnOpened;
 			_solutionEvents.BeforeClosing += OnSolutionEventsOnBeforeClosing;
 			_solutionEvents.AfterClosing += OnSolutionEventsOnAfterClosing;
-		}
 
-		private void OnSolutionEventsOnOpened()
+            if(_dte.Solution.IsOpen) //VS2019 pushing for Async loading it is possible to have a loaded solution at this point...
+            {
+                OnSolutionEventsOnOpened();
+            }
+        }
+
+        private void OnSolutionEventsOnOpened()
 		{
 			_documentEvents.DocumentClosing += DocumentEventsOnDocumentClosing;
 			SolutionState = SolutionStates.Opened;
