@@ -3,6 +3,7 @@ using System.IO;
 using EnvDTE;
 using VSDocumentReopen.Domain;
 using VSDocumentReopen.Domain.Documents;
+using VSDocumentReopen.Infrastructure.Logging;
 using VSDocumentReopen.VS.MessageBox;
 
 namespace VSDocumentReopen.Infrastructure.Document.Tracking
@@ -61,6 +62,8 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 		{
 			_documentEvents.DocumentClosing += DocumentEventsOnDocumentClosing;
 			SolutionState = SolutionStates.Opened;
+
+			LoggerContext.Current.Logger.Info($"{nameof(DocumentEventsTracker)}.{nameof(OnSolutionEventsOnOpened)}() method executing. Opened solution Full path: '{_dte.Solution.FullName}'");
 
 			var solutionDir = Path.GetDirectoryName(_dte.Solution.FullName);
 			var solutionName = Path.GetFileName(_dte.Solution.FullName).Replace(".sln", string.Empty);
