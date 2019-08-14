@@ -30,9 +30,9 @@ namespace VSDocumentReopen
 	[ProvideMenuResource("Menus.ctmenu", 1)]
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
 	[Guid(PackageGuidString)]
-    [ProvideAutoLoad(UIContextGuids.NoSolution, PackageAutoLoadFlags.BackgroundLoad)]
+	[ProvideAutoLoad(UIContextGuids.NoSolution, PackageAutoLoadFlags.BackgroundLoad)]
 	[ProvideToolWindow(typeof(ClosedDocumentsHistory))]
-    [ExcludeFromCodeCoverage]
+	[ExcludeFromCodeCoverage]
 	public sealed class ReopenPackage : AsyncPackage
 	{
 		/// <summary>
@@ -55,9 +55,9 @@ namespace VSDocumentReopen
 		{
 			try
 			{
-                Init();
+				Init();
 
-                LoggerContext.Current.Logger.Info($"{nameof(ReopenPackage)} initializing VS commands...");
+				LoggerContext.Current.Logger.Info($"{nameof(ReopenPackage)} initializing VS commands...");
 
 				await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
@@ -90,37 +90,37 @@ namespace VSDocumentReopen
 			}
 		}
 
-        private void Init()
-        {
-            _dte = GetGlobalService(typeof(DTE)) as DTE2 ?? throw new NullReferenceException($"Unable to get service {nameof(DTE2)}");
+		private void Init()
+		{
+			_dte = GetGlobalService(typeof(DTE)) as DTE2 ?? throw new NullReferenceException($"Unable to get service {nameof(DTE2)}");
 
-            //Log context and Serilog enricher
-            VsVersionContext.Current = new VsDteVersionContext(_dte);
-            LoggerContext.Current = new LogentriesSerilogLoggerContext();
+			//Log context and Serilog enricher
+			VsVersionContext.Current = new VsDteVersionContext(_dte);
+			LoggerContext.Current = new LogentriesSerilogLoggerContext();
 
-            LoggerContext.Current.Logger.Info($"{nameof(ReopenPackage)} started to load. Initializing dependencies...");
+			LoggerContext.Current.Logger.Info($"{nameof(ReopenPackage)} started to load. Initializing dependencies...");
 
-            //DI
-            IDocumentHistoryManager documentHistory = new DocumentHistoryManager();
-            _documentHistoryCommands = documentHistory;
-            _documentHistoryQueries = documentHistory;
+			//DI
+			IDocumentHistoryManager documentHistory = new DocumentHistoryManager();
+			_documentHistoryCommands = documentHistory;
+			_documentHistoryQueries = documentHistory;
 
-            //Commands
-            _reopenLastClosedCommand = new RemoveLastCommand(_documentHistoryCommands,
-                new ReopenDocumentCommandFactory(_dte));
-            _removeLastClosedCommand = new RemoveLastCommand(_documentHistoryCommands,
-                new DoNothingDocumentCommandFactory());
-            _reopenSomeDocumentsCommandFactory = new HistoryCommandFactory<RemoveSomeCommand>(_documentHistoryCommands,
-                new ReopenDocumentCommandFactory(_dte));
-            _removeSomeDocumentsCommandFactory = new HistoryCommandFactory<RemoveSomeCommand>(_documentHistoryCommands,
-                new DoNothingDocumentCommandFactory());
-            _clearHistoryCommand = new ClearHistoryCommand(_documentHistoryCommands);
+			//Commands
+			_reopenLastClosedCommand = new RemoveLastCommand(_documentHistoryCommands,
+				new ReopenDocumentCommandFactory(_dte));
+			_removeLastClosedCommand = new RemoveLastCommand(_documentHistoryCommands,
+				new DoNothingDocumentCommandFactory());
+			_reopenSomeDocumentsCommandFactory = new HistoryCommandFactory<RemoveSomeCommand>(_documentHistoryCommands,
+				new ReopenDocumentCommandFactory(_dte));
+			_removeSomeDocumentsCommandFactory = new HistoryCommandFactory<RemoveSomeCommand>(_documentHistoryCommands,
+				new DoNothingDocumentCommandFactory());
+			_clearHistoryCommand = new ClearHistoryCommand(_documentHistoryCommands);
 
-            _documentTracker = new DocumentEventsTracker(_dte,
-                documentHistory,
-                new JsonHistoryRepositoryFactory(new ServiceStackJsonSerializer()),
-                new VSMessageBox(this));
-        }
+			_documentTracker = new DocumentEventsTracker(_dte,
+				documentHistory,
+				new JsonHistoryRepositoryFactory(new ServiceStackJsonSerializer()),
+				new VSMessageBox(this));
+		}
 
 		/// <summary>
 		/// Enforcing all shortcut key bindings because if it was assigned to another command then the default does not work.
