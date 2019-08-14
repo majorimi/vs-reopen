@@ -26,7 +26,7 @@ namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
 		private readonly Mock<IHistoryRepository> _historyRepositoryMock;
 		private readonly Mock<IMessageBox> _messageBoxMock;
 
-		private readonly DocumentEventsTracker _documentEventsTracker;
+		private DocumentEventsTracker _documentEventsTracker;
 
 		public DocumentEventsTrackerTest()
 		{
@@ -44,6 +44,7 @@ namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
 
 			_solutionMock = new Mock<Solution>();
 			_solutionMock.SetupGet(g => g.FullName).Returns("c:\\test.sln");
+			_solutionMock.SetupGet(g => g.IsOpen).Returns(false);
 
 			_dteMock = new Mock<_DTE>();
 			_dteMock.SetupGet(g => g.Events).Returns(_eventsMock.Object);
@@ -58,10 +59,6 @@ namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
 			_messageBoxMock = new Mock<IMessageBox>();
 			_messageBoxMock.Setup(s => s.ShowError(It.IsAny<string>(), It.IsAny<string>()));
 
-			_documentEventsTracker = new DocumentEventsTracker(_dteMock.Object,
-				_documentHistoryManagerMock.Object,
-				_historyRepositoryFactoryMock.Object,
-				_messageBoxMock.Object);
 		}
 
 		[Fact]
@@ -76,6 +73,11 @@ namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
 		[Fact]
 		public void ItShould_Initialize_Object()
 		{
+			_documentEventsTracker = new DocumentEventsTracker(_dteMock.Object,
+				_documentHistoryManagerMock.Object,
+				_historyRepositoryFactoryMock.Object,
+				_messageBoxMock.Object);
+
 			_solutionEventsMock.Received(1).Opened += Arg.Any<_dispSolutionEvents_OpenedEventHandler>();
 			_solutionEventsMock.Received(1).BeforeClosing += Arg.Any<_dispSolutionEvents_BeforeClosingEventHandler>();
 			_solutionEventsMock.Received(1).AfterClosing += Arg.Any<_dispSolutionEvents_AfterClosingEventHandler>();
@@ -86,6 +88,13 @@ namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
 		[Fact]
 		public void ItShould_Handle_SolutionOpened_Event_With_RepositoryError()
 		{
+			_solutionMock.SetupGet(g => g.IsOpen).Returns(true);
+
+			_documentEventsTracker = new DocumentEventsTracker(_dteMock.Object,
+				_documentHistoryManagerMock.Object,
+				_historyRepositoryFactoryMock.Object,
+				_messageBoxMock.Object);
+
 			_historyRepositoryFactoryMock.Setup(s => s.CreateHistoryRepository(It.IsAny<SolutionInfo>()))
 				.Returns(() => null);
 
@@ -102,6 +111,13 @@ namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
 		[Fact]
 		public void ItShould_Handle_SolutionOpened_Event()
 		{
+			_solutionMock.SetupGet(g => g.IsOpen).Returns(true);
+
+			_documentEventsTracker = new DocumentEventsTracker(_dteMock.Object,
+				_documentHistoryManagerMock.Object,
+				_historyRepositoryFactoryMock.Object,
+				_messageBoxMock.Object);
+
 			_historyRepositoryFactoryMock.Setup(s => s.CreateHistoryRepository(It.Is<SolutionInfo>(si => si.FullPath == "c:\\" && si.Name == "test")))
 				.Returns(_historyRepositoryMock.Object);
 			_historyRepositoryMock.Setup(s => s.GetHistory())
@@ -122,6 +138,13 @@ namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
 		[Fact]
 		public void ItShould_Handle_SolutionBeforeClosing_Event()
 		{
+			_solutionMock.SetupGet(g => g.IsOpen).Returns(true);
+
+			_documentEventsTracker = new DocumentEventsTracker(_dteMock.Object,
+				_documentHistoryManagerMock.Object,
+				_historyRepositoryFactoryMock.Object,
+				_messageBoxMock.Object);
+
 			_historyRepositoryFactoryMock.Setup(s => s.CreateHistoryRepository(It.IsAny<SolutionInfo>()))
 				.Returns(_historyRepositoryMock.Object);
 
@@ -133,6 +156,13 @@ namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
 		[Fact]
 		public void ItShould_Handle_SolutionAfterClosing_Event()
 		{
+			_solutionMock.SetupGet(g => g.IsOpen).Returns(true);
+
+			_documentEventsTracker = new DocumentEventsTracker(_dteMock.Object,
+				_documentHistoryManagerMock.Object,
+				_historyRepositoryFactoryMock.Object,
+				_messageBoxMock.Object);
+
 			_historyRepositoryFactoryMock.Setup(s => s.CreateHistoryRepository(It.IsAny<SolutionInfo>()))
 				.Returns(_historyRepositoryMock.Object);
 			_historyRepositoryMock.Setup(s => s.SaveHistory(It.IsAny<IEnumerable<IClosedDocument>>())).Returns(true);
@@ -152,11 +182,20 @@ namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
 		[Fact]
 		public void ItShould_Notify_User_SolutionAfterClosing_Event_When_History_Was_Not_Saved()
 		{
+			_solutionMock.SetupGet(g => g.IsOpen).Returns(true);
+
+			_documentEventsTracker = new DocumentEventsTracker(_dteMock.Object,
+				_documentHistoryManagerMock.Object,
+				_historyRepositoryFactoryMock.Object,
+				_messageBoxMock.Object);
+
 			_historyRepositoryFactoryMock.Setup(s => s.CreateHistoryRepository(It.IsAny<SolutionInfo>()))
 				.Returns(_historyRepositoryMock.Object);
 			_historyRepositoryMock.Setup(s => s.SaveHistory(It.IsAny<IEnumerable<IClosedDocument>>())).Returns(false);
 			_documentHistoryManagerMock.Setup(s => s.GetAll())
 				.Returns(new List<IClosedDocument>());
+
+			_solutionMock.SetupGet(g => g.IsOpen).Returns(true);
 
 			_solutionEventsMock.AfterClosing += Raise.Event<_dispSolutionEvents_AfterClosingEventHandler>();
 
@@ -178,6 +217,13 @@ namespace VSDocumentReopen.Test.Infrastructure.Document.Tracking
 		[Fact]
 		public void ItShould_Handle_DocumentClosed_Event_When_Solution_Loaded()
 		{
+			_solutionMock.SetupGet(g => g.IsOpen).Returns(true);
+
+			_documentEventsTracker = new DocumentEventsTracker(_dteMock.Object,
+				_documentHistoryManagerMock.Object,
+				_historyRepositoryFactoryMock.Object,
+				_messageBoxMock.Object);
+
 			var doc = Substitute.For<EnvDTE.Document>();
 			doc.FullName.Returns("c:\\test.cs");
 			doc.Name.Returns("test.cs");

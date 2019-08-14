@@ -38,19 +38,26 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 
 		private void Initialize()
 		{
-            SolutionState = SolutionStates.None;
+			//TODO: refactore event hanling based on VS Options: track documents without sln, etc...
+			/*
+			 * https://haacked.com/archive/2014/07/30/visual-studios-extensions-settings/
+			 * https://docs.microsoft.com/hu-hu/visualstudio/extensibility/creating-an-options-page?view=vs-2015
+			 * https://docs.microsoft.com/en-us/visualstudio/extensibility/creating-an-options-page?view=vs-2017
+			 */
 
-            _solutionEvents.Opened += OnSolutionEventsOnOpened;
+			SolutionState = SolutionStates.None;
+
+			_solutionEvents.Opened += OnSolutionEventsOnOpened;
 			_solutionEvents.BeforeClosing += OnSolutionEventsOnBeforeClosing;
 			_solutionEvents.AfterClosing += OnSolutionEventsOnAfterClosing;
 
-            if(_dte.Solution.IsOpen) //VS2019 pushing for Async loading it is possible to have a loaded solution at this point...
-            {
-                OnSolutionEventsOnOpened();
-            }
-        }
+			if(_dte.Solution.IsOpen) //VS2019 pushing for Async loading it is possible to have a loaded solution at this point...
+			{
+				OnSolutionEventsOnOpened();
+			}
+		}
 
-        private void OnSolutionEventsOnOpened()
+		private void OnSolutionEventsOnOpened()
 		{
 			_documentEvents.DocumentClosing += DocumentEventsOnDocumentClosing;
 			SolutionState = SolutionStates.Opened;

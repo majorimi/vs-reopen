@@ -1,5 +1,8 @@
-﻿namespace VSDocumentReopen.Domain
+﻿using System.Diagnostics;
+
+namespace VSDocumentReopen.Domain
 {
+	[DebuggerDisplay("SolutionInfo: {Name} - {FullPath}")]
 	public class SolutionInfo
 	{
 		public string FullPath { get; }
