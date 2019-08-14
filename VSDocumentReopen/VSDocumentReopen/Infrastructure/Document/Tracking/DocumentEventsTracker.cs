@@ -3,6 +3,7 @@ using System.IO;
 using EnvDTE;
 using VSDocumentReopen.Domain;
 using VSDocumentReopen.Domain.Documents;
+using VSDocumentReopen.Infrastructure.Logging;
 using VSDocumentReopen.VS.MessageBox;
 
 namespace VSDocumentReopen.Infrastructure.Document.Tracking
@@ -38,22 +39,24 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 
 		private void Initialize()
 		{
-            SolutionState = SolutionStates.None;
+			SolutionState = SolutionStates.None;
 
-            _solutionEvents.Opened += OnSolutionEventsOnOpened;
+			_solutionEvents.Opened += OnSolutionEventsOnOpened;
 			_solutionEvents.BeforeClosing += OnSolutionEventsOnBeforeClosing;
 			_solutionEvents.AfterClosing += OnSolutionEventsOnAfterClosing;
 
-            if(_dte.Solution.IsOpen) //VS2019 pushing for Async loading it is possible to have a loaded solution at this point...
-            {
-                OnSolutionEventsOnOpened();
-            }
-        }
+			if(_dte.Solution.IsOpen) //VS2019 pushing for Async loading it is possible to have a loaded solution at this point...
+			{
+				OnSolutionEventsOnOpened();
+			}
+		}
 
-        private void OnSolutionEventsOnOpened()
+		private void OnSolutionEventsOnOpened()
 		{
 			_documentEvents.DocumentClosing += DocumentEventsOnDocumentClosing;
 			SolutionState = SolutionStates.Opened;
+
+			LoggerContext.Current.Logger.Info($"{nameof(DocumentEventsTracker)}.{nameof(OnSolutionEventsOnOpened)}() method executing. Opened solution Full path: '{_dte.Solution.FullName}'");
 
 			var solutionDir = Path.GetDirectoryName(_dte.Solution.FullName);
 			var solutionName = Path.GetFileName(_dte.Solution.FullName).Replace(".sln", string.Empty);

@@ -5,15 +5,18 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 
 ## Version history
 
+##### v. 1.4.8
+- Logging for issue investigation: "System.ArgumentException: The path is not of a legal form."
+
 ##### v. 1.4.7
 - Bug fix: Async package loading issue. Extension does not work if VS was started by double clicking on a .sln file.
 
 ##### v. 1.4.6
 - Code improvements: 
 	- Nuget package updates,
-    - Async package loading
+	- Async package loading
 - Enhance History Tool Window:
-    - Remove non existing items from history toolbar menu button
+	- Remove non existing items from history toolbar menu button
 
 ##### v. 1.4.5
 - Tool Window issue fixes:
@@ -23,8 +26,8 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 
 ##### v. 1.4.4
 - Tool Window issue fixes:
-    - #11: Tool bar icons vanish if the tool window gets too narrow
-    - Column reorder does not work
+	- #11: Tool bar icons vanish if the tool window gets too narrow
+	- Column reorder does not work
 - Tool Window columns:
   - Can be show/hide form context menu
   - Order and size customizations saved and restored
@@ -57,23 +60,23 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 #### v. 1.3.0
 - Add support for **Visual Studio 2015**
 - Enhance History Tool Window
-    - Show Solution Explorer style document Icon in "Type" column
-    - Show icon in "Exists" column
+	- Show Solution Explorer style document Icon in "Type" column
+	- Show icon in "Exists" column
 
 #### v. 1.2.0
 - Enhance History Tool Window:
-    - Reopen any closed document by double clicking or selected document(s) using toolbar menu button
-    - Remove selected document(s) using toolbar menu button or Delete key
-    - Clear history with toolbar menu button
-    - Filter history by document name or path
-    - More info about the documents
+	- Reopen any closed document by double clicking or selected document(s) using toolbar menu button
+	- Remove selected document(s) using toolbar menu button or Delete key
+	- Clear history with toolbar menu button
+	- Filter history by document name or path
+	- More info about the documents
 - Code enhancements, small issue fixes
 
 ##### v. 1.1.1
 - Enforce key bindings for menu commands
 - Enable vertical scroll in History Tool Window
 - Bugfix: History Tool Window does not initialized with history data
-    
+	
 #### v. 1.1.0
 - Reorganized menu command: under the Tools menu child menu
 - Track the last 5 closed document in child menu
