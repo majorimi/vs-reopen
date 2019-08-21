@@ -169,14 +169,14 @@ namespace VSDocumentReopen
 			var showMoreCommandBinding = globalKeyBindingValue + ConfigurationManager.Current.Config.ShowMoreCommandBinding;
 
 			var myCommands = new List<Command>();
-			foreach (Command command in _dte.Commands)
+			foreach (Command command in _dte.Commands.OfType<Command>()) //Causes InvalidCastException
 			{
 				if (command.Guid == commandsGuid)
 				{
 					myCommands.Add(command);
 				}
 
-				if (command.Bindings is object[] bindings && bindings.Length > 0)
+				if (command.Bindings is object[] bindings && bindings.Length > 0) //Causes OutOfMemory exception
 				{
 					var bind = string.Join(" ", bindings.Select(x => (string)x));
 					if (bind.Contains(reopenCommandBinding) || bind.Contains(showMoreCommandBinding))

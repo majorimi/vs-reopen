@@ -63,10 +63,17 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 			_documentEvents.DocumentClosing += DocumentEventsOnDocumentClosing;
 			SolutionState = SolutionStates.Opened;
 
-			LoggerContext.Current.Logger.Info($"{nameof(DocumentEventsTracker)}.{nameof(OnSolutionEventsOnOpened)}() method executing. Opened solution Full path: '{_dte.Solution.FullName}'");
+			string slnPath = _dte.Solution.FullName; //can be empty if it is a new solution??
+			LoggerContext.Current.Logger.Info($"{nameof(DocumentEventsTracker)}.{nameof(OnSolutionEventsOnOpened)}() method executing. Opened solution Full path: '{slnPath}'");
 
-			var solutionDir = Path.GetDirectoryName(_dte.Solution.FullName);
-			var solutionName = Path.GetFileName(_dte.Solution.FullName).Replace(".sln", string.Empty);
+			if (string.IsNullOrWhiteSpace(slnPath))
+			{
+				slnPath = _dte.Solution.Properties.Item("Path")?.Value?.ToString(); //https://github.com/3F/vsCommandEvent/blob/master/vsCommandEvent/Environment.cs
+				LoggerContext.Current.Logger.Warning($"{nameof(DocumentEventsTracker)}.{nameof(OnSolutionEventsOnOpened)}() method executing. _dte.Solution.FullName was EMPTY or NULL. Getting Solution.Properties Full path: '{slnPath}'");
+			}
+
+			var solutionDir = Path.GetDirectoryName(slnPath);
+			var solutionName = Path.GetFileName(slnPath).Replace(".sln", string.Empty);
 			_currentSolution = new SolutionInfo(solutionDir, solutionName);
 
 			//Create history repo

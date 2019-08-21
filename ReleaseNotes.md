@@ -5,6 +5,8 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 
 ## Version history
 
+##### v. 1.4.9
+- Bug fixes
 ##### v. 1.4.8
 - Logging for issue investigation: "System.ArgumentException: The path is not of a legal form."
 
