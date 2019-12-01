@@ -39,7 +39,7 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 
 		private void Initialize()
 		{
-			//TODO: refactore event hanling based on VS Options: track documents without sln, etc...
+			//TODO: refactore event handling based on VS Options: track documents without sln, etc...
 			/*
 			 * https://haacked.com/archive/2014/07/30/visual-studios-extensions-settings/
 			 * https://docs.microsoft.com/hu-hu/visualstudio/extensibility/creating-an-options-page?view=vs-2015
@@ -68,8 +68,15 @@ namespace VSDocumentReopen.Infrastructure.Document.Tracking
 
 			if (string.IsNullOrWhiteSpace(slnPath))
 			{
-				slnPath = _dte.Solution.Properties.Item("Path")?.Value?.ToString(); //https://github.com/3F/vsCommandEvent/blob/master/vsCommandEvent/Environment.cs
-				LoggerContext.Current.Logger.Warning($"{nameof(DocumentEventsTracker)}.{nameof(OnSolutionEventsOnOpened)}() method executing. _dte.Solution.FullName was EMPTY or NULL. Getting Solution.Properties Full path: '{slnPath}'");
+				try
+				{
+					slnPath = _dte.Solution.Properties.Item("Path")?.Value?.ToString(); //https://github.com/3F/vsCommandEvent/blob/master/vsCommandEvent/Environment.cs
+					LoggerContext.Current.Logger.Warning($"{nameof(DocumentEventsTracker)}.{nameof(OnSolutionEventsOnOpened)}() method executing. _dte.Solution.FullName was EMPTY or NULL. Getting Solution.Properties Full path: '{slnPath}'");
+				}
+				catch (Exception ex)
+				{
+					LoggerContext.Current.Logger.Error($"Error occurred during {nameof(OnSolutionEventsOnOpened)}.", ex);
+				}
 			}
 
 			var solutionDir = Path.GetDirectoryName(slnPath);

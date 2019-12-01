@@ -4,10 +4,15 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows.Forms;
+
 using EnvDTE;
+
 using EnvDTE80;
+
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+
 using VSDocumentReopen.Infrastructure;
 using VSDocumentReopen.Infrastructure.Document.Factories;
 using VSDocumentReopen.Infrastructure.Document.Tracking;
@@ -20,11 +25,10 @@ using VSDocumentReopen.Infrastructure.Version;
 using VSDocumentReopen.VS.Commands;
 using VSDocumentReopen.VS.MessageBox;
 using VSDocumentReopen.VS.ToolWindows;
+using VSDocumentReopen.VS.UserControls;
+
 using ConfigurationManager = VSDocumentReopen.Infrastructure.ConfigurationManager;
 using Task = System.Threading.Tasks.Task;
-
-using System.Windows.Forms;
-using VSDocumentReopen.VS.UserControls;
 
 namespace VSDocumentReopen
 {
@@ -246,7 +250,7 @@ namespace VSDocumentReopen
 
 		protected override void Dispose(bool disposing)
 		{
-			_documentTracker.Dispose();
+			_documentTracker?.Dispose();
 			base.Dispose(disposing);
 		}
 	}
