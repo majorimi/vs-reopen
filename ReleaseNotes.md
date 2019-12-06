@@ -5,6 +5,9 @@ Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/i
 
 ## Version history
 
+##### v. 1.4.10
+- Remove non necessary command key bindings. Since it some overrides user settings.
+
 ##### v. 1.4.9
 - Bug fixes
 ##### v. 1.4.8

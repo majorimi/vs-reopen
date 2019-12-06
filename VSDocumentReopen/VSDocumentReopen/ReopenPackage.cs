@@ -155,8 +155,9 @@ namespace VSDocumentReopen
 			}
 
 			Bind(ReopenClosedDocumentsCommand.CommandId, reopenCommandBinding);
-			Bind(RemoveClosedDocumentsCommand.CommandId, removeCommandBinding);
-			Bind(ShowDocumentsHIstoryCommand.CommandId, showMoreCommandBinding);
+			//TODO: make it configurable to override all keys
+			//Bind(RemoveClosedDocumentsCommand.CommandId, removeCommandBinding);
+			//Bind(ShowDocumentsHIstoryCommand.CommandId, showMoreCommandBinding);
 
 			void Bind(int commandId, string keyBinding)
 			{
