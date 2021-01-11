@@ -38,3 +38,10 @@ For version history see [release notes](https://github.com/majorimi/vs-reopen/bl
 - Clear history
 
 ![Window](https://raw.githubusercontent.com/majorimi/vs-reopen/master/VSDocumentReopen/VSDocumentReopen/Resources/VsToolsWindow.png "Document history Tool Window")
+
+#### Support
+This VS Extension is free to use. If you like it you can [Buy me a beer :)](https://blockchain.com/btc/payment_request?address=12dNbAbcW7W959QQR649AcwVL4TZGjMoTM&amount=0.00015807&message=Buy_me_a_beer)
+
+<a href="https://blockchain.com/btc/payment_request?address=12dNbAbcW7W959QQR649AcwVL4TZGjMoTM&amount=0.00015807&message=Buy me a beer :)">
+  <img border="0" alt="Buy me a beer" src="https://webstockreview.net/images/beer-clipart-pint-beer-1.jpg" width="100" height="200">
+</a>
